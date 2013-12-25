@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1387752755 source:/mnt/home/marcin/Projects/CodeBlocks/client/main.c
+	<stdio.h>
+	<stdlib.h>
+
