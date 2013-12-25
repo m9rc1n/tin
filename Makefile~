@@ -1,0 +1,8 @@
+all:
+	make -C tin_library	
+	make -C client
+	make -C server
+
+clean:
+	rm -rf *o
+
