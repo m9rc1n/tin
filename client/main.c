@@ -12,7 +12,7 @@
 /**
  * To jest przykladowe ustawienie:
  * Normalnie klient tu powinny sie znajdowac funkcje interakcji uzytkownika z komputerem
- * Klient laczy sie z serwerem poprzez biblioteke tin_library
+ * Klient laczy sie z serwerem poprzez bibli`oteke tin_library
  */
 
 int main(int argc, char* argv[])
@@ -30,12 +30,11 @@ int main(int argc, char* argv[])
 	}
 
 	/* create a socket */
-	sockd = socket(AF_INET, SOCK_DGRAM, 0);
-	if (sockd == -1)
-	{
-		perror("Socket creation error");
-		exit(1);
-	}
+	/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		dodałem to
+		implementacja w bibliotece
+	*/
+	sockd = create_socket();
 
 	/* client address */
 	my_addr.sin_family = AF_INET;

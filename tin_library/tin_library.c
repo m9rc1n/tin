@@ -1,15 +1,17 @@
-// The functions contained in this file are pretty dummy
-// and are included only as a placeholder. Nevertheless,
-// they *will* get included in the static library if you
-// don't remove them :)
-// 
-// Obviously, you 'll have to write yourself the super-duper
-// functions to include in the resulting library...
-// Also, it's not necessary to write every function in this file.
-// Feel free to add more files in this project. They will be
-// included in the resulting library.
+#include "tin_library.h"
 
-// A function adding two integers and returning the result
+int create_socket()
+{
+	int sockd;
+	sockd = socket(AF_INET, SOCK_DGRAM, 0);
+	if (sockd == -1)
+	{
+		perror("Socket creation error");
+		exit(1);
+	}
+	return sockd;
+} 
+
 int SampleAddInt(int i1, int i2)
 {
     return i1 + i2;
