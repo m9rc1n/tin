@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "../protocol.h"
+
 #define MAX_BUF 1024
 
 int main(int argc, char* argv[])
@@ -16,7 +18,13 @@ int main(int argc, char* argv[])
 	char buf[MAX_BUF];
 	int status;
 	int addrlen;
+		
+	FsOpenServerC client_struct;
+	FsOpenServerS server_struct;
 	
+	printf("cokolwiej");
+
+
 	if (argc < 2)
 	{
 		fprintf(stderr, "Usage: %s port_number\n", argv[0]);
@@ -36,13 +44,18 @@ int main(int argc, char* argv[])
 	my_name.sin_addr.s_addr = INADDR_ANY;
 	my_name.sin_port = htons(atoi(argv[1]));
 
+	server_struct.answer = OK;
+	server_struct.server_handler = 2;
+
 	status = bind(sockd, (struct sockaddr*)&my_name, sizeof(my_name));
 	addrlen = sizeof(cli_name);
-	status = recvfrom(sockd, buf, MAX_BUF, 0, (struct sockaddr*)&cli_name, &addrlen);
 
-	printf("%s", buf);
-	strcat(buf, "OK!\n");
-	status = sendto(sockd, buf, strlen(buf)+1, 0, (struct sockaddr*)&cli_name, sizeof(cli_name));
+
+ 	status = recvfrom (sockd, (FsOpenServerC*) &client_struct, sizeof (client_struct), 0, (struct sockaddr*) &cli_name, &addrlen);
+
+/*	status = sendto (sockd, (FsOpenServerS*) &server_struct, sizeof (server_struct), 0, (struct sockaddr*) &cli_name, sizeof (cli_name));
+*/
+	// status = sendto (sockd, (FsOpenServerS*) &server_struct, sizeof (server_struct), 0, (struct sockaddr*) &cli_name, sizeof (cli_name));
 
 	close(sockd);
 	return 0;

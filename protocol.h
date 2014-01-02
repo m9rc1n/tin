@@ -23,7 +23,7 @@ typedef enum FsCmd
 	// Zapisz do pliku
 	WRITE = 4,
 	// Odczytaj plik 
-	R/EAD = 5,
+	READ = 5,
 	// Polecenie zmiany miejsca w ktorym 
 	// zostanie wykonana kolejna operacja 
 	LSEEK = 6,
@@ -33,10 +33,8 @@ typedef enum FsCmd
 	STAT = 8,
 	// Zablokowanie pliku na serwerze
 	LOCK = 9,
-	// Odczytanie pliku zakonczone powodzeniem
-	OK = 10,
 	// Przeslij ponownie plik	
-	AGAIN = 11
+	AGAIN = 10
 } 
 FsCmd;
 
@@ -46,84 +44,84 @@ typedef enum FsAnswer
 	// ===============================================
 	// Kontynuacja
 	// Serwer czeka na polecenia Klienta
-	CONTINUE = 100;
+	CONTINUE = 100,
 	// -----------------------------------------------
 	// Przekroczenie czasu
 	// Serwer nie odpowiedział w zadanym czasie
-	CONNECTION_TIMED_OUT = 110;
+	CONNECTION_TIMED_OUT = 110,
 	// -----------------------------------------------
 	// Odmowa połączenia
 	// Serwer odmówił połączenia z bazą
-	CONNECTION_REFUSED = 111;
+	CONNECTION_REFUSED = 111,
 
 	// Kody powodzenia
 	// ===============================================
 	// OK
 	// Operacja zakończona powodzeniem
-	OK = 200;
+	OK = 200,
 	// -----------------------------------------------
 	// Utworzony
 	// Plik został poprawnie utworzony na serwerze
-	CREATED = 201;
+	CREATED = 201,
 	// -----------------------------------------------
 	// Zapisany
 	// Plik został poprawnie zapisany na serwerze
-	SAVED = 202
+	SAVED = 202,
 	// -----------------------------------------------
 	// Zaakceptowanie
 	// Serwer zaakceptował połączenie z klientem 
-	ACCEPTED = 203;
+	ACCEPTED = 203,
 
 	// Kody przekierowania
 	// ===============================================
 	// Niezmodyfikowany
 	// Dany plik nie został zmodyfikowany na serwerze
-	NOT_MODIFIED = 300;
+	NOT_MODIFIED = 300,
 
 	// Kody błędu aplikacji klienta
 	// ===============================================
 	// Nieprawidłowe zapytanie 
 	// żądanie nie może być obsłużone przez serwer 
 	// z powodu błędnej składni zapytania
-	BAD_REQUEST = 400;
+	BAD_REQUEST = 400,
 	// -----------------------------------------------
 	// Nie znaleziono
 	// serwer nie odnalazł zasobu według podanego wzorca
-	NOT_FOUND = 401;
+	NOT_FOUND = 401,
 	// -----------------------------------------------
 	// Niedozwolone
 	// zażądany zasób nie jest w stanie zwrócić 
 	// odpowiedzi mogącej być obsłużonej przez klienta 
 	// według informacji podanych w zapytaniu
-	NOT_ACCETABLE = 402;
+	NOT_ACCETABLE = 402,
 	// -----------------------------------------------
 	// Blokada na pliku
 	// Konflikt z obecnym statusem zasobu na serwerze. 
 	// Zwracany gdy klient nie może uzyskać dostępu 
 	// do zablokowanego pliku 
-	FILE_BLOCKED = 403;
+	FILE_BLOCKED = 403,
 	// -----------------------------------------------
 	// Plik istnieje już na serwerze
 	// Podany plik znajduje się już w danym katalogu 
 	// na serwerze
-	ALREADY_EXIST = 404;
+	ALREADY_EXIST = 404,
 	// -----------------------------------------------
 	// Jest katalogiem
 	// Podany plik jest katalogiem
-	IS_DIR = 405;
+	IS_DIR = 405,
 
 	// Kody błędów wewnętrznych
 	// ===============================================
 	// Wewnętrzny błąd serwera
 	// Serwer napotkał niespodziewane trudności
 	// które uniemożliwiły zrealizowanie żądania
-	INTERNAL_SERVER_ERROR = 500;
+	INTERNAL_SERVER_ERROR = 500,
 	// ----------------------------------------------
 	// Nie zaimplementowano
 	// Serwer nie dysponuje funkcjonalnością wymaganą 
 	// w zapytaniu ten kod jest zwracany gdy serwer 
 	// otrzymał nieznany typ zapytania
-	NOT_IMPLEMENTED = 501;
+	NOT_IMPLEMENTED = 501
 }
 FsAnswer;
 

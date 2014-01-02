@@ -1,6 +1,0 @@
-#ifndef PROTOCOL_H_INCLUDED
-#define PROTOCOL_H_INCLUDED
-
-
-
-#endif // PROTOCOL_H_INCLUDED
