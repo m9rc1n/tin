@@ -130,7 +130,7 @@ typedef struct FsOpenServerC
 	/* polecenie otworzenia serwera */
 	FsCmd command;
 	/* adres serwera */
-	char* serveraddress;
+	char server_address[16];
 } 
 FsOpenServerC;
 

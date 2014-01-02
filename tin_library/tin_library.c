@@ -7,13 +7,11 @@
  *
  * wysylamy login a serwer jesli odpowie dobrze to zwracamy uchwyt
  */ 
+
 int fs_open_server (char* server_address)
 {
-	int sockd;
+	int sockd, addrlen, port, status, count;
     struct sockaddr_in my_addr, srv_addr;
-    char buf[MAX_BUF];
-    int count;
-    int addrlen;
 
 	FsOpenServerS server_struct;
 	FsOpenServerC client_struct = {OPEN_SERVER, server_address};
@@ -29,22 +27,23 @@ int fs_open_server (char* server_address)
 	my_addr.sin_family = AF_INET;
     my_addr.sin_addr.s_addr = INADDR_ANY;
     my_addr.sin_port = 0;
+    status = bind (sockd, (struct sockaddr*)&my_addr, sizeof(my_addr));
 
-    bind(sockd, (struct sockaddr*)&my_addr, sizeof(my_addr));
+  	/* server address */ 
+	srv_addr.sin_family = AF_INET;    
+	inet_aton ("localhost", &srv_addr.sin_addr);
+	printf ("input port: ");
+	scanf ("%d", &port);
+    srv_addr.sin_port = htons(port);
 
-    /* server address */
-    srv_addr.sin_family = AF_INET;
-    inet_aton("localhost", &srv_addr.sin_addr);
-    srv_addr.sin_port = htons(atoi("61110"));
-	
-	sendto(sockd, &client_struct, sizeof(client_struct), 0, (struct sockaddr*)&srv_addr, sizeof(srv_addr));
-    addrlen = sizeof(srv_addr);
+	status = sendto (sockd, (FsOpenServerC*) &client_struct, sizeof(FsOpenServerC), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+	addrlen = sizeof(srv_addr);
+  	count = recvfrom(sockd, (FsOpenServerS*) &server_struct, sizeof(FsOpenServerS), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
-//    	count = recvfrom(sockd, &server_struct, sizeof(server_struct), 0, (struct sockaddr*)&srv_addr, &addrlen);
+	printf ("Server handler: %d\n", server_struct.server_handler); 
 
-    close(sockd);
-
-	return server_struct.server_handler;
+    close (sockd);
+	return 0;//server_struct.server_handler;
 }
 
 int fs_close_server (int srvhndl)
