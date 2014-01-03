@@ -1,6 +1,8 @@
 // client
 #include "client_network.h"
 
+int server_handler = 20;
+
 int c_open_server (void)
 {
 	char* server_address;

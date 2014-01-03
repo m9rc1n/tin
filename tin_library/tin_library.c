@@ -56,7 +56,7 @@ int fs_open_server (char* server_address)
 	}
     close (sockd);
     
-	return 0;//server_struct.server_handler;
+	return open_server_s.server_handler;
 }
 
 int fs_close_server (int server_handler)
