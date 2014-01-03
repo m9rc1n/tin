@@ -1,3 +1,4 @@
+// server
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -8,6 +9,11 @@
 #include <unistd.h>
 
 #include "../protocol.h"
+
+#include "server_io.h"
+#include "server_network.h"
+#include "server_reset.h"
+
 
 int main(int argc, char* argv[])
 {

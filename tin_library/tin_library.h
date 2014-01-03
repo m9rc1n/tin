@@ -12,16 +12,14 @@
 
 #include "../protocol.h"
 
-#define MAX_BUF 100
-
 int fs_open_server (char* server_address);
-int fs_close_server (int srvhndl);
+int fs_close_server (int server_handler);
 
-int fs_open (int srvhndl, char* name, int flags);
-int fs_write (int srvhndl, int fd, void *buf, size_t len);
-int fs_read (int srvhndl, int fd, long offset, int whence);
-int fs_close (int srvhndl, int fd);
-/*int fs_fstat (int srvhndl, int fd, struct stat *buf);
-*/int fs_lock (int srvhndl, int fd, int mode);
+int fs_open (int server_handler, char* name, int flags);
+int fs_write (int server_handler, int fd, void *buf, size_t len);
+int fs_read (int server_handler, int fd, long offset, int whence);
+int fs_close (int server_handler, int fd);
+// int fs_fstat (int server_handler, int fd, struct stat *buf);
+int fs_lock (int server_handler, int fd, int mode);
 
 #endif // TIN_LIBRARY_H_INCLUDED

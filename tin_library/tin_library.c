@@ -23,13 +23,13 @@ int fs_open_server (char* server_address)
         exit(1);
     }
 	
-	/* client address */
+	// client address
 	my_addr.sin_family = AF_INET;
     my_addr.sin_addr.s_addr = INADDR_ANY;
     my_addr.sin_port = 0;
     status = bind (sockd, (struct sockaddr*)&my_addr, sizeof(my_addr));
 
-  	/* server address */ 
+  	// server address 
 	srv_addr.sin_family = AF_INET;    
 	inet_aton ("localhost", &srv_addr.sin_addr);
 	printf ("input port: ");
@@ -43,7 +43,8 @@ int fs_open_server (char* server_address)
 	printf ("Server handler: %d\n", server_struct.server_handler); 
 
     close (sockd);
-	return 0;//server_struct.server_handler;
+    
+	return server_struct.server_handler;
 }
 
 int fs_close_server (int srvhndl)

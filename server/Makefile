@@ -1,20 +1,20 @@
 all: server
 
-io.o: io.c
-	gcc -c io.c
+server_io.o: server_io.c
+	gcc -c server_io.c
 
-network.o: network.c
-	gcc -c network.c
+server_network.o: server_network.c
+	gcc -c server_network.c
 
-reset.o: reset.c
-	gcc -c reset.c
+server_reset.o: server_reset.c
+	gcc -c server_reset.c
 
-main.o: main.c
-	gcc -c main.c
+server_main.o: server_main.c
+	gcc -c server_main.c
 
-server: main.o reset.o io.o network.o
-	gcc main.o reset.o io.o network.o -o server
+server: server_main.o server_reset.o server_io.o server_network.o
+	gcc server_main.o server_reset.o server_io.o server_network.o -o server
 
 clean:
-	rm -rf *o server
+	rm -rf *.o server
 

@@ -1,17 +1,17 @@
 all: client
 
-io.o: io.c
-	gcc -c io.c
+client_io.o: client_io.c
+	gcc -c client_io.c
 
-network.o: network.c
-	gcc -c network.c 
+client_network.o: client_network.c
+	gcc -c client_network.c 
 
-main.o: main.c
-	gcc -c main.c
+client_main.o: client_main.c
+	gcc -c client_main.c
 
-client: main.o io.o network.o ../tin_library/tin_library.so
-	gcc main.o io.o network.o ../tin_library/tin_library.so -o client
+client: client_main.o client_io.o client_network.o ../tin_library/tin_library.so
+	gcc client_main.o client_io.o client_network.o ../tin_library/tin_library.so -o client
 
 clean:
-	rm -rf *o client
+	rm -rf *.o client
 

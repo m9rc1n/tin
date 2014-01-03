@@ -1,5 +1,6 @@
-#ifndef NETWORK_H_INCLUDED
-#define NETWORK_H_INCLUDED
+// server
+#ifndef SERVER_NETWORK_H_INCLUDED
+#define SERVER_NETWORK_H_INCLUDED
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -12,7 +13,7 @@
 
 #include "../protocol.h"
 
-int open_socket (void);
-int open_server (void);
+int s_open_server (char* server_address);
+int s_close_server (int server_handler);
 
-#endif // NETWORK_H_INCLUDED
+#endif // SERVER_NETWORK_H_INCLUDED
