@@ -13,7 +13,7 @@
 
 #include "../protocol.h"
 
-int server_handler = 0;
+int server_handler;
 
 int c_open_server (void);
 int c_close_server (void);

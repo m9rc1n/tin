@@ -4,7 +4,7 @@
 int c_open_server (void)
 {
 	char* server_address;
-	int server_handler = fs_open_server ("0.0.0.0");
+	server_handler = fs_open_server ("0.0.0.0");
 }
 
 int c_close_server (void)

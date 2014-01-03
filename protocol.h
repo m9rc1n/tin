@@ -2,7 +2,7 @@
 #define PROTOCOL_H_INCLUDED
 
 
-typedef enum FsCmd
+typedef enum FsCommand
 {
 	// Polacz sie z serwerem
 	OPEN_SERVER = 1,
@@ -36,7 +36,7 @@ typedef enum FsCmd
 	// Przeslij ponownie plik	
 	AGAIN = 10
 } 
-FsCmd;
+FsCommand;
 
 typedef enum FsAnswer
 {
@@ -127,8 +127,6 @@ FsAnswer;
 
 typedef struct FsOpenServerC
 {
-	/* polecenie otworzenia serwera */
-	FsCmd command;
 	/* adres serwera */
 	char server_address[16];
 } 
@@ -142,5 +140,19 @@ typedef struct FsOpenServerS
 	int server_handler;
 } 
 FsOpenServerS;
+
+typedef struct FsCloseServerC
+{
+	// uchwyt do serwera
+	int server_handler;
+} 
+FsCloseServerC;
+
+typedef struct FsCloseServerS
+{
+	// komunikat − odpowiedz serwera
+	FsAnswer answer;
+} 
+FsCloseServerS;
 
 #endif // PROTOCOL_H_INCLUDED

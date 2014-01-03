@@ -13,8 +13,10 @@ int fs_open_server (char* server_address)
 	int sockd, addrlen, port, status, count;
     struct sockaddr_in my_addr, srv_addr;
 
-	FsOpenServerS server_struct;
-	FsOpenServerC client_struct = {OPEN_SERVER, server_address};
+	FsCommand command = OPEN_SERVER;
+	FsAnswer answer;
+	FsOpenServerS open_server_s;
+	FsOpenServerC open_server_c; // = {server_address};
 	
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockd == -1)
@@ -36,15 +38,15 @@ int fs_open_server (char* server_address)
 	scanf ("%d", &port);
     srv_addr.sin_port = htons(port);
 
-	status = sendto (sockd, (FsOpenServerC*) &client_struct, sizeof(FsOpenServerC), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	addrlen = sizeof(srv_addr);
-  	count = recvfrom(sockd, (FsOpenServerS*) &server_struct, sizeof(FsOpenServerS), 0, (struct sockaddr*)&srv_addr, &addrlen);
+	addrlen = sizeof(struct sockaddr_in);
 
-	printf ("Server handler: %d\n", server_struct.server_handler); 
+	status = sendto (sockd, (FsOpenServerC*) &open_server_c, sizeof(FsOpenServerC), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+	addrlen = sizeof(srv_addr);
+  	count = recvfrom(sockd, (FsOpenServerS*) &open_server_s, sizeof(FsOpenServerS), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
     close (sockd);
     
-	return server_struct.server_handler;
+	return 0;//server_struct.server_handler;
 }
 
 int fs_close_server (int srvhndl)

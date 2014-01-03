@@ -14,5 +14,6 @@
 int main(int argc, char* argv[])
 {
 	c_open_server();
+	c_close_server();
 	return 0;
 }
