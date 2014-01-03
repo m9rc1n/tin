@@ -7,3 +7,14 @@ tin
 		x Dodać struktury z sprawozdania
 		x Przemyśleć po co te struktury i jak je użyć
 		x Stworzyć UI
+
+todo
+===
+
+	Błędy
+		x Mam problem ze zmiennymi globalnymi, poczytam jak najlepiej implementować
+		x Trochę z portami miałem proste problemy: ustawione jest stale na 33337
+	
+	Problemy
+		x Przemyśleć jak zrobić jedną inicjalizację socketu, zamiast w każdej funkcji
+		
