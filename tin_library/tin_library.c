@@ -8,17 +8,22 @@
  * wysylamy login a serwer jesli odpowie dobrze to zwracamy uchwyt
  */ 
 
-#define PORT 33337
+#define PORT 44443
+
+int sockd;
+int port;
+struct sockaddr_in my_addr;
+struct sockaddr_in srv_addr;
+FsCommand command;
+FsAnswer answer;
+FsOpenServerS open_server_s;
+FsOpenServerC open_server_c;
+FsCloseServerS close_server_s;
+FsCloseServerC close_server_c;
 
 int fs_open_server (char* server_address)
 {
-	int sockd, addrlen, port, status, count;
-    struct sockaddr_in my_addr, srv_addr;
-
-	FsCommand command = OPEN_SERVER;
-	FsAnswer answer;
-	FsOpenServerS open_server_s;
-	FsOpenServerC open_server_c; // = {server_address};
+	int addrlen, status, count;
 	
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockd == -1)
@@ -39,12 +44,11 @@ int fs_open_server (char* server_address)
 	
 	printf ("input port: ");
 	scanf ("%d", &port);
-    srv_addr.sin_port = htons(PORT);
+    srv_addr.sin_port = htons(port);
 
 	addrlen = sizeof(struct sockaddr_in);
 
-	int com = command;
-
+	command = OPEN_SERVER;
 	sendto (sockd, (int*) &command, sizeof(int), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	addrlen = sizeof(struct sockaddr_in);
 	recvfrom(sockd, (FsAnswer*) &answer, sizeof(int), 0, (struct sockaddr*)&srv_addr, &addrlen);
@@ -54,45 +58,22 @@ int fs_open_server (char* server_address)
 		sendto (sockd, (FsOpenServerC*) &open_server_c, sizeof(FsOpenServerC), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	  	recvfrom(sockd, (FsOpenServerS*) &open_server_s, sizeof(FsOpenServerS), 0, (struct sockaddr*)&srv_addr, &addrlen);
 	}
-    close (sockd);
     
 	return open_server_s.server_handler;
 }
 
 int fs_close_server (int server_handler)
 {
-	int sockd, addrlen, status, count;
-    struct sockaddr_in my_addr, srv_addr;
+	int addrlen, status, count;
 
-	FsCommand command = CLOSE_SERVER;
-	FsAnswer answer;
-	FsCloseServerS close_server_s;
-	FsCloseServerC close_server_c = {server_handler};
-	
-	sockd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sockd == -1)
-    {
-        perror("Socket creation error");
-        exit(1);
-    }
-	
-	// client address
-	my_addr.sin_family = AF_INET;
-    my_addr.sin_addr.s_addr = INADDR_ANY;
-    my_addr.sin_port = 0;
-    status = bind (sockd, (struct sockaddr*)&my_addr, sizeof(my_addr));
-
-  	// server address 
-	srv_addr.sin_family = AF_INET;    
-	inet_aton ("localhost", &srv_addr.sin_addr);
-    srv_addr.sin_port = htons(PORT);
-	
+	command = CLOSE_SERVER;
 	status = sendto (sockd, (int*) &command, sizeof(int), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	addrlen = sizeof(struct sockaddr_in);
 	recvfrom(sockd, (int*) &answer, sizeof(int), 0, (struct sockaddr*)&srv_addr, &addrlen);
 	if (answer == OK)
 	{
-		status = sendto (sockd, (FsCloseServerC*) &close_server_c, sizeof(FsCloseServerC), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+		close_server_c.server_handler = server_handler;
+		sendto (sockd, (FsCloseServerC*) &close_server_c, sizeof(FsCloseServerC), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	  	recvfrom(sockd, (FsCloseServerS*) &close_server_s, sizeof(FsCloseServerS), 0, (struct sockaddr*)&srv_addr, &addrlen);
 	}
 
