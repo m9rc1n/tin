@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 
 	// każdy klient dostaje inny numer
 	// robimy kolejke klientóœ?
-	int server_handler = 5;
+	int server_handler = 0;
 
 	FsOpenServerS open_server_s;
 	FsOpenServerC open_server_c;
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 		{
 			// s_open_server();
 			recvfrom (sockd, (FsOpenServerC*) &open_server_c, sizeof (FsOpenServerC), 0, (struct sockaddr*) &cli_name, &addrlen);
-			open_server_s.server_handler = server_handler;	
+			open_server_s.server_handler = server_handler++;	
 			status = sendto (sockd, (FsOpenServerS*) &open_server_s, sizeof (FsOpenServerS), 0, (struct sockaddr*) &cli_name, sizeof (cli_name));
 		} 
 		else if (command == CLOSE_SERVER)
