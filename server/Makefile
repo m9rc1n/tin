@@ -11,9 +11,12 @@ server_reset.o: server_reset.c
 
 server_main.o: server_main.c
 	gcc -c server_main.c
+	
+server_synchroniser.o: server_synchroniser.c server_synchroniser.h
+	gcc -c server_synchroniser.c
 
-server: server_main.o server_reset.o server_io.o server_network.o
-	gcc server_main.o server_reset.o server_io.o server_network.o -o server
+server: server_main.o server_reset.o server_io.o server_network.o server_synchroniser.o
+	gcc server_main.o server_reset.o server_io.o server_network.o server_synchroniser.o -lpthread -o server
 
 clean:
 	rm -rf *.o server

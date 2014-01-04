@@ -46,6 +46,11 @@ int main(int argc, char* argv[])
 	my_name.sin_addr.s_addr = INADDR_ANY;
 	my_name.sin_port = htons (atoi (argv[1]));
 	status = bind(sockd, (struct sockaddr*) &my_name, sizeof (my_name));
+	
+	/* Trzeba stworzyc i ruszyc synchronizator dostepu do plikow. */
+	// fixme: error handling
+	synchroniser_init();
+	
 	while (1)
 	{
 		recvfrom (sockd, (FsCommand*) &command, sizeof (int), 0, (struct sockaddr*) &cli_name, &addrlen);
