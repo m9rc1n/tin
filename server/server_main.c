@@ -22,14 +22,9 @@ int main(int argc, char* argv[])
 	struct sockaddr_in my_name, cli_name;
 
 	// każdy klient dostaje inny numer
-	// robimy kolejke klientóœ?
+	// robimy kolejke klientów?
 	int server_handler = 0;
 
-	FsOpenServerS open_server_s;
-	FsOpenServerC open_server_c;
-	FsCloseServerS close_server_s;
-	FsCloseServerC close_server_c;
-	
 	FsCommand command;
 	FsAnswer answer;
 	
@@ -59,22 +54,15 @@ int main(int argc, char* argv[])
 
 		if (command == OPEN_SERVER)
 		{
-			// s_open_server();
-			recvfrom (sockd, (FsOpenServerC*) &open_server_c, sizeof (FsOpenServerC), 0, (struct sockaddr*) &cli_name, &addrlen);
-			open_server_s.server_handler = server_handler++;	
-			status = sendto (sockd, (FsOpenServerS*) &open_server_s, sizeof (FsOpenServerS), 0, (struct sockaddr*) &cli_name, sizeof (cli_name));
+			s_open_server(sockd, cli_name, addrlen, server_handler++);
 		} 
 		else if (command == CLOSE_SERVER)
 		{
-			// s_close_server();		
-			recvfrom (sockd, (FsCloseServerC*) &close_server_c, sizeof (FsCloseServerC), 0, (struct sockaddr*) &cli_name, &addrlen);
-			printf ("Closing session with: %d\n", close_server_c.server_handler); 
-			close_server_s.answer = OK;
-			status = sendto (sockd, (FsCloseServerS*) &close_server_s, sizeof (FsCloseServerS), 0, (struct sockaddr*) &cli_name, sizeof (cli_name));
+			s_close_server(sockd, cli_name, addrlen, server_handler);
 			// @todo tymczasowe
 			// zamykamy server, trzeba zrobic bardziej praktycznie, macie jakis pomysl?
 			// zamykanie serwera przez klienta raczej nie wchodzi w gre, chyba ze jakis klient sterujacy serwerem
-			break;
+			// break;
 		} 	
 
 	}	

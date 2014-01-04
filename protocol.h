@@ -71,6 +71,10 @@ typedef enum FsAnswer
 	// Zaakceptowanie
 	// Serwer zaakceptował połączenie z klientem 
 	ACCEPTED = 203,
+	// -----------------------------------------------
+	// Zamknięcie połączenia
+	// Serwer zamknął połączenie z klientem
+	CLOSED = 204,
 
 	// Kody przekierowania
 	// ===============================================

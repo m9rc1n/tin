@@ -13,7 +13,7 @@
 
 #include "../protocol.h"
 
-int s_open_server (char* server_address);
-int s_close_server (int server_handler);
+int s_open_server (int sockd, struct sockaddr_in cli_name, int addrlen, int server_handler);
+int s_close_server (int sockd, struct sockaddr_in cli_name, int addrlen, int server_handler);
 
 #endif // SERVER_NETWORK_H_INCLUDED
