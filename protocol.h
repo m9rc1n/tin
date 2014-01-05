@@ -22,10 +22,10 @@ typedef enum FsCommand
 	OPEN_APPEND = 35,
 	// Zapisz do pliku
 	WRITE = 4,
-	// Odczytaj plik 
+	// Odczytaj plik
 	READ = 5,
-	// Polecenie zmiany miejsca w ktorym 
-	// zostanie wykonana kolejna operacja 
+	// Polecenie zmiany miejsca w ktorym
+	// zostanie wykonana kolejna operacja
 	LSEEK = 6,
 	// Zamknij plik
 	CLOSE = 7,
@@ -33,9 +33,9 @@ typedef enum FsCommand
 	STAT = 8,
 	// Zablokowanie pliku na serwerze
 	LOCK = 9,
-	// Przeslij ponownie plik	
+	// Przeslij ponownie plik
 	AGAIN = 10
-} 
+}
 FsCommand;
 
 typedef enum FsAnswer
@@ -69,7 +69,7 @@ typedef enum FsAnswer
 	SAVED = 202,
 	// -----------------------------------------------
 	// Zaakceptowanie
-	// Serwer zaakceptował połączenie z klientem 
+	// Serwer zaakceptował połączenie z klientem
 	ACCEPTED = 203,
 	// -----------------------------------------------
 	// Zamknięcie połączenia
@@ -84,8 +84,8 @@ typedef enum FsAnswer
 
 	// Kody błędu aplikacji klienta
 	// ===============================================
-	// Nieprawidłowe zapytanie 
-	// żądanie nie może być obsłużone przez serwer 
+	// Nieprawidłowe zapytanie
+	// żądanie nie może być obsłużone przez serwer
 	// z powodu błędnej składni zapytania
 	BAD_REQUEST = 400,
 	// -----------------------------------------------
@@ -94,19 +94,19 @@ typedef enum FsAnswer
 	NOT_FOUND = 401,
 	// -----------------------------------------------
 	// Niedozwolone
-	// zażądany zasób nie jest w stanie zwrócić 
-	// odpowiedzi mogącej być obsłużonej przez klienta 
+	// zażądany zasób nie jest w stanie zwrócić
+	// odpowiedzi mogącej być obsłużonej przez klienta
 	// według informacji podanych w zapytaniu
 	NOT_ACCETABLE = 402,
 	// -----------------------------------------------
 	// Blokada na pliku
-	// Konflikt z obecnym statusem zasobu na serwerze. 
-	// Zwracany gdy klient nie może uzyskać dostępu 
-	// do zablokowanego pliku 
+	// Konflikt z obecnym statusem zasobu na serwerze.
+	// Zwracany gdy klient nie może uzyskać dostępu
+	// do zablokowanego pliku
 	FILE_BLOCKED = 403,
 	// -----------------------------------------------
 	// Plik istnieje już na serwerze
-	// Podany plik znajduje się już w danym katalogu 
+	// Podany plik znajduje się już w danym katalogu
 	// na serwerze
 	ALREADY_EXIST = 404,
 	// -----------------------------------------------
@@ -122,8 +122,8 @@ typedef enum FsAnswer
 	INTERNAL_SERVER_ERROR = 500,
 	// ----------------------------------------------
 	// Nie zaimplementowano
-	// Serwer nie dysponuje funkcjonalnością wymaganą 
-	// w zapytaniu ten kod jest zwracany gdy serwer 
+	// Serwer nie dysponuje funkcjonalnością wymaganą
+	// w zapytaniu ten kod jest zwracany gdy serwer
 	// otrzymał nieznany typ zapytania
 	NOT_IMPLEMENTED = 501
 }
@@ -131,9 +131,11 @@ FsAnswer;
 
 typedef struct FsOpenServerC
 {
-	/* adres serwera */
+    // komenda wysylana do serwera
+    FsCommand command;
+	// adres serwera
 	char server_address[16];
-} 
+}
 FsOpenServerC;
 
 typedef struct FsOpenServerS
@@ -142,21 +144,23 @@ typedef struct FsOpenServerS
 	FsAnswer answer;
 	// uchwyt do serwera
 	int server_handler;
-} 
+}
 FsOpenServerS;
 
 typedef struct FsCloseServerC
 {
+    // komenda wysylana do serwera
+    FsCommand command;
 	// uchwyt do serwera
 	int server_handler;
-} 
+}
 FsCloseServerC;
 
 typedef struct FsCloseServerS
 {
 	// komunikat − odpowiedz serwera
 	FsAnswer answer;
-} 
+}
 FsCloseServerS;
 
 #endif // PROTOCOL_H_INCLUDED
