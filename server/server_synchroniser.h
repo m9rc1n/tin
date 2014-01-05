@@ -5,8 +5,19 @@ struct SyncRequest {
   char *file_name; //todo reszta
 };
 
+/**
+ * 
+ */
 extern int synchroniser_add(struct SyncRequest *request);
 
+/**
+ * 
+ */
 extern int synchroniser_init();
+
+/**
+ * 
+ */
+extern int synchroniser_shutdown();
 
 #endif

@@ -13,6 +13,7 @@
 #include "server_io.h"
 #include "server_network.h"
 #include "server_reset.h"
+#include "server_synchroniser.h"
 
 #define MAX_BUF 256
 
@@ -52,7 +53,7 @@ int main(int argc, char* argv[])
 
 	/* Trzeba stworzyc i ruszyc synchronizator dostepu do plikow. */
 	// fixme: error handling
-	// synchroniser_init();
+	synchroniser_init();
 
 	while (1)
 	{
@@ -72,5 +73,7 @@ int main(int argc, char* argv[])
 		}
 	}
 	close(sockd);
+	
+	synchroniser_shutdown();
 	return 0;
 }

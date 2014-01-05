@@ -178,15 +178,15 @@ int synchroniser_add(struct SyncRequest *request) {
 }
 
 int synchroniser_init() {
-int i;  
+ 
   sync_queue_init();
   sync_sem_init();
   
   pthread_create(&synchroniser_thread, NULL, synchroniser_thread_func, NULL);
-  
-  // ...
-  
-  pthread_join(synchroniser_thread, NULL);
-  
+ 
   return 42;
+}
+
+int synchroniser_shutdown() {
+  pthread_join(synchroniser_thread, NULL);
 }
