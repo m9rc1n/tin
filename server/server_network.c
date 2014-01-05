@@ -18,7 +18,7 @@ int s_open_server (int sockd, char* buffer, int buflen, struct sockaddr_in cli_n
 int s_close_server (int sockd, char* buffer, int buflen, struct sockaddr_in cli_name, int addrlen, int server_handler)
 {
 	FsCloseServerS close_server_s;
-	FsCloseServerC close_server_c;
+	FsCloseServerC* close_server_c;
 
     close_server_c = (FsCloseServerC*) buffer;
 
