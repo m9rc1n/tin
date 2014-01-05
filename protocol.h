@@ -47,66 +47,66 @@ typedef enum FsAnswer
 	CONTINUE = 100,
 	// -----------------------------------------------
 	// Przekroczenie czasu
-	// Serwer nie odpowiedział w zadanym czasie
+	// Serwer nie odpowiedzial w zadanym czasie
 	CONNECTION_TIMED_OUT = 110,
 	// -----------------------------------------------
-	// Odmowa połączenia
-	// Serwer odmówił połączenia z bazą
+	// Odmowa polaczenia
+	// Serwer odmowil polaczenia z baza
 	CONNECTION_REFUSED = 111,
 
 	// Kody powodzenia
 	// ===============================================
 	// OK
-	// Operacja zakończona powodzeniem
+	// Operacja zakonczona powodzeniem
 	OK = 200,
 	// -----------------------------------------------
 	// Utworzony
-	// Plik został poprawnie utworzony na serwerze
+	// Plik zostal poprawnie utworzony na serwerze
 	CREATED = 201,
 	// -----------------------------------------------
 	// Zapisany
-	// Plik został poprawnie zapisany na serwerze
+	// Plik zostal poprawnie zapisany na serwerze
 	SAVED = 202,
 	// -----------------------------------------------
 	// Zaakceptowanie
-	// Serwer zaakceptował połączenie z klientem
+	// Serwer zaakceptowal polaczenie z klientem
 	ACCEPTED = 203,
 	// -----------------------------------------------
-	// Zamknięcie połączenia
-	// Serwer zamknął połączenie z klientem
+	// Zamkniecie polaczenia
+	// Serwer zamknal polaczenie z klientem
 	CLOSED = 204,
 
 	// Kody przekierowania
 	// ===============================================
 	// Niezmodyfikowany
-	// Dany plik nie został zmodyfikowany na serwerze
+	// Dany plik nie zostal zmodyfikowany na serwerze
 	NOT_MODIFIED = 300,
 
-	// Kody błędu aplikacji klienta
+	// Kody bledu aplikacji klienta
 	// ===============================================
-	// Nieprawidłowe zapytanie
-	// żądanie nie może być obsłużone przez serwer
-	// z powodu błędnej składni zapytania
+	// Nieprawidlowe zapytanie
+	// żadanie nie może być obslużone przez serwer
+	// z powodu blednej skladni zapytania
 	BAD_REQUEST = 400,
 	// -----------------------------------------------
 	// Nie znaleziono
-	// serwer nie odnalazł zasobu według podanego wzorca
+	// serwer nie odnalazl zasobu wedlug podanego wzorca
 	NOT_FOUND = 401,
 	// -----------------------------------------------
 	// Niedozwolone
-	// zażądany zasób nie jest w stanie zwrócić
-	// odpowiedzi mogącej być obsłużonej przez klienta
-	// według informacji podanych w zapytaniu
+	// zażadany zasob nie jest w stanie zwrocić
+	// odpowiedzi mogacej być obslużonej przez klienta
+	// wedlug informacji podanych w zapytaniu
 	NOT_ACCETABLE = 402,
 	// -----------------------------------------------
 	// Blokada na pliku
 	// Konflikt z obecnym statusem zasobu na serwerze.
-	// Zwracany gdy klient nie może uzyskać dostępu
+	// Zwracany gdy klient nie może uzyskać dostepu
 	// do zablokowanego pliku
 	FILE_BLOCKED = 403,
 	// -----------------------------------------------
 	// Plik istnieje już na serwerze
-	// Podany plik znajduje się już w danym katalogu
+	// Podany plik znajduje sie już w danym katalogu
 	// na serwerze
 	ALREADY_EXIST = 404,
 	// -----------------------------------------------
@@ -114,17 +114,17 @@ typedef enum FsAnswer
 	// Podany plik jest katalogiem
 	IS_DIR = 405,
 
-	// Kody błędów wewnętrznych
+	// Kody bledow wewnetrznych
 	// ===============================================
-	// Wewnętrzny błąd serwera
-	// Serwer napotkał niespodziewane trudności
-	// które uniemożliwiły zrealizowanie żądania
+	// Wewnetrzny blad serwera
+	// Serwer napotkal niespodziewane trudnosci
+	// ktore uniemożliwily zrealizowanie żadania
 	INTERNAL_SERVER_ERROR = 500,
 	// ----------------------------------------------
 	// Nie zaimplementowano
-	// Serwer nie dysponuje funkcjonalnością wymaganą
+	// Serwer nie dysponuje funkcjonalnoscia wymagana
 	// w zapytaniu ten kod jest zwracany gdy serwer
-	// otrzymał nieznany typ zapytania
+	// otrzymal nieznany typ zapytania
 	NOT_IMPLEMENTED = 501
 }
 FsAnswer;

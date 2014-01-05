@@ -4,11 +4,9 @@
 int s_open_server (int sockd, char* buffer, int buflen, struct sockaddr_in cli_name, int addrlen, int server_handler)
 {
 	FsOpenServerS open_server_s;
-	FsOpenServerC open_server_c;
+	FsOpenServerC* open_server_c;
 
-    memcpy ((FsOpenServerC*) &open_server_c, buffer, sizeof(FsOpenServerC));
-
-    printf ("%d\n", open_server_c.command);
+    open_server_c = (FsOpenServerC*) buffer;
 
 	open_server_s.server_handler = server_handler;
 	open_server_s.answer = ACCEPTED;
@@ -22,9 +20,9 @@ int s_close_server (int sockd, char* buffer, int buflen, struct sockaddr_in cli_
 	FsCloseServerS close_server_s;
 	FsCloseServerC close_server_c;
 
-    memcpy ((FsCloseServerC*) &close_server_c, buffer, sizeof(FsCloseServerC));
+    close_server_c = (FsCloseServerC*) buffer;
 
-	printf ("Closing session with: %d\n", close_server_c.server_handler);
+	printf ("Closing session with: %d\n", (*close_server_c).server_handler);
 	close_server_s.answer = CLOSED;
 	return sendto (sockd, (FsCloseServerS*) &close_server_s, sizeof (FsCloseServerS), 0, (struct sockaddr*) &cli_name, sizeof (cli_name));
 }

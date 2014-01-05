@@ -22,15 +22,14 @@ int main(int argc, char* argv[])
 	int addrlen = sizeof(struct sockaddr_in);
 	int status, sockd;
 	struct sockaddr_in my_name, cli_name;
-    char* buffer;
+    char buffer[MAX_BUF];
     char command_buf[4];
 
 	// kazdy klient dostaje inny numer
 	// robimy kolejke klientow?
 	int server_handler = 0;
 
-	FsCommand command;
-	FsAnswer answer;
+	FsCommand* command;
 
 	if (argc < 2)
 	{
@@ -57,18 +56,13 @@ int main(int argc, char* argv[])
 
 	while (1)
 	{
-		recvfrom (sockd, (char*) buffer, MAX_BUF, 0, (struct sockaddr*) &cli_name, &addrlen);
-		strncpy (command_buf, buffer, 4);
-        command = atoi(command_buf);
-        printf ("%d", command);
-        FsOpenServerC op;
-        memcpy (&op, buffer, sizeof(FsOpenServerC));
-        printf ("Aa -- %d \n", (op).command);
-		if (command == OPEN_SERVER)
+		recvfrom (sockd, (char*) &buffer, MAX_BUF, 0, (struct sockaddr*) &cli_name, &addrlen);
+        command = (FsCommand*) &buffer;
+		if (*command == OPEN_SERVER)
 		{
 			s_open_server(sockd, buffer, MAX_BUF, cli_name, addrlen, server_handler++);
 		}
-		else if (command == CLOSE_SERVER)
+		else if (*command == CLOSE_SERVER)
 		{
 			s_close_server(sockd, buffer, MAX_BUF, cli_name, addrlen, server_handler);
 			// @todo tymczasowe

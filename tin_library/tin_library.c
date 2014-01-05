@@ -59,8 +59,6 @@ int fs_close_server (int server_handler)
 	int addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
-    printf ("Jestem");
-
 	close_server_c.command = CLOSE_SERVER;
 	close_server_c.server_handler = server_handler;
 	sendto (sockd, (FsCloseServerC*) &close_server_c, sizeof(FsCloseServerC), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
