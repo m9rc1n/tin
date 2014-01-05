@@ -1,22 +1,15 @@
+CXX = clang
+CXXFLAGS = -O2 -Wall 
+LDFLAGS = -lpthread
+OBJS = server_io.o server_network.o server_main.o server_synchroniser.o server_thread.o
+
 all: server
 
-server_io.o: server_io.c
-	gcc -c server_io.c
+%.o:%.c
+	$(CXX) $(CXXFLAGS) $< -c -o $@
 
-server_network.o: server_network.c
-	gcc -c server_network.c
-
-server_reset.o: server_reset.c
-	gcc -c server_reset.c
-
-server_main.o: server_main.c
-	gcc -c server_main.c
-	
-server_synchroniser.o: server_synchroniser.c server_synchroniser.h
-	gcc -c server_synchroniser.c
-
-server: server_main.o server_reset.o server_io.o server_network.o server_synchroniser.o
-	gcc server_main.o server_reset.o server_io.o server_network.o server_synchroniser.o -lpthread -o server
+server: $(OBJS)
+	$(CXX) $(OBJS) $(LDFLAGS) -o server
 
 clean:
 	rm -rf *.o server
