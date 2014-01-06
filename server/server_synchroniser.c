@@ -1,6 +1,5 @@
 #include "server_synchroniser.h"
 
-#include <pthread.h>
 #include <semaphore.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,125 +8,19 @@
 
 #define HASH_LIST_SIZE 31
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-/* Semafory. */
-
-/* Semafor odpowiedzialny za dostep do operacji wloz/wyjmij na kolejce. */
-static sem_t sem_request_queue;
-
-/* Semafor ktory ladnie wyglada. */
-static sem_t sem_sync_thread;
-
-/*
- * Przygotowuje semafory.
- */ 
-static int sync_sem_init() {
-  sem_init(&sem_request_queue, 0, 1);
-  sem_init(&sem_sync_thread, 0, 0);  
-  
-  return 42;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-/* Kolejka zadan uzywana do synchronizacji synchronizatora. */
-
-/*
- * Pojedynczy element kolejki.
- */
-struct SyncRequestQueueElement {
-  struct SyncRequestQueueElement *next;
-  struct SyncRequest *element;
-};
-
-/*
- * Kolejka.
- */
-struct SyncRequestQueue {
-  struct SyncRequestQueueElement *head;
-  struct SyncRequestQueueElement *tail;
-};  
-
-/* Kolejka zadan synchronizatora. */
-static struct SyncRequestQueue synchroniser_requests_queue;
-
-/*
- * Przygotowuje kolejke do dzialania. 
- */ 
-static int sync_queue_init() {
-  synchroniser_requests_queue.head = NULL;
-  synchroniser_requests_queue.tail = NULL;
-  
-  return 0;
-};
-
-/*
- * Dodaje element na koniec kolejki zadan synchronizatora. Odwiesza watek synchronizatora.
- */
-static int sync_queue_add(struct SyncRequest *request) {
-  
-  struct SyncRequestQueueElement *new_queue_element = (struct SyncRequestQueueElement *) calloc(1, sizeof(struct SyncRequestQueueElement));
-  new_queue_element->element = request;
-  new_queue_element->next = NULL;
-  
-  sem_wait(&sem_request_queue);
-  
-  if(synchroniser_requests_queue.head == NULL) {
-    synchroniser_requests_queue.head = new_queue_element;
-    synchroniser_requests_queue.tail = new_queue_element;
-  } else {
-    synchroniser_requests_queue.tail->next = new_queue_element;
-    synchroniser_requests_queue.tail = new_queue_element;
-  }
-  
-  sem_post(&sem_sync_thread);
-  sem_post(&sem_request_queue);
-  
-  return 42;
-};
-
-/*
- * Wyciaga pierwszy element z kolejki zadan synchronizatora. Watek sam sie musi potem zawiesic.
- */
-static int sync_queue_get(struct SyncRequest *request) {
-  
-  sem_wait(&sem_sync_thread);
-  sem_wait(&sem_request_queue);
- 
-  struct SyncRequestQueueElement *first_queue_element = synchroniser_requests_queue.head;
-  synchroniser_requests_queue.head = first_queue_element->next;
-  
-  if(first_queue_element->next == NULL)
-    synchroniser_requests_queue.tail = NULL;
-    
-  sem_post(&sem_request_queue);
-  
-  request = first_queue_element->element;
-  free(first_queue_element);
-  
-  return 42;
-};
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-/* Kontener na wszelkiego rodzaju blokady na plikach. */ 
-
 /*
  * 
  */
 struct SyncHashMapElement {
-  struct HashMapElement *prev;
-  struct HashMapElement *next;
-  
-  struct SyncRequest *element;
+  struct SyncHashMapElement *next;
+  struct SyncQuery *element;
 };
 
 /*
  * 
  */
 struct SyncHashMap {
-  struct HashMapElement *hashes[HASH_LIST_SIZE];
+  struct SyncHashMapElement *hashes[HASH_LIST_SIZE];
   unsigned size;
 };
 
@@ -149,50 +42,87 @@ static int sync_hash_map_hash(char *file_name) {
   return hash;
 };
 
+static int sync_hash_map_init() {
+    int i;
+    
+    for(i = 0; i < HASH_LIST_SIZE; ++ i)
+        synchroniser_map.hashes[i] = NULL;
+    
+    return 0;
+}
+    
+static int sync_hash_map_create(char *file_name, struct SyncQuery *result) {
+    int hash;
+    struct SyncHashMapElement *hash_map_element;
+    struct SyncHashMapElement *new_element;
+    
+    hash = sync_hash_map_hash(file_name);
+    hash_map_element = synchroniser_map.hashes[hash];
+    
+    result = (struct SyncQuery *) calloc(1, sizeof(struct SyncQuery));
+    result->file_name = (char *) calloc(strlen(file_name), sizeof(char));
+    strcpy(result->file_name, file_name);
+    
+    /*
+     * TODO: domyślne wartości tych blokad i innych dziadostw.
+     */
+    
+    new_element = (struct SyncHashMapElement *) calloc(1, sizeof(struct SyncHashMapElement));
+    new_element->next = NULL;
+    new_element->element = result;
+    
+    ++ synchroniser_map.size;
+    
+    if(hash_map_element == NULL) {
+        synchroniser_map.hashes[hash] = new_element;
+    } else {
+        while(hash_map_element->next != NULL)
+            hash_map_element = hash_map_element->next;
+            
+        hash_map_element->next = new_element;
+    }
+    
+    return 0;
+}
+
+static int sync_hash_map_find(char *file_name, struct SyncQuery *result) {
+    int hash;
+    struct SyncHashMapElement *hash_map_element;
+    
+    hash = sync_hash_map_hash(file_name);
+    hash_map_element = synchroniser_map.hashes[hash];
+    
+    while(hash_map_element != NULL) {
+        if(strcmp(hash_map_element->element->file_name, file_name) == 0) 
+            break;
+        
+        hash_map_element = hash_map_element->next;
+    }
+    
+    if(hash_map_element == NULL)
+        sync_hash_map_create(file_name, result);
+    
+    return 0;
+}
 /* todo: dokonczyc to */
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
+sem_t sem_synchroniser_access;
 
-/* Watek synchronizatora i jemu potrzebne rzeczy. */
-
-static pthread_t synchroniser_thread;
-
-static void *synchroniser_thread_func(void *parameters) {
-  struct SyncRequest *rq = NULL;
-
-  while(1) {
-    sync_queue_get(rq);
-
-    // tu sie dzieje magia
-  }
+int synchroniser_query(char *file_name, struct SyncQuery *result) {  
+    sem_wait(&sem_synchroniser_access);
+    sync_hash_map_find(file_name, result);    
+    sem_post(&sem_synchroniser_access);    
+    return 0;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-/* Intefrejs synchronizatora dla reszty aplikacji. */
-
-/*
- * Dodaje zadanie do kolejki synchronizatora.
- */
-int synchroniser_add(struct SyncRequest *request) {
-  
-  return sync_queue_add(request);
-}
-
-int synchroniser_init() {
- 
-  sync_queue_init();
-  sync_sem_init();
-  
-  pthread_create(&synchroniser_thread, NULL, synchroniser_thread_func, NULL);
- 
-  return 42;
+int synchroniser_init() { 
+    sync_hash_map_init();
+    sem_init(&sem_synchroniser_access, 0, 1); 
+    return 0;
 }
 
 int synchroniser_shutdown() {
-  pthread_join(synchroniser_thread, NULL);
-  
-  return 42;
+    sem_destroy(&sem_synchroniser_access);  
+    return 0;
 }
