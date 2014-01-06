@@ -129,30 +129,8 @@ typedef enum FsAnswer
 }
 FsAnswer;
 
-typedef struct FsRequest
-{
-    FsCommand command;
-    
-    union RequestData 
-    {
-        int server_handler;
-    } request_data;
-} FsRequest;
-
-typedef struct FsResponse
-{
-    FsAnswer answer;
-    
-    union ResponseData
-    {
-        int server_handler;
-    } response_data;
-} FsResponse;
-
 typedef struct FsOpenServerC
 {
-    // komenda wysylana do serwera
-    FsCommand command;
 	// adres serwera
 	char server_address[16];
 }
@@ -160,8 +138,6 @@ FsOpenServerC;
 
 typedef struct FsOpenServerS
 {
-	// komunikat − odpowiedz serwera
-	FsAnswer answer;
 	// uchwyt do serwera
 	int server_handler;
 }
@@ -169,18 +145,45 @@ FsOpenServerS;
 
 typedef struct FsCloseServerC
 {
-    // komenda wysylana do serwera
-    FsCommand command;
 	// uchwyt do serwera
 	int server_handler;
 }
 FsCloseServerC;
 
+// narazie nie usuwam, pozniej tak
 typedef struct FsCloseServerS
 {
 	// komunikat − odpowiedz serwera
 	FsAnswer answer;
 }
 FsCloseServerS;
+
+typedef struct FsRequest
+{
+	// komenda wysylana do serwera
+    FsCommand command;
+    
+    union RequestData 
+    {
+        FsOpenServerC open_server_c;
+		FsCloseServerC close_server_c;
+    } 
+	request_data;
+} 
+FsRequest;
+
+typedef struct FsResponse
+{
+	// komunikat − odpowiedz serwera
+    FsAnswer answer;
+    
+    union ResponseData
+    {
+        FsOpenServerS open_server_s;
+		FsCloseServerS close_server_s;
+    } 
+	response_data;
+} 
+FsResponse;
 
 #endif // PROTOCOL_H_INCLUDED

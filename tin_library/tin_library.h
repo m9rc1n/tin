@@ -16,12 +16,6 @@ extern int sockd;
 extern int port;
 extern struct sockaddr_in my_addr; 
 extern struct sockaddr_in srv_addr;
-extern FsCommand command;
-extern FsAnswer answer;
-extern FsOpenServerS open_server_s;
-extern FsOpenServerC open_server_c;
-extern FsCloseServerS close_server_s;
-extern FsCloseServerC close_server_c;
 
 int fs_open_server (char* server_address);
 int fs_close_server (int server_handler);
