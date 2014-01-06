@@ -15,19 +15,19 @@
 
 #define MAX_BUF 256
 
-struct IncomingRequest {
+typedef struct IncomingRequest 
+{
     struct sockaddr_in client_addr;
     unsigned int client_addr_len;
-    int socd;
-	int server_handler;
     FsRequest request;
-};
+} 
+IncomingRequest;
 
 extern int status, sockd;
 extern struct sockaddr_in my_name;
 extern int server_handler;
 
-int s_open_server(int sockd, struct IncomingRequest *inc_request, int server_handler);
-int s_close_server(int sockd, FsRequest *fs_request, struct sockaddr_in client_name, int addrlen, int server_handler);
+int s_open_server(IncomingRequest *inc_request);
+int s_close_server(IncomingRequest *inc_request);
 
 #endif // SERVER_NETWORK_H_INCLUDED

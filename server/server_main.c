@@ -64,7 +64,6 @@ int main(int argc, char* argv[])
         struct IncomingRequest *request = (struct IncomingRequest *) calloc(1, sizeof(struct IncomingRequest));
         request->client_addr_len = sizeof(struct sockaddr_in);
 
-
 		recvfrom(sockd, (char*) &(request->request), MAX_BUF, 0, (struct sockaddr *) &(request->client_addr), &(request->client_addr_len));
         
         // fixme: prawdziwy multithread.
