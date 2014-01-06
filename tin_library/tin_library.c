@@ -21,7 +21,7 @@ int fs_open_server (char* server_address)
     FsRequest request; 
     request.command = OPEN_SERVER;
     
-	int addrlen = sizeof(struct sockaddr_in);
+	unsigned int addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -58,7 +58,7 @@ int fs_close_server (int server_handler)
     request.command = CLOSE_SERVER;
     request.request_data.server_handler = server_handler;
     
-	int addrlen = sizeof(struct sockaddr_in);
+	unsigned int addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
@@ -72,24 +72,25 @@ int fs_close_server (int server_handler)
 
 int fs_open (int server_handler, char* name, int flags)
 {
+    return -1;
 }
 
 int fs_write (int server_handler, int fd, void *buf, size_t len)
 {
+    return -1;
 }
 
 int fs_read (int server_handler, int fd, long offset, int whence)
 {
+    return -1;
 }
 
 int fs_close (int server_handler, int fd)
 {
+    return -1;
 }
 
-/*int fs_fstat (int server_handler, int fd, struct stat *buf)
-{
-}
-*/
 int fs_lock (int server_handler, int fd, int mode)
 {
+    return -1;
 }
