@@ -13,7 +13,20 @@
 
 #include "../protocol.h"
 
-int s_open_server (int sockd, char* buffer, int buflen, struct sockaddr_in cli_name, int addrlen, int server_handler);
-int s_close_server (int sockd, char* buffer, int buflen, struct sockaddr_in cli_name, int addrlen, int server_handler);
+#define MAX_BUF 256
+
+struct IncomingRequest {
+    struct sockaddr_in client_addr;
+    unsigned int client_addr_len;
+    
+    FsRequest request;
+};
+
+extern int status, sockd;
+extern struct sockaddr_in my_name;
+extern int server_handler;
+
+int s_open_server(int sockd, struct IncomingRequest *inc_request, int server_handler);
+int s_close_server(int sockd, FsRequest *fs_request, struct sockaddr_in client_name, int addrlen, int server_handler);
 
 #endif // SERVER_NETWORK_H_INCLUDED

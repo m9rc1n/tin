@@ -14,15 +14,13 @@ int sockd;
 int port;
 struct sockaddr_in my_addr;
 struct sockaddr_in srv_addr;
-FsCommand command;
-FsAnswer answer;
-FsOpenServerS open_server_s;
-FsOpenServerC open_server_c;
-FsCloseServerS close_server_s;
-FsCloseServerC close_server_c;
 
 int fs_open_server (char* server_address)
 {
+    FsResponse response;
+    FsRequest request; 
+    request.command = OPEN_SERVER;
+    
 	int addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
@@ -47,23 +45,26 @@ int fs_open_server (char* server_address)
 	scanf ("%d", &port);
     srv_addr.sin_port = htons(port);
 
-    open_server_c.command = OPEN_SERVER;
-	sendto (sockd, (FsOpenServerC*) &open_server_c, sizeof(FsOpenServerC), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	recvfrom(sockd, (FsOpenServerS*) &open_server_s, sizeof(FsOpenServerS), 0, (struct sockaddr*)&srv_addr, &addrlen);
+	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
-	return open_server_s.server_handler;
+	return response.response_data.server_handler;
 }
 
 int fs_close_server (int server_handler)
 {
+    FsResponse response;
+    FsRequest request; 
+    request.command = CLOSE_SERVER;
+    request.request_data.server_handler = server_handler;
+    
 	int addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
-	close_server_c.command = CLOSE_SERVER;
-	close_server_c.server_handler = server_handler;
-	sendto (sockd, (FsCloseServerC*) &close_server_c, sizeof(FsCloseServerC), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	recvfrom(sockd, (FsCloseServerS*) &close_server_s, sizeof(FsCloseServerS), 0, (struct sockaddr*)&srv_addr, &addrlen);
-	printf ("Closing server: %d\n", close_server_s.answer);
+	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+    printf("Sent close message\n");
+	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+	printf ("Closing server: %d\n", response.answer);
 
     close (sockd);
 	return 0;

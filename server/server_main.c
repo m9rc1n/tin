@@ -4,6 +4,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -14,23 +15,26 @@
 #include "server_network.h"
 #include "server_reset.h"
 #include "server_synchroniser.h"
+#include "server_thread.h"
 
-#define MAX_BUF 256
+int status, sockd;
+struct sockaddr_in my_name;
+int server_handler = 0;
 
+pthread_t handlers_threads[1];
 
 int main(int argc, char* argv[])
 {
-	int addrlen = sizeof(struct sockaddr_in);
-	int status, sockd;
-	struct sockaddr_in my_name, cli_name;
-    char buffer[MAX_BUF];
-    char command_buf[4];
+	//unsigned int addrlen = sizeof(struct sockaddr_in);
+
+	
+	//char command_buf[4];
 
 	// kazdy klient dostaje inny numer
 	// robimy kolejke klientow?
-	int server_handler = 0;
+	//
 
-	FsCommand* command;
+	//FsCommand* command;
 
 	if (argc < 2)
 	{
@@ -55,23 +59,24 @@ int main(int argc, char* argv[])
 	// fixme: error handling
 	synchroniser_init();
 
-	while (1)
+	while(1)
 	{
-		recvfrom (sockd, (char*) &buffer, MAX_BUF, 0, (struct sockaddr*) &cli_name, &addrlen);
-        command = (FsCommand*) &buffer;
-		if (*command == OPEN_SERVER)
-		{
-			s_open_server(sockd, buffer, MAX_BUF, cli_name, addrlen, server_handler++);
-		}
-		else if (*command == CLOSE_SERVER)
-		{
-			s_close_server(sockd, buffer, MAX_BUF, cli_name, addrlen, server_handler);
-			// @todo tymczasowe
-			// zamykamy server, trzeba zrobic bardziej praktycznie, macie jakis pomysl?
-			// zamykanie serwera przez klienta raczej nie wchodzi w gre, chyba ze jakis klient sterujacy serwerem
-			// break;
-		}
+        struct IncomingRequest *request = (struct IncomingRequest *) calloc(1, sizeof(struct IncomingRequest));
+        request->client_addr_len = sizeof(struct sockaddr_in);
+
+
+		recvfrom(sockd, (char*) &(request->request), MAX_BUF, 0, (struct sockaddr *) &(request->client_addr), &(request->client_addr_len));
+        
+        // fixme: prawdziwy multithread.
+        pthread_create(&handlers_threads[0], NULL, server_thread_function, (void *) request);
+        pthread_join(handlers_threads[0], NULL);
+
+        //free(request->request);
+        //free(request);
+	
+
 	}
+	
 	close(sockd);
 	
 	synchroniser_shutdown();

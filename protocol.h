@@ -129,6 +129,26 @@ typedef enum FsAnswer
 }
 FsAnswer;
 
+typedef struct FsRequest
+{
+    FsCommand command;
+    
+    union RequestData 
+    {
+        int server_handler;
+    } request_data;
+} FsRequest;
+
+typedef struct FsResponse
+{
+    FsAnswer answer;
+    
+    union ResponseData
+    {
+        int server_handler;
+    } response_data;
+} FsResponse;
+
 typedef struct FsOpenServerC
 {
     // komenda wysylana do serwera

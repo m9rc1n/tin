@@ -1,28 +1,22 @@
-// server
 #include "server_network.h"
 
-int s_open_server (int sockd, char* buffer, int buflen, struct sockaddr_in cli_name, int addrlen, int server_handler)
+int s_open_server(int sockd, struct IncomingRequest *inc_request, int server_handler)
 {
-	FsOpenServerS open_server_s;
-	FsOpenServerC* open_server_c;
-
-    open_server_c = (FsOpenServerC*) buffer;
-
-	open_server_s.server_handler = server_handler;
-	open_server_s.answer = ACCEPTED;
-	printf ("Opening session with: %d\n", open_server_s.server_handler);
-	return sendto (sockd, (FsOpenServerS*) &open_server_s, sizeof (FsOpenServerS), 0, (struct sockaddr*) &cli_name, sizeof (cli_name));
-
+    FsResponse response;
+    response.response_data.server_handler = server_handler;
+    response.answer = ACCEPTED;
+    
+    printf("%s\n", inet_ntoa(inc_request->client_addr.sin_addr));
+    
+	printf ("Opening session with: %d\n", server_handler);
+	return sendto(sockd, &response, sizeof (FsResponse), 0, (struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
 
-int s_close_server (int sockd, char* buffer, int buflen, struct sockaddr_in cli_name, int addrlen, int server_handler)
+int s_close_server(int sockd, FsRequest *fs_request, struct sockaddr_in cli_name, int addrlen, int server_handler)
 {
-	FsCloseServerS close_server_s;
-	FsCloseServerC* close_server_c;
-
-    close_server_c = (FsCloseServerC*) buffer;
-
-	printf ("Closing session with: %d\n", (*close_server_c).server_handler);
-	close_server_s.answer = CLOSED;
-	return sendto (sockd, (FsCloseServerS*) &close_server_s, sizeof (FsCloseServerS), 0, (struct sockaddr*) &cli_name, sizeof (cli_name));
+    FsResponse response;
+    response.answer = CLOSED;
+    	
+	printf("Closing session with: %d\n", fs_request->request_data.server_handler);
+	return sendto(sockd, &response, sizeof (FsResponse), 0, (struct sockaddr*) &cli_name, sizeof (cli_name));
 }

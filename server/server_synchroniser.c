@@ -25,6 +25,8 @@ static sem_t sem_sync_thread;
 static int sync_sem_init() {
   sem_init(&sem_request_queue, 0, 1);
   sem_init(&sem_sync_thread, 0, 0);  
+  
+  return 42;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,6 +58,8 @@ static struct SyncRequestQueue synchroniser_requests_queue;
 static int sync_queue_init() {
   synchroniser_requests_queue.head = NULL;
   synchroniser_requests_queue.tail = NULL;
+  
+  return 0;
 };
 
 /*
@@ -122,7 +126,7 @@ struct SyncHashMapElement {
 /*
  * 
  */
-typedef struct SyncHashMap {
+struct SyncHashMap {
   struct HashMapElement *hashes[HASH_LIST_SIZE];
   unsigned size;
 };
@@ -155,7 +159,7 @@ static int sync_hash_map_hash(char *file_name) {
 static pthread_t synchroniser_thread;
 
 static void *synchroniser_thread_func(void *parameters) {
-  struct SyncRequest *rq;
+  struct SyncRequest *rq = NULL;
 
   while(1) {
     sync_queue_get(rq);
@@ -189,4 +193,6 @@ int synchroniser_init() {
 
 int synchroniser_shutdown() {
   pthread_join(synchroniser_thread, NULL);
+  
+  return 42;
 }
