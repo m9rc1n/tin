@@ -63,9 +63,8 @@ static int sync_hash_map_create(char *file_name, struct SyncQuery *result) {
     result->file_name = (char *) calloc(strlen(file_name), sizeof(char));
     strcpy(result->file_name, file_name);
     
-    /*
-     * TODO: domyślne wartości tych blokad i innych dziadostw.
-     */
+    result->lock_type = FLOCK_NONE;
+    result->readers = 0;
     
     new_element = (struct SyncHashMapElement *) calloc(1, sizeof(struct SyncHashMapElement));
     new_element->next = NULL;
