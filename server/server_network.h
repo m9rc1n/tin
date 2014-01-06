@@ -18,7 +18,8 @@
 struct IncomingRequest {
     struct sockaddr_in client_addr;
     unsigned int client_addr_len;
-    
+    int socd;
+	int server_handler;
     FsRequest request;
 };
 
