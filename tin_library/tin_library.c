@@ -23,7 +23,7 @@ int fs_open_server (char* server_address)
     request.command = OPEN_SERVER;
 	request.request_data.open_server_c = open_server_c;
     
-	unsigned int addrlen = sizeof(struct sockaddr_in);
+	socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -61,7 +61,7 @@ int fs_close_server (int server_handler)
 	FsCloseServerC close_server_c = {server_handler};
     request.request_data.close_server_c = close_server_c;
     
-	unsigned int addrlen = sizeof(struct sockaddr_in);
+	socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
