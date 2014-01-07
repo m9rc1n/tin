@@ -14,6 +14,10 @@ extern struct Session *session_list;
 
 int session_init();
 
+int session_create();
+
+int session_close(int session_id);
+
 int session_shutdown();
 
 
