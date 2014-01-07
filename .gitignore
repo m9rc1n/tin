@@ -21,6 +21,5 @@
 
 *.fuse*
 
-server
-
-client
+server/server
+client/client
