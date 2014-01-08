@@ -8,7 +8,7 @@
  * wysylamy login a serwer jesli odpowie dobrze to zwracamy uchwyt
  */
 
-#define PORT 44443
+#define PORT 2000
 
 int sockd;
 int port;
@@ -43,8 +43,10 @@ int fs_open_server (char* server_address)
 	srv_addr.sin_family = AF_INET;
 	inet_aton ("localhost", &srv_addr.sin_addr);
 
-	printf ("input port: ");
-	scanf ("%d", &port);
+    // No kurde chyba nie w bibliotece to...
+	//printf ("input port: ");
+	//scanf ("%d", &port);
+    port = PORT;
     srv_addr.sin_port = htons(port);
 
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
@@ -55,19 +57,19 @@ int fs_open_server (char* server_address)
 
 int fs_close_server (int server_handler)
 {
+    printf("\t\t%d\n", server_handler);
     FsResponse response;
     FsRequest request; 
     request.command = CLOSE_SERVER;
-	FsCloseServerC close_server_c = {server_handler};
-    request.request_data.close_server_c = close_server_c;
+    request.request_data.close_server_c.server_handler = server_handler;
     
 	socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-    printf("Sent close message\n");
+    //printf("Sent close message, sid = %d\n", server_handler);
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
-	printf ("Closing server: %d\n", response.answer);
+	//printf ("Closing server: %d\n", response.answer);
 
     close (sockd);
 	return 0;

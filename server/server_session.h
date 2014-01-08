@@ -1,24 +1,33 @@
 #ifndef SEVER_SESSION_H
 #define SEVER_SESSION_H
 
-struct Session {
-    unsigned id;
-    unsigned time_active;
-    // todo założone blokady
+#ifndef SESSION_MAX_NUMBER
+#define SESSION_MAX_NUMBER 16
+#endif
 
-    struct Session *prev;
-    struct Session *next;
-};
-
-extern struct Session *session_list;
-
+/**
+ * Inicjuje zarządcę sesji. 
+ */
 int session_init();
 
-int session_create();
-
+/**
+ * Zamyka istniejącą sesję.
+ */
 int session_close(int session_id);
 
-int session_shutdown();
+/**
+ * Dodaje nową sesję, zwraca jej identyfikator.
+ */
+int session_create();
 
+/**
+ * Wykonuje zombie collection.
+ */
+int session_destroy_zombies();
+
+/**
+ * Zamyka zarządcę sesji.
+ */
+int session_shutdown();
 
 #endif

@@ -4,6 +4,7 @@
 typedef enum FileLockType {
     FLOCK_NONE, 
     FLOCK_READ, 
+    FLOCK_WRITE_PENDING,
     FLOCK_WRITE
 } FileLockType;
 

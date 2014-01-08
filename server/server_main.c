@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
         request->client_addr_len = sizeof(struct sockaddr_in);
 
 		recvfrom(sockd, (char*) &(request->request), MAX_BUF, 0, (struct sockaddr *) &(request->client_addr), &(request->client_addr_len));
-        
+
         // fixme: prawdziwy multithread.
         pthread_create(&handlers_threads[0], NULL, server_thread_function, (void *) request);
         pthread_join(handlers_threads[0], NULL);
