@@ -10,16 +10,6 @@ typedef enum FsCommand
 	CLOSE_SERVER = 2,
 	// Otworz plik
 	OPEN = 3,
-	// Otworz plik tylko do odczytu
-	OPEN_ORDONLY = 31,
-	// Otworz plik tylko do zapisu
-	OPEN_WRONLY = 32,
-	// Otworz plik do zapisu i odczytu
-	OPEN_RDWR = 33,
-	// Utworz plik */
-	OPEN_CREAT = 34,
-	// Otworz plik z zapisem na koniec pliku
-	OPEN_APPEND = 35,
 	// Zapisz do pliku
 	WRITE = 4,
 	// Odczytaj plik
@@ -85,7 +75,7 @@ typedef enum FsAnswer
 	// Kody bledu aplikacji klienta
 	// ===============================================
 	// Nieprawidlowe zapytanie
-	// żadanie nie może być obslużone przez serwer
+	// Zadanie nie moze byc obsluzone przez serwer
 	// z powodu blednej skladni zapytania
 	BAD_REQUEST = 400,
 	// -----------------------------------------------
@@ -94,14 +84,14 @@ typedef enum FsAnswer
 	NOT_FOUND = 401,
 	// -----------------------------------------------
 	// Niedozwolone
-	// zażadany zasob nie jest w stanie zwrocić
-	// odpowiedzi mogacej być obslużonej przez klienta
+	// zazadany zasob nie jest w stanie zwrocic
+	// odpowiedzi mogacej byc obsluzonej przez klienta
 	// wedlug informacji podanych w zapytaniu
 	NOT_ACCETABLE = 402,
 	// -----------------------------------------------
 	// Blokada na pliku
 	// Konflikt z obecnym statusem zasobu na serwerze.
-	// Zwracany gdy klient nie może uzyskać dostepu
+	// Zwracany gdy klient nie moze uzyskac dostepu
 	// do zablokowanego pliku
 	FILE_BLOCKED = 403,
 	// -----------------------------------------------
@@ -118,7 +108,7 @@ typedef enum FsAnswer
 	// ===============================================
 	// Wewnetrzny blad serwera
 	// Serwer napotkal niespodziewane trudnosci
-	// ktore uniemożliwily zrealizowanie żadania
+	// ktore uniemozliwily zrealizowanie zadania
 	INTERNAL_SERVER_ERROR = 500,
 	// ----------------------------------------------
 	// Nie zaimplementowano
@@ -140,8 +130,176 @@ typedef struct FsOpenServerS
 {
 	// uchwyt do serwera
 	int server_handler;
+    // liczba zwracana przez funkcje
+    int status;
 }
 FsOpenServerS;
+
+typedef struct FsOpenC
+{
+    // uchwyt do serwera
+    int server_handler;
+    // sciezka do pliku na serwerze
+    char* name;
+    // rozmiar tablicy z nazwa
+    size_t name_len;
+    // flaga otworzenia pliku
+    // O_RDONLY O_WRONLY O_RDWR O_CREAT O_APPEND
+    int flags;
+}
+FsOpenC;
+
+typedef struct FsOpenS
+{
+    // unikalny deskryptor pliku dla danego klienta
+    int fd;
+    // liczba zwracana przez funkcje
+    int status;
+}
+FsOpenS;
+
+typedef struct FsWriteC
+{
+    // uchwyt do serwera
+    int server_handler;
+    // unikalny deskryptor pliku dla danego klienta
+    int fd;
+    // bufor danych do zapisania w pliku
+    void* buffer;
+    // ilosc bajtow do zapisania
+    long buffer_len;
+}
+FsWriteC;
+
+typedef struct FsWriteS
+{
+    // liczba zapisanych bajtow
+    long buffer_len;
+    // liczba zwracana przez funkcje
+    int status;
+}
+FsWriteS;
+
+// @todo SPRAWDZIC POPRAWNOSC!
+
+typedef struct FsReadC
+{
+    // uchwyt do serwera
+    int server_handler;
+    // unikalny deskryptor pliku dla danego klienta
+    int fd;
+    // buffor danych do odczytania z pliku
+    void* buffer;
+    // ile danych chcemy wczytac
+    long buffer_len;
+}
+FsReadC;
+
+typedef struct FsReadS
+{
+    // liczba zwracana przez funkcje
+    int status;
+    // liczba faktycznie przekazanych bajtow
+    long buffer_len;
+}
+FsReadS;
+
+typedef struct FsLseekC
+{
+    // uchwyt do serwera
+    int server_handler;
+    // unikalny deskryptor pliku dla danego klienta
+    int fd;
+    // oznacza miejsce od ktorego ma sie rozpoczac
+    // najblizsza operacja odczytu/zapisu - liczba bajtow od poczatku
+    long offset;
+    // whence ma nastepujace znaczenie
+    //     0 = liczymy offset od samego poczatku
+    //     1 = liczymy offset od aktualnej pozycji
+    //     2 = liczymy offset od konca
+    unsigned int whence;
+}
+FsLseekC;
+
+typedef struct FsLseekS
+{
+    // liczba zwracana przez funkcje
+    int status;
+}
+FsLseekS;
+
+typedef struct FsCloseC
+{
+    // uchwyt do serwera
+    int server_handler;
+    // unikalny deskryptor pliku dla danego klienta
+    int fd;
+}
+FsCloseC;
+
+typedef struct FsCloseS
+{
+    // liczba zwracana przez funkcje
+    int status;
+}
+FsCloseS;
+
+typedef struct FsStat
+{
+    // protection
+    mode_t st_mode;
+    // total size, in bytes
+    off_t st_size;
+    // time of last access
+    time_t st_atime;
+    // time of modification
+    time_t st_mtime;
+    // time of last status change
+    time_t st_ctime;
+}
+FsStat;
+
+typedef struct FsFstatC
+{
+    // uchwyt do serwera
+    int server_handler;
+    // unikalny deskryptor pliku dla danego klienta
+    int fd;
+    FsStat stat;
+    // kolejka blokad
+    int* queueLock;
+    // aktualny stan
+    int actualState;
+}
+FsFstatC;
+
+typedef struct FsFstatS
+{
+    // liczba zwracana przez funkcje
+    int status;
+}
+FsFstatS;
+
+typedef struct FsLockC
+{
+    // uchwyt do serwera
+    int server_handler;
+    // unikalny deskryptor pliku dla danego klienta
+    int fd;
+    // ustawienia blokady
+    //     mode = 0, blokada READ
+    //     mode = 1, blokada WRITE
+    //     mode = 2, zdejmnij poprzednia blokade
+    int mode;
+}
+FsLockC;
+
+typedef struct FsLockS
+{
+    // liczba zwracana przez funkcje
+    int status;
+}
+FsLockS;
 
 typedef struct FsCloseServerC
 {
@@ -150,11 +308,10 @@ typedef struct FsCloseServerC
 }
 FsCloseServerC;
 
-// narazie nie usuwam, pozniej tak
 typedef struct FsCloseServerS
 {
-	// komunikat − odpowiedz serwera
-	FsAnswer answer;
+    // liczba zwracana przez funkcje
+    int status;
 }
 FsCloseServerS;
 
@@ -162,28 +319,42 @@ typedef struct FsRequest
 {
 	// komenda wysylana do serwera
     FsCommand command;
-    
-    union RequestData 
+
+    union RequestData
     {
-        FsOpenServerC open_server_c;
-		FsCloseServerC close_server_c;
-    } 
+        FsOpenServerC open_server;
+		FsCloseServerC close_server;
+        FsOpenC open;
+        FsWriteC write;
+        FsReadC read;
+        FsLseekC lseek;
+        FsCloseC close;
+        FsFstatC fstat;
+        FsLockC lock;
+    }
 	request_data;
-} 
+}
 FsRequest;
 
 typedef struct FsResponse
 {
-	// komunikat − odpowiedz serwera
+	// komunikat - odpowiedz serwera
     FsAnswer answer;
-    
+
     union ResponseData
     {
-        FsOpenServerS open_server_s;
-		FsCloseServerS close_server_s;
-    } 
+        FsOpenServerS open_server;
+		FsCloseServerS close_server;
+        FsOpenS open;
+        FsWriteS write;
+        FsReadS read;
+        FsLseekS lseek;
+        FsCloseS close;
+        FsFstatS fstat;
+        FsLockS lock;
+    }
 	response_data;
-} 
+}
 FsResponse;
 
 #endif // PROTOCOL_H_INCLUDED
