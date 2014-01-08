@@ -18,11 +18,11 @@ struct sockaddr_in srv_addr;
 int fs_open_server (char* server_address)
 {
     FsResponse response;
-    FsRequest request; 	
-	FsOpenServerC open_server_c = {};
+    FsRequest request;
+	FsOpenServerC open_server = {};
     request.command = OPEN_SERVER;
-	request.request_data.open_server_c = open_server_c;
-    
+	request.request_data.open_server = open_server;
+
 	socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
@@ -52,17 +52,23 @@ int fs_open_server (char* server_address)
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
-	return response.response_data.open_server_s.server_handler;
+	return response.response_data.open_server.server_handler;
 }
 
 int fs_close_server (int server_handler)
 {
     printf("\t\t%d\n", server_handler);
     FsResponse response;
-    FsRequest request; 
+    FsRequest request;
     request.command = CLOSE_SERVER;
+<<<<<<< HEAD
     request.request_data.close_server_c.server_handler = server_handler;
     
+=======
+	FsCloseServerC close_server = {server_handler};
+    request.request_data.close_server = close_server;
+
+>>>>>>> 6795aa806817f96c2447a5f3c076b11bdb527924
 	socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
