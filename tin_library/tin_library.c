@@ -61,14 +61,7 @@ int fs_close_server (int server_handler)
     FsResponse response;
     FsRequest request;
     request.command = CLOSE_SERVER;
-<<<<<<< HEAD
-    request.request_data.close_server_c.server_handler = server_handler;
-    
-=======
-	FsCloseServerC close_server = {server_handler};
-    request.request_data.close_server = close_server;
-
->>>>>>> 6795aa806817f96c2447a5f3c076b11bdb527924
+    request.request_data.close_server.server_handler = server_handler;
 	socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
