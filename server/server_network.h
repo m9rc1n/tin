@@ -2,6 +2,8 @@
 #ifndef SERVER_NETWORK_H_INCLUDED
 #define SERVER_NETWORK_H_INCLUDED
 
+#include "server_const.h"
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>

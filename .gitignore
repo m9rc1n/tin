@@ -23,4 +23,4 @@
 
 server/server
 client/client
-tests/session_id/session_id
+bin/

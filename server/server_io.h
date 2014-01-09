@@ -2,6 +2,8 @@
 #ifndef SERVER_IO_H_INCLUDED
 #define SERVER_IO_H_INCLUDED
 
+#include "server_const.h"
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

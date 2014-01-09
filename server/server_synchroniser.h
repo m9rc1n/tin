@@ -1,6 +1,8 @@
 #ifndef SERVER_SYNCHRONISER_H
 #define SERVER_SYNCHRONISER_H
 
+#include "server_const.h"
+
 typedef enum FileLockType {
     FLOCK_NONE, 
     FLOCK_READ, 

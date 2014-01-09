@@ -52,6 +52,8 @@ static int session_remove_locks(unsigned session_id) {
 /** Semafor blokujący modyfikację listy sesji. */
 static sem_t sem_sessions_list_access;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 int session_init() {
     int i;
     
@@ -68,13 +70,13 @@ int session_close(int session_id) {
     sem_wait(&sem_sessions_list_access);
 
     if(session_id >= SESSION_MAX_NUMBER) {
-        //printf("wartosc %d jest z (_!_) wzieta\n", session_id);
+
         sem_post(&sem_sessions_list_access);  
         return -1;
     }
     
     if(sessions_list[session_id] == NULL) {
-        //printf("wartosc %d jest z (_!_) nieaktualna\n", session_id);
+
         sem_post(&sem_sessions_list_access);  
         return -2;
     }
@@ -113,10 +115,28 @@ int session_create(struct sockaddr_in client_addr, unsigned client_addr_len) {
 }
 
 int session_destroy_zombies() {
+    unsigned i;
     
-    return 42;
+    sem_wait(&sem_sessions_list_access);
+    
+    for(i = 0; i < SESSION_MAX_NUMBER; ++ i) {
+        
+        if(sessions_list[i] != NULL) {
+            
+            if((time(NULL) - sessions_list[i]->time_active) > SESSION_ZOMBIE_TIME) {
+                
+                /* Send REQUEST_TIMEOUT maybe? */
+                session_remove_locks(i);
+                free(sessions_list[i]);
+                sessions_list[i] = NULL;
+            }
+        }
+    }
+    
+    sem_post(&sem_sessions_list_access);  
+    
+    return 0;
 }
-
 
 int session_shutdown() {
     int i;

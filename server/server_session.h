@@ -1,9 +1,7 @@
 #ifndef SEVER_SESSION_H
 #define SEVER_SESSION_H
 
-#ifndef SESSION_MAX_NUMBER
-#define SESSION_MAX_NUMBER 16
-#endif
+#include "server_const.h"
 
 /**
  * Inicjuje zarządcę sesji. 
