@@ -8,10 +8,18 @@
  */
 
 /**
+ * Wielkosc bufora przesylana miedzy kientem a serwerem
+ * @todo Pozniej pojdzie do protokolu albo wymysle cos lepszego
+ */
+#ifndef MAX_BUF
+#define MAX_BUF 256
+#endif
+
+/**
  * Wielkość tablicy w hashmapie. Używane w obsłudze sesji.
  * Z definicji hashpamy lepiej podać liczbę pierwszą.
  */
-#ifndef SESSION_HASH_LIST_SIZE 
+#ifndef SESSION_HASH_LIST_SIZE
 #define SESSION_HASH_LIST_SIZE 31
 #endif
 

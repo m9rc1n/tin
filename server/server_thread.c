@@ -1,8 +1,4 @@
-#include "server_network.h"
 #include "server_thread.h"
-
-#include <pthread.h>
-#include <stdio.h>
 
 void *server_thread_function(void *parameters) {
     struct IncomingRequest *inc_request = (struct IncomingRequest *) parameters;

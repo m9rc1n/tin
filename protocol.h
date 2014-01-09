@@ -1,6 +1,8 @@
 #ifndef PROTOCOL_H_INCLUDED
 #define PROTOCOL_H_INCLUDED
 
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef enum FsCommand
 {
