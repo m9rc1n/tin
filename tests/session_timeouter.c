@@ -11,9 +11,12 @@
 #include "../tin_library/tin_library.h"
 
 int main(int argc, char* argv[]) {
-    int sid;
-    
-    sid = fs_open_server("0.0.0.0");
+    int sid, port;
+
+    printf ("Podaj nr portu: ");
+    scanf ("%d", &port);
+
+    sid = fs_open_server("0.0.0.0", port);
     printf("Otwieram, session_id %d\n", sid);
 
     sleep(3600);
