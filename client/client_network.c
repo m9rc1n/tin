@@ -5,7 +5,10 @@ int server_handler = 20;
 
 int c_open_server(void)
 {
-	server_handler = fs_open_server("0.0.0.0");
+    int port;
+    printf ("Input port: ");
+    scanf ("%d", &port);
+	server_handler = fs_open_server("0.0.0.0", port);
     return 42;
 }
 

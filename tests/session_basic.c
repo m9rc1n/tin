@@ -11,19 +11,22 @@
 #include "../tin_library/tin_library.h"
 
 int main(int argc, char* argv[]) {
-    int i, how_many, sid;
-    
+    int i, how_many, sid, port;
+
     printf("Ile powtorzen?\n");
     scanf("%d", &how_many);
-    
+
+    printf("Podaj port serwera: ");
+    scanf("%d", &port);
+
     for(i = 0; i < how_many; ++ i) {
-        sid = fs_open_server("0.0.0.0");
+        sid = fs_open_server("0.0.0.0", port);
         printf("Otwieram %d z %d, session_id %d\n", i, how_many, sid);
-        
+
         fs_close_server(sid);
         printf("Zamykam %d z %d, session_id %d\n", i, how_many, sid);
 
     }
-    
+
         return 0;
 }

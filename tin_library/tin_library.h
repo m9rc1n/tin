@@ -17,7 +17,7 @@ extern int port;
 extern struct sockaddr_in my_addr;
 extern struct sockaddr_in srv_addr;
 
-int fs_open_server (char* server_address);
+int fs_open_server (char* server_address, int server_port);
 int fs_close_server (int server_handler);
 
 int fs_open (int server_handler, char* name, int flags);

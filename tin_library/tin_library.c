@@ -15,7 +15,7 @@ int port;
 struct sockaddr_in my_addr;
 struct sockaddr_in srv_addr;
 
-int fs_open_server (char* server_address)
+int fs_open_server (char* server_address, int server_port)
 {
     FsResponse response;
     FsRequest request;
@@ -44,9 +44,7 @@ int fs_open_server (char* server_address)
 	srv_addr.sin_family = AF_INET;
 	inet_aton (server_address, &srv_addr.sin_addr);
 
-	//printf ("input port: ");
-	//scanf ("%d", &port);
-    port = PORT;
+    port = server_port;
     srv_addr.sin_port = htons(port);
 
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
