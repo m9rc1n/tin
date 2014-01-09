@@ -44,6 +44,10 @@ int fs_open_server (char* server_address)
 	inet_aton ("localhost", &srv_addr.sin_addr);
 
     // No kurde chyba nie w bibliotece to...
+    // To jest tutaj tylko tymczasowo,
+    // Bo w przypadku kiedy zabijesz (a nie zamkniesz portu) serwer, port pozostawal otworzony
+    // A nie wiedzialem jak zamykac manualnie port :)
+    //
 	//printf ("input port: ");
 	//scanf ("%d", &port);
     port = PORT;
