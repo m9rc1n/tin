@@ -34,14 +34,14 @@
  * Okres wykonywania zombie collection (ubijania starych i nieaktywnych sesji) w sekundach.
  */
 #ifndef SESSION_SWEEP_TIME
-#define SESSION_SWEEP_TIME 600
+#define SESSION_SWEEP_TIME 10
 #endif
 
 /**
  * Okres od ostatniego requesta po upłynięciu którego sesja jest uznana jako zombie w sekundach.
  */
 #ifndef SESSION_ZOMBIE_TIME
-#define SESSION_ZOMBIE_TIME 300
+#define SESSION_ZOMBIE_TIME 15
 #endif
 
 

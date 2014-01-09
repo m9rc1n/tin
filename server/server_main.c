@@ -17,6 +17,7 @@
 #include "server_session.h"
 #include "server_synchroniser.h"
 #include "server_thread.h"
+#include "server_zombie_collector.h"
 
 int status, sockd;
 struct sockaddr_in my_name;
@@ -47,6 +48,7 @@ int main(int argc, char* argv[]) {
 	
 	synchroniser_init();
     session_init();
+    zombie_collector_init();
 
 	while(1)
 	{
@@ -67,6 +69,7 @@ int main(int argc, char* argv[]) {
 	
     session_shutdown();
 	synchroniser_shutdown();
+    zombie_collector_shutdown();
     
 	return 0;
 }
