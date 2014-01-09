@@ -33,7 +33,7 @@
  * Okres od ostatniego requesta po upłynięciu którego sesja jest uznana jako zombie w sekundach.
  */
 #ifndef SESSION_ZOMBIE_TIME
-#define SESSION_ZOMBIE_TIME 300
+#define SESSION_ZOMBIE_TIME 15
 #endif
 
 
