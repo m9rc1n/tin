@@ -20,11 +20,12 @@ typedef enum FsCommand
 	// Zamknij plik
 	CLOSE = 7,
 	// Przeslanie informacji o pliku
-	STAT = 8,
+	FSTAT = 8,
 	// Zablokowanie pliku na serwerze
 	LOCK = 9,
 	// Przeslij ponownie plik
-	AGAIN = 10
+    // Potencjalnie do usuniecia
+	// AGAIN = 10
 }
 FsCommand;
 
@@ -244,7 +245,7 @@ typedef struct FsCloseS
 }
 FsCloseS;
 
-typedef struct FsStat
+typedef struct FsFstat
 {
     // protection
     mode_t st_mode;
@@ -257,7 +258,7 @@ typedef struct FsStat
     // time of last status change
     time_t st_ctime;
 }
-FsStat;
+FsFstat;
 
 typedef struct FsFstatC
 {
@@ -265,7 +266,7 @@ typedef struct FsFstatC
     int server_handler;
     // unikalny deskryptor pliku dla danego klienta
     int fd;
-    FsStat stat;
+    FsFstat stat;
     // kolejka blokad
     int* queueLock;
     // aktualny stan

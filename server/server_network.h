@@ -12,16 +12,7 @@
 #include <unistd.h>
 
 #include "../protocol.h"
-
-#define MAX_BUF 256
-
-typedef struct IncomingRequest 
-{
-    struct sockaddr_in client_addr;
-    unsigned int client_addr_len;
-    FsRequest request;
-} 
-IncomingRequest;
+#include "server_network.h"
 
 extern int status, sockd;
 extern struct sockaddr_in my_name;
