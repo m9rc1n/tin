@@ -1,11 +1,12 @@
 #include "server_zombie_collector.h"
 
+#include "server_const.h"
+
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
 
-#define SWEEP_TIME 10
-#define ZOMBIFICATION_PERIOD 1800
+
 
 sem_t sem_zombie_collector_working;
 pthread_t zombie_collector_thread;

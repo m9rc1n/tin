@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-#define HASH_LIST_SIZE 31
+
 
 /*
  * 
@@ -20,7 +20,7 @@ struct SyncHashMapElement {
  * 
  */
 struct SyncHashMap {
-  struct SyncHashMapElement *hashes[HASH_LIST_SIZE];
+  struct SyncHashMapElement *hashes[SESSION_HASH_LIST_SIZE];
   unsigned size;
 };
 
@@ -38,14 +38,14 @@ static int sync_hash_map_hash(char *file_name) {
     hash += (int) file_name[i];
   }
   
-  hash %= HASH_LIST_SIZE;
+  hash %= SESSION_HASH_LIST_SIZE;
   return hash;
 };
 
 static int sync_hash_map_init() {
     int i;
     
-    for(i = 0; i < HASH_LIST_SIZE; ++ i)
+    for(i = 0; i < SESSION_HASH_LIST_SIZE; ++ i)
         synchroniser_map.hashes[i] = NULL;
     
     return 0;
