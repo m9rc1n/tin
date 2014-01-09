@@ -1,12 +1,9 @@
 #include "server_synchroniser.h"
-
+#include <assert.h>
 #include <semaphore.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <stdio.h>
-
-
 
 /*
  * 
@@ -51,10 +48,11 @@ static int sync_hash_map_init() {
     return 0;
 }
     
-static int sync_hash_map_create(char *file_name, struct SyncQuery *result) {
+static struct SyncQuery * sync_hash_map_create(char *file_name) {
     int hash;
     struct SyncHashMapElement *hash_map_element;
     struct SyncHashMapElement *new_element;
+    struct SyncQuery *result;
     
     hash = sync_hash_map_hash(file_name);
     hash_map_element = synchroniser_map.hashes[hash];
@@ -81,10 +79,10 @@ static int sync_hash_map_create(char *file_name, struct SyncQuery *result) {
         hash_map_element->next = new_element;
     }
     
-    return 0;
+    return result;
 }
 
-static int sync_hash_map_find(char *file_name, struct SyncQuery *result) {
+static struct SyncQuery * sync_hash_map_find(char *file_name) {
     int hash;
     struct SyncHashMapElement *hash_map_element;
     
@@ -99,19 +97,20 @@ static int sync_hash_map_find(char *file_name, struct SyncQuery *result) {
     }
     
     if(hash_map_element == NULL)
-        sync_hash_map_create(file_name, result);
-    
-    return 0;
+        return sync_hash_map_create(file_name);
+    else
+        return hash_map_element->element;
 }
 /* todo: dokonczyc to */
 
 
 sem_t sem_synchroniser_access;
 
-int synchroniser_query(char *file_name, struct SyncQuery *result) {  
+int synchroniser_query(char *file_name, struct SyncQuery **result) {  
     sem_wait(&sem_synchroniser_access);
-    sync_hash_map_find(file_name, result);    
+    *result = sync_hash_map_find(file_name);    
     sem_post(&sem_synchroniser_access);    
+    assert(*result != NULL);
     return 0;
 }
 
@@ -123,5 +122,6 @@ int synchroniser_init() {
 
 int synchroniser_shutdown() {
     sem_destroy(&sem_synchroniser_access);  
+    /* @todo free memory. */
     return 0;
 }

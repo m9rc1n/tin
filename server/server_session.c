@@ -1,4 +1,6 @@
 #include "server_session.h"
+#include "server_synchroniser.h"
+#include <assert.h>
 #include <netinet/in.h>
 #include <semaphore.h>
 #include <stdlib.h>
@@ -6,14 +8,9 @@
 #include <time.h>
 #include <stdio.h>
 
-typedef enum SessionLockType {
-    SLT_READ,
-    SLT_WRITE,
-} SessionLockType;
-
 struct SessionLock {
     char *file_name;
-    SessionLockType lock_type;
+    FileLockType lock_type;
 };
 
 struct Session {
@@ -27,6 +24,11 @@ struct Session {
 
 /** Lista aktywnych (jeszcze...) sesji. */
 static struct Session *sessions_list[SESSION_MAX_NUMBER];
+
+static int session_add_lock(int session_id, char *file_name, FileLockType file_lock_type) {
+    
+    return 42;
+}
 
 /**
  * Zwraca pierwsze wolne id sesji lub -1, jeżeli takowe nie istnieje.
@@ -46,7 +48,9 @@ static int session_find_free_id() {
  */
 static int session_remove_locks(unsigned session_id) {
 
-    return 42;
+    
+    
+    return 0;
 }
 
 
@@ -138,6 +142,52 @@ int session_destroy_zombies() {
     sem_post(&sem_sessions_list_access);
 
     return 0;
+}
+
+int session_lock_file(int session_id, char *file_name, FileLockType file_lock_type) {
+    
+    struct SyncQuery *sq = NULL;    
+    
+    if(synchroniser_query(file_name, &sq) < 0)
+        return -1;
+    
+    assert(sq != NULL);
+    
+    switch(file_lock_type) {
+        
+        case FLOCK_READ:
+            if(sq->lock_type == FLOCK_READ || sq->lock_type == FLOCK_NONE) {
+                
+                sq->lock_type = FLOCK_READ;
+                ++ sq->readers;
+                session_add_lock(session_id, file_name, file_lock_type);
+                return 0;
+            } else {
+                
+                return -2;
+            }
+            
+        case FLOCK_WRITE:
+            if(sq->lock_type == FLOCK_NONE) {
+                
+                sq->lock_type = FLOCK_WRITE;
+                session_add_lock(session_id, file_name, file_lock_type);
+                return 0;
+            } else if(sq->lock_type == FLOCK_READ) {
+                
+                sq->lock_type = FLOCK_WRITE_PENDING;
+                session_add_lock(session_id, file_name, file_lock_type);
+                return 1;
+            } else {
+                
+                return -3;
+            }
+            
+        default:
+            break;            
+    }
+    
+    return -4;
 }
 
 int session_shutdown() {
