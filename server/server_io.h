@@ -10,12 +10,14 @@
 #include <unistd.h>
 
 #include "../protocol.h"
+#include "server_protocol.h"
 
-int s_open (int server_handler, char* name, int flags);
-int s_write (int server_handler, int fd, void *buf, size_t len);
-int s_read (int server_handler, int fd, long offset, int whence);
-int s_close (int server_handler, int fd);
-// int s_fstat (int server_handler, int fd, struct stat *buf);
-int s_lock (int server_handler, int fd, int mode);
+int s_open (IncomingRequest *inc_request);
+int s_write (IncomingRequest *inc_request);
+int s_read (IncomingRequest *inc_request);
+int s_close (IncomingRequest *inc_request);
+int s_fstat (IncomingRequest *inc_request);
+int s_lock (IncomingRequest *inc_request);
+int s_lseek (IncomingRequest *inc_request);
 
 #endif // SERVER_IO_H_INCLUDED

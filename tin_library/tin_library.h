@@ -14,7 +14,7 @@
 
 extern int sockd;
 extern int port;
-extern struct sockaddr_in my_addr; 
+extern struct sockaddr_in my_addr;
 extern struct sockaddr_in srv_addr;
 
 int fs_open_server (char* server_address);
@@ -22,9 +22,11 @@ int fs_close_server (int server_handler);
 
 int fs_open (int server_handler, char* name, int flags);
 int fs_write (int server_handler, int fd, void *buf, size_t len);
-int fs_read (int server_handler, int fd, long offset, int whence);
+int fs_read (int server_handler, int fd, void *buf, size_t len);
 int fs_close (int server_handler, int fd);
-// int fs_fstat (int server_handler, int fd, struct stat *buf);
 int fs_lock (int server_handler, int fd, int mode);
+int fs_fstat (int server_handler, int fd, FsFstat *buf);
+int fs_lseek (int server_handler, int fd, long offset, int whence);
+
 
 #endif // TIN_LIBRARY_H_INCLUDED

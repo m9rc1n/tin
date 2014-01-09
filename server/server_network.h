@@ -3,6 +3,8 @@
 #define SERVER_NETWORK_H_INCLUDED
 
 #include "server_const.h"
+#include "server_protocol.h"
+#include "../protocol.h"
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -12,18 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-#include "../protocol.h"
-
-#define MAX_BUF 256
-
-typedef struct IncomingRequest 
-{
-    struct sockaddr_in client_addr;
-    unsigned int client_addr_len;
-    FsRequest request;
-} 
-IncomingRequest;
 
 extern int status, sockd;
 extern struct sockaddr_in my_name;
