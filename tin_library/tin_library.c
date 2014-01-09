@@ -21,6 +21,8 @@ int fs_open_server (char* server_address, int server_port)
     FsRequest request;
     request.command = OPEN_SERVER;
 
+    // @todo Potencjalnie do usuniecia w protokole, chyba ze podacie mi jakis powod dlaczego to
+    // przekazac serwerowi
     // size_t address_len = sizeof (request.request_data.open_server.server_address);
 	// strncpy (request.request_data.open_server.server_address, server_address, address_len);
 
@@ -34,13 +36,13 @@ int fs_open_server (char* server_address, int server_port)
         exit(1);
     }
 
-	// client address
+	/* client address */
 	my_addr.sin_family = AF_INET;
     my_addr.sin_addr.s_addr = INADDR_ANY;
     my_addr.sin_port = 0;
     status = bind (sockd, (struct sockaddr*)&my_addr, sizeof(my_addr));
 
-  	// server address
+  	/* server address */
 	srv_addr.sin_family = AF_INET;
 	inet_aton (server_address, &srv_addr.sin_addr);
 
@@ -66,7 +68,7 @@ int fs_close_server (int server_handler)
     socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
-	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+    sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
     //printf("Sent close message, sid = %d\n", server_handler);
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 	//printf ("Closing server: %d\n", response.answer);
@@ -81,7 +83,8 @@ int fs_open (int server_handler, char* name, int flags)
     FsRequest request;
     request.command = OPEN;
     request.request_data.open.server_handler = server_handler;
-    strcpy (request.request_data.open.name, name);
+    request.request_data.open.name = (char*) malloc(strlen(name));
+    strncpy (request.request_data.open.name, name, strlen(name));
     request.request_data.open.flags = flags;
 
 	socklen_t addrlen = sizeof(struct sockaddr_in);
@@ -90,6 +93,7 @@ int fs_open (int server_handler, char* name, int flags)
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
+    free (request.request_data.open.name);
 	return response.response_data.open.status;
 }
 
@@ -101,6 +105,7 @@ int fs_write (int server_handler, int fd, void *buf, size_t len)
     request.command = WRITE;
     request.request_data.write.server_handler = server_handler;
     request.request_data.write.fd = fd;
+    request.request_data.write.buffer = (void*) malloc(len);
     memcpy (request.request_data.write.buffer, buf, len);
     request.request_data.write.buffer_len = len;
 
@@ -110,6 +115,7 @@ int fs_write (int server_handler, int fd, void *buf, size_t len)
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
+    free (request.request_data.write.buffer);
 	return response.response_data.write.status;
 }
 
@@ -121,6 +127,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     request.command = READ;
     request.request_data.read.server_handler = server_handler;
     request.request_data.read.fd = fd;
+    request.request_data.read.buffer = (void*) malloc(len);
     memcpy (request.request_data.read.buffer, buf, len);
     request.request_data.read.buffer_len = len;
 
@@ -130,6 +137,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
+    free (request.request_data.read.buffer);
 	return response.response_data.read.status;
 }
 
@@ -198,7 +206,8 @@ int fs_fstat (int server_handler, int fd, FsFstat *buf)
     request.command = FSTAT;
     request.request_data.fstat.server_handler = server_handler;
     request.request_data.fstat.fd = fd;
-    memcpy (&request.request_data.fstat.stat, buf, sizeof (FsFstat));
+    request.request_data.fstat.stat = (FsFstat*) malloc(sizeof(FsFstat));
+    memcpy (request.request_data.fstat.stat, buf, sizeof(FsFstat));
 
     socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
@@ -206,6 +215,7 @@ int fs_fstat (int server_handler, int fd, FsFstat *buf)
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
+    free (request.request_data.fstat.stat);
 	return response.response_data.fstat.status;
 }
 
