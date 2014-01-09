@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "../../protocol.h"
-#include "../../tin_library/tin_library.h"
+#include "../protocol.h"
+#include "../tin_library/tin_library.h"
 
 int main(int argc, char* argv[]) {
     int i, how_many, sid;
@@ -25,5 +25,5 @@ int main(int argc, char* argv[]) {
 
     }
     
-	return 0;
+        return 0;
 }
