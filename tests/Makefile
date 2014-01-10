@@ -1,7 +1,7 @@
 CXX = clang
 CXXFLAGS = -O2 -Wall 
 LDFLAGS = 
-TESTS = session_basic session_timeouter
+TESTS = file_opener session_basic session_timeouter
 
 SRCS = $(addsuffix .c, $(TESTS))
 EXEC = $(addprefix bin/, $(addsuffix .out, $(TESTS)))

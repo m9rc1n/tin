@@ -44,12 +44,4 @@
 #define SESSION_ZOMBIE_TIME 15
 #endif
 
-
-/*
- * Poniższe dwa są tutaj tylko na chwilę, zaraz wylecą.
- */
-#define SWEEP_TIME 10
-#define ZOMBIFICATION_PERIOD 1800
-
-
 #endif
