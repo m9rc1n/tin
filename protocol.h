@@ -3,6 +3,11 @@
 
 #include <sys/types.h>
 
+#define BUF_LEN 200
+#define NAME_LEN 32
+#define MODE_LEN 3
+
+
 typedef enum FsCommand
 {
 	// Polacz sie z serwerem
@@ -142,12 +147,12 @@ typedef struct FsOpenC
     // uchwyt do serwera
     int server_handler;
     // sciezka do pliku na serwerze
-    char* name;
+    char name[NAME_LEN];
     // rozmiar tablicy z nazwa
     size_t name_len;
     // flaga otworzenia pliku
     // O_RDONLY O_WRONLY O_RDWR O_CREAT O_APPEND
-    char* mode;
+    char mode[MODE_LEN];
     // rozmiar tablicy z ustawieniami
     size_t mode_len;
 }
@@ -169,7 +174,7 @@ typedef struct FsWriteC
     // unikalny deskryptor pliku dla danego klienta
     int fd;
     // bufor danych do zapisania w pliku
-    void* buffer;
+    char buffer[BUF_LEN];
     // ilosc bajtow do zapisania
     long buffer_len;
 }
@@ -193,7 +198,7 @@ typedef struct FsReadC
     // unikalny deskryptor pliku dla danego klienta
     int fd;
     // buffor danych do odczytania z pliku
-    void* buffer;
+    char buffer[BUF_LEN];
     // ile danych chcemy wczytac
     long buffer_len;
 }
@@ -269,9 +274,9 @@ typedef struct FsFstatC
     int server_handler;
     // unikalny deskryptor pliku dla danego klienta
     int fd;
-    FsFstat* stat;
+    FsFstat stat;
     // kolejka blokad
-    int* queueLock;
+    // int* queueLock;
     // aktualny stan
     int actualState;
 }

@@ -5,7 +5,7 @@
 
 int s_open(IncomingRequest *inc_request) {
     char *file_name = (char *) calloc(inc_request->request.data.open.name_len, sizeof(char));
-    // strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
+    strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
 
     printf ("Dlugosc przeslanej nazwy pliku == %s\n", inc_request->request.data.open.name);
 
@@ -18,6 +18,7 @@ int s_open(IncomingRequest *inc_request) {
         printf("imma readin: %d\n", session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ));
     else
         printf("imma writin: %d\n", session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE));
+
     FsResponse response;
     response.answer = OK;
 
