@@ -76,19 +76,20 @@ int fs_close_server (int server_handler)
 	return response.data.close_server.status;
 }
 
-// int fs_open (int server_handler, char* name, int flags)
-// skoro powiedzial ze ma przypominac fopen to zmieniam int flags na char* mode
 int fs_open (int server_handler, const char* name, const char* mode)
 {
+    printf ("Dlugosc pliku w tescie: %lu\n", strlen(name));
     FsResponse response;
 
     FsRequest request;
     request.command = OPEN;
     request.data.open.server_handler = server_handler;
-    request.data.open.name = (char*) malloc(strlen(name));
-    request.data.open.mode = (char*) malloc(strlen(mode));
+    request.data.open.name = (char*) calloc(strlen(name), sizeof(char));
     strncpy (request.data.open.name, name, strlen(name));
+    request.data.open.name_len = strlen(name);
+    request.data.open.mode = (char*) calloc(strlen(mode), sizeof(char));
     strncpy (request.data.open.mode, mode, strlen(mode));
+    request.data.open.mode_len = strlen(mode);
 
 	socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
