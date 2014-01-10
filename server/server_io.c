@@ -5,9 +5,9 @@
 
 int s_open(IncomingRequest *inc_request) {
     char *file_name = (char *) calloc(inc_request->request.data.open.name_len, sizeof(char));
-    // strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
+    strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
 
-    printf ("Dlugosc przeslanej nazwy pliku == %d\n", inc_request->request.data.open.name_len);
+    printf ("Dlugosc przeslanej nazwy pliku == %lu\n", inc_request->request.data.open.name_len);
 
     /** @todo faktyczna obsługa tych plików */
 

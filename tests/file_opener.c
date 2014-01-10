@@ -22,8 +22,8 @@ int main(int argc, char* argv[]) {
     sid = fs_open_server("0.0.0.0", port);
     printf("Otwieram session_id %d\n", sid);
     fs_open(sid, fn1, "r");
-    // fs_open(sid, fn2, "w");
-    // fs_open(sid, fn2, "r");
+    fs_open(sid, fn2, "w");
+    fs_open(sid, fn2, "r");
     sleep(10);
     fs_close_server(sid);
     printf("Zamykam session_id %d\n", sid);
