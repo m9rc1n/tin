@@ -1,8 +1,7 @@
 #ifndef PROTOCOL_H_INCLUDED
 #define PROTOCOL_H_INCLUDED
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <sys/types.h>
 
 typedef enum FsCommand
 {
@@ -148,7 +147,9 @@ typedef struct FsOpenC
     size_t name_len;
     // flaga otworzenia pliku
     // O_RDONLY O_WRONLY O_RDWR O_CREAT O_APPEND
-    int flags;
+    char* mode;
+    // rozmiar tablicy z ustawieniami
+    size_t mode_len;
 }
 FsOpenC;
 
@@ -250,15 +251,15 @@ FsCloseS;
 typedef struct FsFstat
 {
     // protection
-    mode_t st_mode;
+    mode_t mode;
     // total size, in bytes
-    off_t st_size;
+    off_t size;
     // time of last access
-    time_t st_atime;
+    time_t atime;
     // time of modification
-    time_t st_mtime;
+    time_t mtime;
     // time of last status change
-    time_t st_ctime;
+    time_t ctime;
 }
 FsFstat;
 
@@ -268,7 +269,7 @@ typedef struct FsFstatC
     int server_handler;
     // unikalny deskryptor pliku dla danego klienta
     int fd;
-    FsFstat* stat;
+    FsFstat* stata;
     // kolejka blokad
     int* queueLock;
     // aktualny stan
