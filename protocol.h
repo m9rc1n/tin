@@ -269,7 +269,7 @@ typedef struct FsFstatC
     int server_handler;
     // unikalny deskryptor pliku dla danego klienta
     int fd;
-    FsFstat* stata;
+    FsFstat* stat;
     // kolejka blokad
     int* queueLock;
     // aktualny stan
@@ -336,7 +336,7 @@ typedef struct FsRequest
         FsFstatC fstat;
         FsLockC lock;
     }
-	request_data;
+	data;
 }
 FsRequest;
 
@@ -357,7 +357,7 @@ typedef struct FsResponse
         FsFstatS fstat;
         FsLockS lock;
     }
-	response_data;
+	data;
 }
 FsResponse;
 

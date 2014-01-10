@@ -4,26 +4,26 @@
 #include "server_synchroniser.h"
 
 int s_open(IncomingRequest *inc_request) {
-    char *file_name = (char *) calloc(inc_request->request.request_data.open.name_len, sizeof(char));
-    strncpy(file_name, inc_request->request.request_data.open.name, inc_request->request.request_data.open.name_len);
-    
+    char *file_name = (char *) calloc(inc_request->request.data.open.name_len, sizeof(char));
+    strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
+
     /** @todo faktyczna obsługa tych plików */
-    
-    
+
+
     /** @fixme tych flag nie widzę zdefiniowanych nigdzie. */
     /** @fixme to chyba nie miało tak wyglądać... :P */
-    if(inc_request->request.request_data.open.flags == 0)
-        printf("imma readin: %d\n", session_lock_file(inc_request->request.request_data.open.server_handler, file_name, FLOCK_READ));
+    if(strcmp(inc_request->request.data.open.mode , "r"))
+        printf("imma readin: %d\n", session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ));
     else
-        printf("imma writin: %d\n", session_lock_file(inc_request->request.request_data.open.server_handler, file_name, FLOCK_WRITE));
-    
+        printf("imma writin: %d\n", session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE));
+
     FsResponse response;
     response.answer = OK;
 
-    return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);   
-    
+    return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+
     free(file_name);
-    
+
     return 0;
 }
 
