@@ -52,6 +52,8 @@ int fs_open_server (const char* server_address, int server_port)
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
+    printf ("Answer: %d", response.answer);
+
     return response.data.open_server.server_handler;
 }
 
@@ -84,18 +86,19 @@ int fs_open (int server_handler, const char* name, const char* mode)
     FsRequest request;
     request.command = OPEN;
     request.data.open.server_handler = server_handler;
-    request.data.open.name = (char*) calloc(strlen(name), sizeof(char));
+    request.data.open.name = (char*) malloc(strlen(name));
     strncpy (request.data.open.name, name, strlen(name));
     request.data.open.name_len = strlen(name);
-    request.data.open.mode = (char*) calloc(strlen(mode), sizeof(char));
+    printf ("AQA: %s\n", request.data.open.name);
+    /*request.data.open.mode = (char*) calloc(strlen(mode), sizeof(char));
     strncpy (request.data.open.mode, mode, strlen(mode));
     request.data.open.mode_len = strlen(mode);
-
+*/
 	socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+	// recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
     free (request.data.open.name);
     free (request.data.open.mode);
