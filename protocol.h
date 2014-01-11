@@ -29,6 +29,8 @@ typedef enum FsCommand
 	FSTAT = 8,
 	// Zablokowanie pliku na serwerze
 	LOCK = 9,
+    // Odbierz paczki
+    RECEIVE_PACKAGES = 10
 	// Przeslij ponownie plik
     // Potencjalnie do usuniecia
 	// AGAIN = 10
@@ -78,6 +80,10 @@ typedef enum FsAnswer
 	// Niezmodyfikowany
 	// Dany plik nie zostal zmodyfikowany na serwerze
 	NOT_MODIFIED = 300,
+    // -----------------------------------------------
+    // Blad przesylania pliku
+    // Plik zostal niepoprawnie przeslany
+    SENDING_ERROR = 301,
 
 	// Kody bledu aplikacji klienta
 	// ===============================================

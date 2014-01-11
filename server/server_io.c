@@ -26,10 +26,46 @@ int s_open(IncomingRequest *inc_request) {
 
 int s_write (IncomingRequest *inc_request)
 {
-    printf ("\nBuffer_len: %zu id: %d: %s\n", inc_request->request.data.write.buffer_len, inc_request->request.data.write.part_id, inc_request->request.data.write.buffer);
+    FsWriteC data_c = inc_request->request.data.write;
+    int i, status = 0;
+    size_t count = 0;
+    size_t parts_number = data_c.parts_number;
+    size_t last_part = data_c.buffer_len%BUF_LEN;
+    int server_handler = data_c.server_handler;
+    int fd = data_c.fd;
+
+    int* received_packages = (int*) calloc(parts_number, sizeof(int));
+    char* buffer = (char*) calloc(data_c.buffer_len, sizeof(char));
+
+    for (i=0; i<parts_number; i++)
+    {
+        count = recvfrom(sockd, (char*) (&inc_request->request), MAX_BUF, 0, (struct sockaddr*) &(inc_request->client_addr), &(inc_request->client_addr_len));
+        if (inc_request->request.command == RECEIVE_PACKAGES)
+        {
+            data_c = inc_request->request.data.write;
+            if (data_c.fd == fd && data_c.server_handler == server_handler && data_c.parts_number == parts_number)
+            {
+                memcpy(buffer+data_c.part_id*BUF_LEN*sizeof(char), data_c.buffer, data_c.buffer_len*sizeof(char));
+                int* current_package = received_packages+data_c.part_id*sizeof(int);
+                *current_package = 1;
+            }
+        }
+    }
 
     FsResponse response;
     response.answer = OK;
+
+    for (i=9; i<parts_number; ++i)
+    {
+        int* current_package = received_packages+i*sizeof(int);
+        if (current_package == 0 ) response.answer = SENDING_ERROR;
+    }
+
+    printf ("\nBuffer : %s\n", buffer);
+
+    free(received_packages);
+    free(buffer);
+    // wszystkie paczki przeslane
 
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
@@ -39,8 +75,13 @@ int s_close (IncomingRequest *inc_request)
     return -1;
 }
 
+// Otworz plik o identyfikatorze fd
+// Przeslij na wskazany adres w czesciach
+
 int s_read (IncomingRequest *inc_request)
 {
+    FsReadC data_c = inc_request->request.data.read;
+    // printf ("\nBuffer_len: %zu id: %d: %s\n", data_c.buffer_len, data_c.part_id, data_c.buffer);
     return -1;
 }
 

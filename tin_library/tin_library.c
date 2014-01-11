@@ -126,17 +126,21 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
     request.command = WRITE;
     request.data.write.server_handler = server_handler;
     request.data.write.fd = fd;
-    request.data.write.buffer_len = BUF_LEN;
+    request.data.write.buffer_len = len;
     request.data.write.parts_number = parts+1;
 
+    // @todo usunac przesylanie bufora z pierwszej paczki
+    status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+    request.command = RECEIVE_PACKAGES;
     for(i=0; i<parts; ++i)
     {
-        memcpy (request.data.write.buffer, buf + i*BUF_LEN, BUF_LEN);
+        memcpy (request.data.write.buffer, buf + i*BUF_LEN*sizeof(char), BUF_LEN*sizeof(char));
         request.data.write.part_id = i;
+        request.data.write.buffer_len = BUF_LEN;
         status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
     }
     request.data.write.buffer_len = last_part;
-    memcpy (request.data.write.buffer, buf + i*BUF_LEN, last_part);
+    memcpy (request.data.write.buffer, buf + i*BUF_LEN*sizeof(char), last_part*sizeof(char));
     request.data.write.part_id = i;
     status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
     count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
@@ -165,7 +169,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     for(int i=0; i<parts; ++i)
     {
         count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
-        memcpy (buf + i*BUF_LEN, response.data.read.buffer, BUF_LEN);
+        memcpy (buf + i*BUF_LEN*sizeof(char), response.data.read.buffer, BUF_LEN*sizeof(char));
     }
     count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
     memcpy (buf + i*BUF_LEN, response.data.read.buffer, last_part);
