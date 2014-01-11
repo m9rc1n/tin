@@ -11,6 +11,9 @@
 struct SessionLock {
     char *file_name;
     FileLockType lock_type;
+    
+    struct SessionLock *prev;
+    struct SessionLock *next;
 };
 
 struct Session {
@@ -48,7 +51,66 @@ static int session_find_free_id() {
  */
 static int session_remove_locks(unsigned session_id) {
 
+    if(sessions_list[session_id] == NULL)
+        return -1;
     
+    while(sessions_list[session_id]->locks != NULL) {
+        
+        struct SyncQuery *sq = NULL;    
+        char *file_name = sessions_list[session_id]->locks->file_name;
+    
+        if(synchroniser_query(file_name, &sq) < 0)
+            return -1;
+        
+        switch(sessions_list[session_id]->locks->lock_type) {
+            
+            case FLOCK_READ:
+        
+                -- sq->readers;
+                
+                if(sq->readers == 0) {
+                    if(sq->lock_type == FLOCK_WRITE_PENDING) {
+                        //sq->lock_type = FLOCK_WRITE;
+                        /** @todo można już pisać - coś trzeba z tym fantem zrobić. */
+                    } else {
+                        sq->lock_type = FLOCK_NONE;
+                    }
+                }
+                
+                break;
+                
+            case FLOCK_WRITE_PENDING:
+                
+                if(sq->readers == 0) {
+                    sq->lock_type = FLOCK_NONE;
+                } else {
+                    sq->lock_type = FLOCK_READ;
+                }
+                
+                break;
+                
+            case FLOCK_WRITE:
+                
+                sq->lock_type = FLOCK_NONE;
+                break;
+        }
+        
+        
+        if(sessions_list[session_id]->locks->next == NULL) {
+            
+            
+            sessions_list[session_id]->locks = NULL;
+            free(sessions_list[session_id]->locks->file_name)
+            free(sessions_list[session_id]->locks);
+        } else {
+            
+            
+            sessions_list[session_id]->locks = sessions_list[session_id]->locks->next;
+            free(sessions_list[session_id]->locks->prev->file_name);
+            free(sessions_list[session_id]->locks->prev);
+        }
+        
+    }
     
     return 0;
 }

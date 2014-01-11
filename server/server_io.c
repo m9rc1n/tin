@@ -12,6 +12,7 @@ int s_open(IncomingRequest *inc_request) {
 
     /** @fixme tych flag nie widzę zdefiniowanych nigdzie. */
     /** @fixme to chyba nie miało tak wyglądać... :P */
+    
     if(strcmp(inc_request->request.data.open.mode , "r"))
         printf("imma readin: %d\n", session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ));
     else
