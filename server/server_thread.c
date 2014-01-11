@@ -10,9 +10,6 @@ void *server_thread_function(void *parameters) {
 
         case CLOSE_SERVER:
             s_close_server(inc_request);
-            // @todo tymczasowe
-            // zamykamy server, trzeba zrobic bardziej praktycznie, macie jakis pomysl?
-            // zamykanie serwera przez klienta raczej nie wchodzi w gre, chyba ze jakis klient sterujacy serwerem
             break;
 
         case OPEN:

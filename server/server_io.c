@@ -26,7 +26,7 @@ int s_open(IncomingRequest *inc_request) {
 
 int s_write (IncomingRequest *inc_request)
 {
-    printf ("\nBuffer: %zu : %s\n", inc_request->request.data.write.buffer_len, inc_request->request.data.write.buffer);
+    printf ("\nBuffer_len: %zu id: %d: %s\n", inc_request->request.data.write.buffer_len, inc_request->request.data.write.part_id, inc_request->request.data.write.buffer);
 
     FsResponse response;
     response.answer = OK;

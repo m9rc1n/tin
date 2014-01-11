@@ -108,14 +108,16 @@ int fs_open (int server_handler, const char* name, const char* mode)
  *  dane zapisujemy w pliku o deskryptorze fd
  *
  *  nie otwieramy tutaj pliku, przekazujemy dane za pomoca buf
+ *
+ *  w udp pakiety moga przychodzic w roznej kolejnosci wiec cos trzeba wymyslec zeby nad tym zapanowac
  */
 
-int fs_write (int server_handler, int fd, void *buf, size_t len)
+int fs_write (int server_handler, int fd, const void *buf, size_t len)
 {
- 	int i=0, status;
-    size_t count;
+ 	int i=0, status=0;
+    size_t count = 0;;
     size_t parts = (len-1)/BUF_LEN;
-    size_t lastPart = len%BUF_LEN;
+    size_t last_part = len%BUF_LEN;
     socklen_t addrlen = sizeof(struct sockaddr_in);
 
     FsResponse response;
@@ -125,38 +127,48 @@ int fs_write (int server_handler, int fd, void *buf, size_t len)
     request.data.write.server_handler = server_handler;
     request.data.write.fd = fd;
     request.data.write.buffer_len = BUF_LEN;
+    request.data.write.parts_number = parts+1;
 
-    for(i=0; i<parts; i++)
+    for(i=0; i<parts; ++i)
     {
         memcpy (request.data.write.buffer, buf + i*BUF_LEN, BUF_LEN);
-        sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+        request.data.write.part_id = i;
+        status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
     }
+    request.data.write.buffer_len = last_part;
+    memcpy (request.data.write.buffer, buf + i*BUF_LEN, last_part);
+    request.data.write.part_id = i;
+    status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+    count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
-    request.data.write.buffer_len = lastPart;
-    memcpy (request.data.write.buffer, buf + i*BUF_LEN, lastPart);
-    sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-
-
-    recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
     return response.data.write.status;
 }
 
 int fs_read (int server_handler, int fd, void *buf, size_t len)
 {
+    int i=0, status=0;
+    size_t count = 0;
+    size_t parts = (len-1)/BUF_LEN;
+    size_t last_part = len%BUF_LEN;
+    socklen_t addrlen = sizeof(struct sockaddr_in);
+
     FsResponse response;
 
     FsRequest request;
     request.command = READ;
     request.data.read.server_handler = server_handler;
     request.data.read.fd = fd;
-    memcpy (request.data.read.buffer, buf, len);
     request.data.read.buffer_len = len;
 
-    socklen_t addrlen = sizeof(struct sockaddr_in);
-	int status, count;
+	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 
-	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+    for(int i=0; i<parts; ++i)
+    {
+        count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+        memcpy (buf + i*BUF_LEN, response.data.read.buffer, BUF_LEN);
+    }
+    count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+    memcpy (buf + i*BUF_LEN, response.data.read.buffer, last_part);
 
 	return response.data.read.status;
 }

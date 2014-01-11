@@ -177,6 +177,10 @@ typedef struct FsWriteC
     char buffer[BUF_LEN];
     // ilosc bajtow do zapisania
     size_t buffer_len;
+    // identyfikator czesci
+    int part_id;
+    // ilosc czesci
+    int parts_number;
 }
 FsWriteC;
 
@@ -190,6 +194,7 @@ typedef struct FsWriteS
 FsWriteS;
 
 // @todo SPRAWDZIC POPRAWNOSC!
+// marcin: przesunalem buffer do danych otrzymywanych z serwera
 
 typedef struct FsReadC
 {
@@ -197,19 +202,24 @@ typedef struct FsReadC
     int server_handler;
     // unikalny deskryptor pliku dla danego klienta
     int fd;
-    // buffor danych do odczytania z pliku
-    char buffer[BUF_LEN];
-    // ile danych chcemy wczytac
+    // liczba faktycznie przekazanych bajtow
     size_t buffer_len;
 }
+
 FsReadC;
 
 typedef struct FsReadS
 {
     // liczba zwracana przez funkcje
     int status;
-    // liczba faktycznie przekazanych bajtow
+    // buffor danych do odczytania z pliku
+    char buffer[BUF_LEN];
+    // ile danych chcemy wczytac
     size_t buffer_len;
+    // identyfikator czesci
+    int part_id;
+    // ilosc czesci
+    int parts_number;
 }
 FsReadS;
 
