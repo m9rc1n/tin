@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
     fs_open(sid, fn1, "r");
     fs_open(sid, fn2, "r");
     fs_open(sid, fn3, "w");
+    fs_open(sid, fn3, "r");
     sleep(3);
     
     fs_close_server(sid);

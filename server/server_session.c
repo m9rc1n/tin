@@ -237,9 +237,13 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
     
     assert(sq != NULL);
     
+    VDP2("File %s has %d readers.\n", sq->file_name, sq->readers);
+    
     switch(file_lock_type) {
         
         case FLOCK_READ:
+            VDP0("Attempting READ lock.\n");
+            
             if(sq->lock_type == FLOCK_READ || sq->lock_type == FLOCK_NONE) {
                 
                 sq->lock_type = FLOCK_READ;
@@ -251,7 +255,11 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
                 return -2;
             }
             
+            break;
+            
         case FLOCK_WRITE:
+            VDP0("Attempting WRITE lock.\n");
+            
             if(sq->lock_type == FLOCK_NONE) {
                 
                 sq->lock_type = FLOCK_WRITE;
@@ -267,8 +275,10 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
                 return -3;
             }
             
+            break;
+            
         default:
-            break;            
+            assert(0);         
     }
     
     return -4;
