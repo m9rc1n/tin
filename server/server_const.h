@@ -1,6 +1,18 @@
 #ifndef SERVER_CONST_H
 #define SERVER_CONST_H
 
+#ifdef VDBG
+#define VDP0(x) (printf(x))
+#define VDP1(x,y) (printf(x,y))
+#define VDP2(x,y,z) (printf(x,y,z))
+#define VDP3(x,y,z,q) (printf(x,y,z,q))
+#else
+#define VDP0(x)
+#define VDP1(x,y)
+#define VDP2(x,y,z)
+#define VDP3(x,y,z,q)
+#endif
+
 /**
  * Tutaj wrzucamjmy wszystkie makrodefinicje, żeby było potem prościej zmieniać wszelkiego rodzaju
  *  parametry serwera. Ponadto raczej lepiej definiować parametry poprzez idndef-define-endif, bo

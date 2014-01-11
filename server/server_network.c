@@ -20,7 +20,6 @@ int s_close_server(IncomingRequest *inc_request)
     int session_id;
 
     session_id = inc_request->request.data.close_server.server_handler;
-
     session_close(session_id);
 
 	printf("Closing session with: %d\n", session_id);

@@ -2,26 +2,31 @@
 #include "server_io.h"
 #include "server_network.h"
 #include "server_synchroniser.h"
+#include <stdio.h>
 
 int s_open(IncomingRequest *inc_request) {
+    
     char *file_name = (char *) calloc(inc_request->request.data.open.name_len, sizeof(char));
     strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
 
+    VDP2("Incoming OPEN request: %s (mode: %s)\n", file_name, inc_request->request.data.open.mode);
+    
    /** @todo faktyczna obsługa tych plików */
 
 
     /** @fixme tych flag nie widzę zdefiniowanych nigdzie. */
     /** @fixme to chyba nie miało tak wyglądać... :P */
-    
+
     if(strcmp(inc_request->request.data.open.mode , "r"))
         printf("imma readin: %d\n", session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ));
     else
         printf("imma writin: %d\n", session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE));
-
+    
+    free(file_name);
+    
     FsResponse response;
     response.answer = OK;
-
-    free(file_name);
+    
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
 
