@@ -39,6 +39,8 @@ void *server_thread_function(void *parameters) {
         case LOCK:
             s_lock(inc_request);
             break;
+        default:
+            break;
     }
 
     pthread_exit(NULL);

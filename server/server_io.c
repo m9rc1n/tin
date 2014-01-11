@@ -6,43 +6,44 @@
 
 int s_open(IncomingRequest *inc_request) {
     int lock_result;
-    
+
     char *file_name = (char *) calloc(inc_request->request.data.open.name_len, sizeof(char));
     strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
 
     VDP2("Incoming OPEN request: %s (mode: %s)\n", file_name, inc_request->request.data.open.mode);
-    
+
    /** @todo faktyczna obsługa tych plików */
 
 
     /** @fixme tych flag nie widzę zdefiniowanych nigdzie. */
     /** @fixme to chyba nie miało tak wyglądać... :P */
 
-    /* Ludzie, kurde, to jest C, ono nie działa intuicyjnie. 
-     *  http://pl.wikibooks.org/wiki/C/strcmp 
+    /* Ludzie, kurde, to jest C, ono nie działa intuicyjnie.
+     *  http://pl.wikibooks.org/wiki/C/strcmp
      */
     if(strcmp(inc_request->request.data.open.mode, "r") == 0)
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ);
     else
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE);
-    
+
     FsResponse response;
-    
+
     if(lock_result < 0) {
         /* Nie udało się dostać blokady na plik - trzeba powiadomić o tym klienta. */
         /* @todo ja się nie znam na protokole tak dobrze, jak Wy - może trzeba ucywilizować. ~ AK */
         response.answer = FILE_BLOCKED;
-        
+
     } else {
         response.answer = OK;
     }
-    
+
     free(file_name);
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
 
 int s_write (IncomingRequest *inc_request)
 {
+    FsResponse response;
     FsWriteC data_c = inc_request->request.data.write;
     int i, status = 0;
     size_t count = 0;
@@ -66,24 +67,26 @@ int s_write (IncomingRequest *inc_request)
                 int* current_package = received_packages+data_c.part_id*sizeof(int);
                 *current_package = 1;
             }
+            else
+            {
+                response.answer = FILE_ACCESS_ERROR;
+                free(buffer);
+                free(received_packages);
+                return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+            }
         }
     }
 
-    FsResponse response;
     response.answer = OK;
 
-    for (i=9; i<parts_number; ++i)
+    for (i=0; i<parts_number; ++i)
     {
         int* current_package = received_packages+i*sizeof(int);
-        if (current_package == 0 ) response.answer = SENDING_ERROR;
+        if (current_package == 0 ) response.answer = FILE_SENDING_ERROR;
     }
-
-    printf ("\nBuffer : %s\n", buffer);
 
     free(received_packages);
     free(buffer);
-    // wszystkie paczki przeslane
-
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
 

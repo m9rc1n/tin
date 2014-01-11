@@ -25,7 +25,6 @@ int main(int argc, char* argv[]) {
 
     fseek(send_file, 0, SEEK_END);
     size_t file_size = ftell(send_file);
-    printf ("AA--%lu",file_size);
     fseek(send_file, 0, SEEK_SET);
     char* buf = (char*) calloc(file_size, sizeof(char));
     fread (buf, sizeof(char), file_size, send_file);
