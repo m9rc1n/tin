@@ -19,15 +19,18 @@ int main(int argc, char* argv[]) {
     sid = fs_open_server("0.0.0.0", port);
     printf("Otwieram session_id %d\n", sid);
 
-    FILE* sendFile = fopen("a.x", "r+");
+    FILE* send_file = fopen("a.x", "r+");
 
-    printf ("Wsk: %d\n", sendFile);
+    if (send_file == NULL) printf("\nCannot open the file");
 
-    // char* buf = (char*) calloc(1024, sizeof(char));
-    char buf[1024];
-    fread (&buf, sizeof(char), 1024, sendFile);
+    fseek(send_file, 0, SEEK_END);
+    size_t file_size = ftell(send_file);
+    printf ("AA--%lu",file_size);
+    fseek(send_file, 0, SEEK_SET);
+    char* buf = (char*) calloc(file_size, sizeof(char));
+    fread (buf, sizeof(char), file_size, send_file);
+    fs_write(sid, 10, buf, file_size);
 
-    fs_write(sid, 10, buf, sizeof(buf));
     fs_close_server(sid);
     printf("Zamykam session_id %d\n", sid);
 
