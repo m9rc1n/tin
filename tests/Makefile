@@ -1,5 +1,5 @@
 CXX = clang
-CXXFLAGS = -O2 -Wall 
+CXXFLAGS = -O2 -Wall -DVDBG
 LDFLAGS = 
 TESTS = file_reader file_writer file_opener session_basic session_timeouter
 

@@ -2,24 +2,41 @@
 #include "server_io.h"
 #include "server_network.h"
 #include "server_synchroniser.h"
+#include <stdio.h>
 
 int s_open(IncomingRequest *inc_request) {
+    int lock_result;
+    
     char *file_name = (char *) calloc(inc_request->request.data.open.name_len, sizeof(char));
     strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
 
+    VDP2("Incoming OPEN request: %s (mode: %s)\n", file_name, inc_request->request.data.open.mode);
+    
    /** @todo faktyczna obsługa tych plików */
 
 
     /** @fixme tych flag nie widzę zdefiniowanych nigdzie. */
     /** @fixme to chyba nie miało tak wyglądać... :P */
-    if(strcmp(inc_request->request.data.open.mode , "r"))
-        printf("imma readin: %d\n", session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ));
+
+    /* Ludzie, kurde, to jest C, ono nie działa intuicyjnie. 
+     *  http://pl.wikibooks.org/wiki/C/strcmp 
+     */
+    if(strcmp(inc_request->request.data.open.mode, "r") == 0)
+        lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ);
     else
-        printf("imma writin: %d\n", session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE));
-
+        lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE);
+    
     FsResponse response;
-    response.answer = OK;
-
+    
+    if(lock_result < 0) {
+        /* Nie udało się dostać blokady na plik - trzeba powiadomić o tym klienta. */
+        /* @todo ja się nie znam na protokole tak dobrze, jak Wy - może trzeba ucywilizować. ~ AK */
+        response.answer = FILE_BLOCKED;
+        
+    } else {
+        response.answer = OK;
+    }
+    
     free(file_name);
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }

@@ -11,6 +11,9 @@
 struct SessionLock {
     char *file_name;
     FileLockType lock_type;
+    
+    struct SessionLock *prev;
+    struct SessionLock *next;
 };
 
 struct Session {
@@ -27,7 +30,22 @@ static struct Session *sessions_list[SESSION_MAX_NUMBER];
 
 static int session_add_lock(int session_id, char *file_name, FileLockType file_lock_type) {
     
-    return 42;
+    VDP2("Setting lock on file %s, SID: %d\n", file_name, session_id);
+    
+    struct SessionLock *session_lock = (struct SessionLock *) calloc(1, sizeof(struct SessionLock));
+    session_lock->file_name = (char *) calloc(strlen(file_name), sizeof(char));
+    strncpy(session_lock->file_name, file_name, strlen(file_name));
+    session_lock->lock_type = file_lock_type;
+    session_lock->prev = NULL;
+    session_lock->next = sessions_list[session_id]->locks;
+    
+    
+    if(sessions_list[session_id]->locks != NULL)
+        sessions_list[session_id]->locks->prev = session_lock;
+    
+    sessions_list[session_id]->locks = session_lock;
+    
+    return 0;
 }
 
 /**
@@ -48,7 +66,71 @@ static int session_find_free_id() {
  */
 static int session_remove_locks(unsigned session_id) {
 
+    if(sessions_list[session_id] == NULL)
+        return -1;
     
+    while(sessions_list[session_id]->locks != NULL) {
+        
+        VDP2("Unlocking file %s SID: %d\n", sessions_list[session_id]->locks->file_name, session_id);
+        
+        struct SyncQuery *sq = NULL;    
+        char *file_name = sessions_list[session_id]->locks->file_name;
+    
+        if(synchroniser_query(file_name, &sq) < 0)
+            return -1;
+        
+        switch(sessions_list[session_id]->locks->lock_type) {
+            
+            case FLOCK_READ:
+        
+                -- sq->readers;
+                
+                if(sq->readers == 0) {
+                    if(sq->lock_type == FLOCK_WRITE_PENDING) {
+                        //sq->lock_type = FLOCK_WRITE;
+                        /** @todo można już pisać - coś trzeba z tym fantem zrobić. */
+                    } else {
+                        sq->lock_type = FLOCK_NONE;
+                    }
+                }
+                
+                break;
+                
+            case FLOCK_WRITE_PENDING:
+                
+                if(sq->readers == 0) {
+                    sq->lock_type = FLOCK_NONE;
+                } else {
+                    sq->lock_type = FLOCK_READ;
+                }
+                
+                break;
+                
+            case FLOCK_WRITE:
+                
+                sq->lock_type = FLOCK_NONE;
+                break;
+                
+            default:
+                assert(0);
+        }
+        
+        
+        if(sessions_list[session_id]->locks->next == NULL) {
+            
+            free(sessions_list[session_id]->locks->file_name);
+            free(sessions_list[session_id]->locks);
+            sessions_list[session_id]->locks = NULL;
+        } else {
+            
+            sessions_list[session_id]->locks = sessions_list[session_id]->locks->next;
+            free(sessions_list[session_id]->locks->prev->file_name);
+            free(sessions_list[session_id]->locks->prev);
+        }
+        
+    }
+    
+    VDP1("Unlocked files from %d sesssion.\n", session_id);
     
     return 0;
 }
@@ -107,6 +189,8 @@ int session_create(struct sockaddr_in client_addr, unsigned client_addr_len) {
         return -1;
     }
 
+    VDP1("Creating session SID: %d\n", session_id);
+    
     sessions_list[session_id] = (struct Session *) calloc(1, sizeof(struct Session));
     sessions_list[session_id]->id = session_id;
     sessions_list[session_id]->time_active = time(NULL);
@@ -153,9 +237,13 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
     
     assert(sq != NULL);
     
+    VDP2("File %s has %d readers.\n", sq->file_name, sq->readers);
+    
     switch(file_lock_type) {
         
         case FLOCK_READ:
+            VDP0("Attempting READ lock.\n");
+            
             if(sq->lock_type == FLOCK_READ || sq->lock_type == FLOCK_NONE) {
                 
                 sq->lock_type = FLOCK_READ;
@@ -167,7 +255,11 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
                 return -2;
             }
             
+            break;
+            
         case FLOCK_WRITE:
+            VDP0("Attempting WRITE lock.\n");
+            
             if(sq->lock_type == FLOCK_NONE) {
                 
                 sq->lock_type = FLOCK_WRITE;
@@ -183,8 +275,10 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
                 return -3;
             }
             
+            break;
+            
         default:
-            break;            
+            assert(0);         
     }
     
     return -4;
