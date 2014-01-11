@@ -176,14 +176,14 @@ typedef struct FsWriteC
     // bufor danych do zapisania w pliku
     char buffer[BUF_LEN];
     // ilosc bajtow do zapisania
-    long buffer_len;
+    size_t buffer_len;
 }
 FsWriteC;
 
 typedef struct FsWriteS
 {
     // liczba zapisanych bajtow
-    long buffer_len;
+    size_t buffer_len;
     // liczba zwracana przez funkcje
     int status;
 }
@@ -200,7 +200,7 @@ typedef struct FsReadC
     // buffor danych do odczytania z pliku
     char buffer[BUF_LEN];
     // ile danych chcemy wczytac
-    long buffer_len;
+    size_t buffer_len;
 }
 FsReadC;
 
@@ -209,7 +209,7 @@ typedef struct FsReadS
     // liczba zwracana przez funkcje
     int status;
     // liczba faktycznie przekazanych bajtow
-    long buffer_len;
+    size_t buffer_len;
 }
 FsReadS;
 

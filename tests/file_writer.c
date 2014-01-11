@@ -12,19 +12,22 @@
 
 int main(int argc, char* argv[]) {
     int sid, port;
-    char *fn1 = "plik.rd";
-    char *fn2 = "plik.wr";
-    char *fn3 = "plik.??";
 
     printf("Podaj port serwera: ");
     scanf("%d", &port);
 
     sid = fs_open_server("0.0.0.0", port);
     printf("Otwieram session_id %d\n", sid);
-    fs_open(sid, fn1, "r");
-    fs_open(sid, fn2, "r");
-    fs_open(sid, fn2, "w");
-    sleep(10);
+
+    FILE* sendFile = fopen("a.x", "r+");
+
+    printf ("Wsk: %d\n", sendFile);
+
+    // char* buf = (char*) calloc(1024, sizeof(char));
+    char buf[1024];
+    fread (&buf, sizeof(char), 1024, sendFile);
+
+    fs_write(sid, 10, buf, sizeof(buf));
     fs_close_server(sid);
     printf("Zamykam session_id %d\n", sid);
 

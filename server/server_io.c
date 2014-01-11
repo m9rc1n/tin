@@ -7,9 +7,7 @@ int s_open(IncomingRequest *inc_request) {
     char *file_name = (char *) calloc(inc_request->request.data.open.name_len, sizeof(char));
     strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
 
-    printf ("Dlugosc przeslanej nazwy pliku == %s\n", inc_request->request.data.open.name);
-
-    /** @todo faktyczna obsługa tych plików */
+   /** @todo faktyczna obsługa tych plików */
 
 
     /** @fixme tych flag nie widzę zdefiniowanych nigdzie. */
@@ -28,7 +26,12 @@ int s_open(IncomingRequest *inc_request) {
 
 int s_write (IncomingRequest *inc_request)
 {
-    return -1;
+    printf ("\nBuffer: %zu : %s\n", inc_request->request.data.write.buffer_len, inc_request->request.data.write.buffer);
+
+    FsResponse response;
+    response.answer = OK;
+
+    return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
 
 int s_close (IncomingRequest *inc_request)

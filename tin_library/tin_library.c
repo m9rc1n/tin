@@ -83,11 +83,9 @@ int fs_open (int server_handler, const char* name, const char* mode)
     FsRequest request;
     request.command = OPEN;
     request.data.open.server_handler = server_handler;
-    // request.data.open.name = (char*) calloc(strlen(name), sizeof(char));
     // @todo errors!
     strncpy (request.data.open.name, name, strlen(name));
     request.data.open.name_len = strlen(name);
-    // request.data.open.mode = (char*) calloc(strlen(mode), sizeof(char));
     strncpy (request.data.open.mode, mode, strlen(mode));
     request.data.open.mode_len = strlen(mode);
 
@@ -97,31 +95,50 @@ int fs_open (int server_handler, const char* name, const char* mode)
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
-    // free (request.data.open.name);
-    // free (request.data.open.mode);
-	return response.data.open.status;
+	return response.data.open.fd;
 }
+
+/**
+ * buf
+ *  jest to bufor danych ktore klient przekazje nam abysmy mogli przeslac na serwer
+ * len
+ *  dlugosc danych tego bufora
+ * dzialanie:
+ *  buf przesylamy w czesciach okreslonych za pomoca protokolu - rozmiar czesci to BUF_LEN
+ *  dane zapisujemy w pliku o deskryptorze fd
+ *
+ *  nie otwieramy tutaj pliku, przekazujemy dane za pomoca buf
+ */
 
 int fs_write (int server_handler, int fd, void *buf, size_t len)
 {
+ 	int i=0, status;
+    size_t count;
+    size_t parts = (len-1)/BUF_LEN;
+    size_t lastPart = len%BUF_LEN;
+    socklen_t addrlen = sizeof(struct sockaddr_in);
+
     FsResponse response;
 
     FsRequest request;
     request.command = WRITE;
     request.data.write.server_handler = server_handler;
     request.data.write.fd = fd;
-    // request.data.write.buffer = (void*) malloc(len);
-    memcpy (request.data.write.buffer, buf, len);
-    request.data.write.buffer_len = len;
+    request.data.write.buffer_len = BUF_LEN;
 
-    socklen_t addrlen = sizeof(struct sockaddr_in);
-	int status, count;
+    for(i=0; i<parts; i++)
+    {
+        memcpy (request.data.write.buffer, buf + i*BUF_LEN, BUF_LEN);
+        sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+    }
 
-	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+    request.data.write.buffer_len = lastPart;
+    memcpy (request.data.write.buffer, buf + i*BUF_LEN, lastPart);
+    sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 
-    // free (request.data.write.buffer);
-	return response.data.write.status;
+
+    recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+    return response.data.write.status;
 }
 
 int fs_read (int server_handler, int fd, void *buf, size_t len)
@@ -132,7 +149,6 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     request.command = READ;
     request.data.read.server_handler = server_handler;
     request.data.read.fd = fd;
-    // request.data.read.buffer = (void*) malloc(len);
     memcpy (request.data.read.buffer, buf, len);
     request.data.read.buffer_len = len;
 
@@ -142,7 +158,6 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
-    // free (request.data.read.buffer);
 	return response.data.read.status;
 }
 
@@ -211,7 +226,6 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
     request.command = FSTAT;
     request.data.fstat.server_handler = server_handler;
     request.data.fstat.fd = fd;
-    // request.data.fstat.stat = (FsFstat*) malloc(sizeof(FsFstat));
     request.data.fstat.stat.mode = buf->st_mode;
     request.data.fstat.stat.size = buf->st_size;
     request.data.fstat.stat.atime = buf->st_atime;
@@ -224,7 +238,6 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
 	sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
-    // free (request.data.fstat.stat);
 	return response.data.fstat.status;
 }
 
