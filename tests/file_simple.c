@@ -12,6 +12,7 @@
 
 int main(int argc, char* argv[]) {
     int sid, port;
+    char *fn1 = "plik.rd";
 
     printf("Podaj port serwera: ");
     scanf("%d", &port);
@@ -19,17 +20,8 @@ int main(int argc, char* argv[]) {
     sid = fs_open_server("0.0.0.0", port);
     printf("Otwieram session_id %d\n", sid);
 
-    FILE* send_file = fopen("a.x", "r+");
-
-    if (send_file == NULL) printf("\nCannot open the file");
-
-    fseek(send_file, 0, SEEK_END);
-    size_t file_size = ftell(send_file);
-    fseek(send_file, 0, SEEK_SET);
-    char* buf = (char*) calloc(file_size, sizeof(char));
-    fread (buf, sizeof(char), file_size, send_file);
-    fs_write(sid, 10, buf, file_size);
-
+    fs_open(sid, fn1, "r");
+    
     fs_close_server(sid);
     printf("Zamykam session_id %d\n", sid);
 

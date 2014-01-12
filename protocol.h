@@ -29,6 +29,8 @@ typedef enum FsCommand
 	FSTAT = 8,
 	// Zablokowanie pliku na serwerze
 	LOCK = 9,
+    // Odbierz paczki
+    RECEIVE_PACKAGES = 10
 	// Przeslij ponownie plik
     // Potencjalnie do usuniecia
 	// AGAIN = 10
@@ -41,29 +43,21 @@ typedef enum FsAnswer
 	// ===============================================
 	// Kontynuacja
 	// Serwer czeka na polecenia Klienta
-	CONTINUE = 100,
+	INFO_CONTINUE = 100,
 	// -----------------------------------------------
 	// Przekroczenie czasu
-	// Serwer nie odpowiedzial w zadanym czasie
-	CONNECTION_TIMED_OUT = 110,
+	// Sesja uzytkownika wygasla
+	INFO_SESSION_TIMED_OUT = 110,
 	// -----------------------------------------------
 	// Odmowa polaczenia
 	// Serwer odmowil polaczenia z baza
-	CONNECTION_REFUSED = 111,
+	INFO_CONNECTION_REFUSED = 111,
 
 	// Kody powodzenia
 	// ===============================================
 	// OK
 	// Operacja zakonczona powodzeniem
 	OK = 200,
-	// -----------------------------------------------
-	// Utworzony
-	// Plik zostal poprawnie utworzony na serwerze
-	CREATED = 201,
-	// -----------------------------------------------
-	// Zapisany
-	// Plik zostal poprawnie zapisany na serwerze
-	SAVED = 202,
 	// -----------------------------------------------
 	// Zaakceptowanie
 	// Serwer zaakceptowal polaczenie z klientem
@@ -73,11 +67,20 @@ typedef enum FsAnswer
 	// Serwer zamknal polaczenie z klientem
 	CLOSED = 204,
 
-	// Kody przekierowania
+	// Kody bledow operacji plikowych
 	// ===============================================
 	// Niezmodyfikowany
 	// Dany plik nie zostal zmodyfikowany na serwerze
-	NOT_MODIFIED = 300,
+	FILE_NOT_MODIFIED = 300,
+    // -----------------------------------------------
+    // Blad przesylania pliku
+    // Plik zostal niepoprawnie przeslany
+    FILE_SENDING_ERROR = 301,
+    // ----------------------------------------------
+    // Brak praw dostepu
+    // Pakiet przeslany do nieodpowiedniego
+    // uzytkownika
+    FILE_ACCESS_ERROR = 302,
 
 	// Kody bledu aplikacji klienta
 	// ===============================================
@@ -88,7 +91,7 @@ typedef enum FsAnswer
 	// -----------------------------------------------
 	// Nie znaleziono
 	// serwer nie odnalazl zasobu wedlug podanego wzorca
-	NOT_FOUND = 401,
+	FILE_NOT_FOUND = 401,
 	// -----------------------------------------------
 	// Niedozwolone
 	// zazadany zasob nie jest w stanie zwrocic
@@ -102,14 +105,14 @@ typedef enum FsAnswer
 	// do zablokowanego pliku
 	FILE_BLOCKED = 403,
 	// -----------------------------------------------
-	// Plik istnieje już na serwerze
+	// Plik istnieje juz na serwerze
 	// Podany plik znajduje sie już w danym katalogu
 	// na serwerze
-	ALREADY_EXIST = 404,
+	FILE_ALREADY_EXIST = 404,
 	// -----------------------------------------------
 	// Jest katalogiem
 	// Podany plik jest katalogiem
-	IS_DIR = 405,
+	FILE_IS_DIR = 405,
 
 	// Kody bledow wewnetrznych
 	// ===============================================
