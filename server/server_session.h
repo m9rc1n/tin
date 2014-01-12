@@ -12,32 +12,37 @@
  *  FLICK_WRITE - pisarz zajął plik.
  */
 typedef enum FileLockType {
-    FLOCK_NONE, 
-    FLOCK_READ, 
+    FLOCK_NONE,
+    FLOCK_READ,
     FLOCK_WRITE_PENDING,
     FLOCK_WRITE
 } FileLockType;
 
 /**
- * Inicjuje zarządcę sesji. 
+ * Inicjuje zarządcę sesji.
  */
 int session_init();
 
 /**
  * Bumpuje sesję (odznacza, że coś się działo). Jak nie będziecie tego używać, to zombie collection
  *  wywali sesję z pamięci. ;)
- * 
- * @todo być może zaimplementować w pozostałych session_* na wszelki wypadek, ale sami lepiej też 
+ *
+ * @todo być może zaimplementować w pozostałych session_* na wszelki wypadek, ale sami lepiej też
  *  tego używajcie
- * 
+ *
  * -1 - sesja nie istnieje
  * -3 - niepoprawne sid
  */
 int session_bump(int session_id);
 
 /**
+ * Sprawdza czy istnieje dana sesja
+ */
+int session_check_if_exist(int session_id);
+
+/**
  * Zamyka istniejącą sesję.
- * 
+ *
  * -1 - sesja nie istnieje
  * -3 - niepoprawne sid
  */
@@ -45,9 +50,9 @@ int session_close(int session_id);
 
 /**
  * Dodaje nową sesję, zwraca jej identyfikator.
- * 
+ *
  * wszystko >= 0 - nadane session_id
- * 
+ *
  * -1 - wyczerpany limit sesji
  */
 int session_create();
@@ -65,9 +70,9 @@ FILE *session_get(int session_id, int fd);
 
 /**
  * Próbuje założyć podaną blokadę na plik i nadać mu fd. Ujemny kod wyjścia oznacza niepowodzenie.
- * 
+ *
  * wszystko >= 0 - nadany fd
- *  
+ *
  * -1 - sesja nie istnieje
  * -3 - niepoprawne sid
  * -4 - błąd wewnętrzny
@@ -80,7 +85,7 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
 /**
  * Ustawia wskaźnik FILE dla konkretnego pliku.
  *  Dobrze wywołać po fopen().
- * 
+ *
  *  0 - wszystko ok
  * -1 - sesja nie istnieje
  * -2 - fd nie istnieje
@@ -95,7 +100,7 @@ int session_shutdown();
 
 /**
  * Odblokowuje plik (zdejmuje blokadę założoną przez odpowiednią sesję.
- * 
+ *
  *  0 - wszystko ok
  * -1 - sesja nie istnieje
  * -2 - fd nie istnieje

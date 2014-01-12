@@ -62,10 +62,13 @@ typedef enum FsAnswer
 	// Zaakceptowanie
 	// Serwer zaakceptowal polaczenie z klientem
 	ACCEPTED = 203,
-	// -----------------------------------------------
-	// Zamkniecie polaczenia
+
+    // Zamkniecie polaczenia
 	// Serwer zamknal polaczenie z klientem
 	CLOSED = 204,
+
+    // Plik przeslany pomyslnie
+    FILE_SENDING_SUCCESS = 205,
 
 	// Kody bledow operacji plikowych
 	// ===============================================

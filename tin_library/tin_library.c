@@ -1,4 +1,5 @@
 #include "tin_library.h"
+#include <errno.h>
 
 /**
  * UDP jest protokolem bezpolaczeniowym,
@@ -9,56 +10,69 @@
  */
 
 #define PORT 2000
+#define TIME_WAIT 30
 
 int sockd;
 int port;
 struct sockaddr_in my_addr;
 struct sockaddr_in srv_addr;
-
+struct timeval time_val;
 int fs_open_server (const char* server_address, int server_port)
 {
     FsResponse response;
     FsRequest request;
     request.command = OPEN_SERVER;
-
-    // @todo Potencjalnie do usuniecia w protokole, chyba ze podacie mi jakis powod dlaczego to
-    // przekazac serwerowi
-    // size_t address_len = sizeof (request.data.open_server.server_address);
-	// strncpy (request.data.open_server.server_address, server_address, address_len);
-
-	socklen_t addrlen = sizeof(struct sockaddr_in);
+    socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockd == -1)
     {
         perror("Socket creation error");
-        exit(1);
+        return -1;
     }
 
 	/* client address */
 	my_addr.sin_family = AF_INET;
     my_addr.sin_addr.s_addr = INADDR_ANY;
     my_addr.sin_port = 0;
+
     status = bind (sockd, (struct sockaddr*)&my_addr, sizeof(my_addr));
+
+    if (status != 0)
+    {
+        close(sockd);
+        sockd = -1;
+        perror("Socket binding error");
+        return -1;
+    }
 
   	/* server address */
 	srv_addr.sin_family = AF_INET;
 	inet_aton (server_address, &srv_addr.sin_addr);
-
+    srv_addr.sin_addr.s_addr = inet_addr(server_address);
     port = server_port;
     srv_addr.sin_port = htons(port);
 
-	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+    time_val.tv_sec = TIME_WAIT;
+    time_val.tv_usec = 0;
 
+    setsockopt(sockd, SOL_SOCKET, SO_RCVTIMEO, (char*) &time_val, sizeof(struct timeval));
+
+    status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+    count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+
+    if (errno != 0) {
+        perror("Receiving packets error");
+        return -1;
+    }
+
+    info (response.answer);
     return response.data.open_server.server_handler;
 }
 
 int fs_close_server (int server_handler)
 {
-    printf("\t\t%d\n", server_handler);
-
     FsResponse response;
 
     FsRequest request;
@@ -68,10 +82,21 @@ int fs_close_server (int server_handler)
     socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
+    if (sockd == -1)
+    {
+        perror("Socket is closed");
+        return -1;
+    }
+
     status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-    //printf("Sent close message, sid = %d\n", server_handler);
 	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
-	//printf ("Closing server: %d\n", response.answer);
+
+    if (errno != 0) {
+        perror("Receiving packets error");
+        return -1;
+    }
+
+    info (response.answer);
 
 	return response.data.close_server.status;
 }
@@ -83,34 +108,30 @@ int fs_open (int server_handler, const char* name, const char* mode)
     FsRequest request;
     request.command = OPEN;
     request.data.open.server_handler = server_handler;
-    // @todo errors!
     strncpy (request.data.open.name, name, strlen(name));
     request.data.open.name_len = strlen(name);
     strncpy (request.data.open.mode, mode, strlen(mode));
     request.data.open.mode_len = strlen(mode);
 
 	socklen_t addrlen = sizeof(struct sockaddr_in);
-	int status, count;
+
+    int status, count;
+    if (sockd == -1)
+    {
+        perror("Socket is closed");
+        return -1;
+    }
 
 	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
+    if (errno != 0) {
+        perror("Receiving packets error");
+        return -1;
+    }
+
 	return response.data.open.fd;
 }
-
-/**
- * buf
- *  jest to bufor danych ktore klient przekazje nam abysmy mogli przeslac na serwer
- * len
- *  dlugosc danych tego bufora
- * dzialanie:
- *  buf przesylamy w czesciach okreslonych za pomoca protokolu - rozmiar czesci to BUF_LEN
- *  dane zapisujemy w pliku o deskryptorze fd
- *
- *  nie otwieramy tutaj pliku, przekazujemy dane za pomoca buf
- *
- *  w udp pakiety moga przychodzic w roznej kolejnosci wiec cos trzeba wymyslec zeby nad tym zapanowac
- */
 
 int fs_write (int server_handler, int fd, const void *buf, size_t len)
 {
@@ -129,33 +150,42 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
     request.data.write.buffer_len = len;
     request.data.write.parts_number = parts+1;
 
-    // @todo usunac przesylanie bufora z pierwszej paczki
-    status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-    request.command = RECEIVE_PACKAGES;
-    for(i=0; i<parts; ++i)
+    if (sockd == -1)
     {
-        memcpy (request.data.write.buffer, buf + i*BUF_LEN*sizeof(char), BUF_LEN*sizeof(char));
-        request.data.write.part_id = i;
-        request.data.write.buffer_len = BUF_LEN;
-        status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+        perror("Socket is closed");
+        return -1;
     }
-    request.data.write.buffer_len = last_part;
-    memcpy (request.data.write.buffer, buf + i*BUF_LEN*sizeof(char), last_part*sizeof(char));
-    request.data.write.part_id = i;
-    status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-    count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
-    switch (response.answer)
+    status = connect (sockd, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+    status = send (sockd, &request, sizeof(FsRequest), 0);
+    count = recv (sockd, &response, sizeof(FsResponse), 0);
+
+    if (info(response.answer) == -1) return response.data.write.status;
+
+    if (response.answer == INFO_CONTINUE)
     {
-        case INFO_OK:
-            printf ("File sended successfully\n");
-            break;
-        case FILE_SENDING_ERROR:
-            printf ("Unable to send file\n");
-            break;
-        default:
-            break;
+        request.command = RECEIVE_PACKAGES;
+        for(i=0; i<parts; ++i)
+        {
+            memcpy (request.data.write.buffer, buf + i * BUF_LEN * sizeof(char), BUF_LEN * sizeof(char));
+            request.data.write.part_id = i;
+            request.data.write.buffer_len = BUF_LEN;
+            status = send (sockd, &request, sizeof(FsRequest), 0);
+        }
+        request.data.write.buffer_len = last_part;
+        memcpy (request.data.write.buffer, buf + i * BUF_LEN * sizeof(char), last_part * sizeof(char));
+        request.data.write.part_id = i;
+        status = send (sockd, &request, sizeof(FsRequest), 0);
+        count = recv (sockd, &response, sizeof(FsResponse), 0);
     }
+
+    if (errno != 0) {
+        perror("Receiving packets error");
+        return -1;
+    }
+
+    info(response.answer);
+
     return response.data.write.status;
 }
 
@@ -175,7 +205,13 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     request.data.read.fd = fd;
     request.data.read.buffer_len = len;
 
-	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+	if (sockd == -1)
+    {
+        perror("Socket is closed");
+        return -1;
+    }
+
+    status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 
     for(int i=0; i<parts; ++i)
     {
@@ -184,6 +220,11 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     }
     count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
     memcpy (buf + i*BUF_LEN, response.data.read.buffer, last_part);
+
+    if (errno != 0) {
+        perror("Receiving packets error");
+        return -1;
+    }
 
 	return response.data.read.status;
 }
@@ -202,8 +243,19 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
     socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
+    if (sockd == -1)
+    {
+        perror("Socket is closed");
+        return -1;
+    }
+
 	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+
+    if (errno != 0) {
+        perror("Receiving packets error");
+        return -1;
+    }
 
 	return response.data.lseek.status;
 }
@@ -220,8 +272,19 @@ int fs_close (int server_handler, int fd)
     socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
+    if (sockd == -1)
+    {
+        perror("Socket is closed");
+        return -1;
+    }
+
 	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+
+    if (errno != 0) {
+        perror("Receiving packets error");
+        return -1;
+    }
 
 	return response.data.close.status;
 }
@@ -239,8 +302,19 @@ int fs_lock (int server_handler, int fd, int mode)
     socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
+    if (sockd == -1)
+    {
+        perror("Socket is closed");
+        return -1;
+    }
+
 	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+
+    if (errno != 0) {
+        perror("Receiving packets error");
+        return -1;
+    }
 
 	return response.data.lock.status;
 }
@@ -262,10 +336,44 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
     socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
+    if (sockd == -1)
+    {
+        perror("Socket is closed");
+        return -1;
+    }
+
 	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+
+    if (errno != 0) {
+        perror("Receiving packets error");
+        return -1;
+    }
 
 	return response.data.fstat.status;
 }
 
-
+int info (FsAnswer answer)
+{
+    switch (answer)
+    {
+        case INFO_OK:
+            break;
+        case FILE_SENDING_SUCCESS:
+            printf ("File sended successfully\n");
+            break;
+        case FILE_SENDING_ERROR:
+            perror("Unable to send file");
+            break;
+        case INFO_CONTINUE:
+            break;
+        case INFO_SESSION_TIMED_OUT:
+            close(sockd);
+            sockd = -1;
+            perror("Session in server timed out");
+            return -1;
+        default:
+            break;
+    }
+    return 0;
+}

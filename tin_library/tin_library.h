@@ -17,6 +17,7 @@ extern int sockd;
 extern int port;
 extern struct sockaddr_in my_addr;
 extern struct sockaddr_in srv_addr;
+extern struct timeval time_val;
 
 int fs_open_server (const char* server_address, int server_port);
 int fs_close_server (int server_handler);
@@ -29,5 +30,7 @@ int fs_lock (int server_handler, int fd, int mode);
 int fs_fstat (int server_handler, int fd, struct stat* buf);
 int fs_lseek (int server_handler, int fd, long offset, int whence);
 
+// zamienic na funkcje ktora nie moze byc wywolywana na zewnatrz
+int info(FsAnswer answer);
 
 #endif // TIN_LIBRARY_H_INCLUDED
