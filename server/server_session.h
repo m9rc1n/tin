@@ -24,6 +24,15 @@ typedef enum FileLockType {
 int session_init();
 
 /**
+ * Bumpuje sesję (odznacza, że coś się działo). Jak nie będziecie tego używać, to zombie collection
+ *  wywali sesję z pamięci. ;)
+ * 
+ * @todo być może zaimplementować w pozostałych session_* na wszelki wypadek, ale sami lepiej też 
+ *  tego używajcie
+ */
+int session_bump(int session_id);
+
+/**
  * Zamyka istniejącą sesję.
  */
 int session_close(int session_id);
@@ -38,6 +47,9 @@ int session_create();
  */
 int session_destroy_zombies();
 
+/**
+ * Oddaje wskaźnik na FILE dla konkretnego pliku.
+ */
 FILE *session_get(int session_id, int fd);
 
 /**
@@ -47,6 +59,10 @@ FILE *session_get(int session_id, int fd);
  */
 int session_lock_file(int session_id, char *file_name, FileLockType file_lock_type) ;
 
+/**
+ * Ustawia wskaźnik FILE dla konkretnego pliku.
+ *  Dobrze wywołać po fopen().
+ */
 int session_set(int session_id, int fd, FILE *fh);
 
 /**
@@ -54,6 +70,9 @@ int session_set(int session_id, int fd, FILE *fh);
  */
 int session_shutdown();
 
+/**
+ * Odblokowuje plik (zdejmuje blokadę założoną przez odpowiednią sesję.
+ */
 int session_unlock_file(int session_id, int fd);
 
 #endif

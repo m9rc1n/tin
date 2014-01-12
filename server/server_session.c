@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <stdio.h>
 
 struct SessionLock {
     char *file_name;
@@ -155,6 +154,13 @@ int session_init() {
     sem_init(&sem_sessions_list_access, 0, 1);
 
     return 0;
+}
+
+int session_bump(int session_id) {
+    if(sessions_list[session_id] == NULL)
+        return -1;
+    
+    sessions_list[session_id]->time_active = time(NULL);
 }
 
 int session_close(int session_id) {
