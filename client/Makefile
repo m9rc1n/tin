@@ -1,7 +1,7 @@
 CXX = clang
-CXXFLAGS = -O2 -Wall 
-LDFLAGS = 
-OBJS = client_io.o client_network.o client_main.o
+CXXFLAGS = -O2 -Wall
+LDFLAGS = -lncurses
+OBJS = ncurses-menu.o ncurses-readstring.o clientGUI.o
 
 all: client
 
