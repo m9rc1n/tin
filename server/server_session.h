@@ -69,8 +69,7 @@ FILE *session_get(int session_id, int fd);
  * wszystko >= 0 - nadany fd
  *  
  * -1 - sesja nie istnieje
- * -2 - fd nie istnieje
- * -3 - niepoprawne sid/fd
+ * -3 - niepoprawne sid
  * -4 - błąd wewnętrzny
  * -5 - wyczerpany limit fd dla sesji
  * -6 - nie da się zablokować - ktoś już pisze do pliku

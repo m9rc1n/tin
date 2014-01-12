@@ -42,6 +42,9 @@ void *server_thread_function(void *parameters) {
         default:
             break;
     }
+    
+    /* @todo wywalić z pamięci request, skoro jest już przetworzony. */
+    free(parameters);
 
     pthread_exit(NULL);
     return NULL;

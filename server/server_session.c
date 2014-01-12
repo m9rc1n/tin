@@ -65,7 +65,7 @@ static int session_find_free_id() {
 
 static int session_remove_lock(unsigned session_id, unsigned fd) {
     
-    if(sessions_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
+    if(session_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
         return -3;
     
     if(sessions_list[session_id] == NULL)
@@ -162,13 +162,15 @@ int session_init() {
 
 int session_bump(int session_id) {
     
-    if(sessions_id >= SESSION_MAX_NUMBER)
+    if(session_id >= SESSION_MAX_NUMBER)
         return -3;
     
     if(sessions_list[session_id] == NULL)
         return -1;
     
     sessions_list[session_id]->time_active = time(NULL);
+    
+    return 0;
 }
 
 int session_close(int session_id) {
@@ -253,7 +255,7 @@ FILE *session_get(int session_id, int fd) {
     if(session_id >= SESSION_MAX_NUMBER || sessions_list[session_id] == NULL)
         return NULL;
     
-    if(fd >= MAX_FD_PER_SESSION || [session_id]->locks[fd] == NULL)
+    if(fd >= MAX_FD_PER_SESSION || sessions_list[session_id]->locks[fd] == NULL)
         return NULL;
     
     session_bump(session_id);
@@ -263,7 +265,7 @@ FILE *session_get(int session_id, int fd) {
 
 int session_set(int session_id, int fd, FILE *fh) {
     
-    if(sessions_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
+    if(session_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
         return -3;
     
     if(sessions_list[session_id] == NULL)
@@ -280,14 +282,11 @@ int session_set(int session_id, int fd, FILE *fh) {
 
 int session_lock_file(int session_id, char *file_name, FileLockType file_lock_type) {
     
-    if(sessions_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
+    if(session_id >= SESSION_MAX_NUMBER)
         return -3;
     
     if(sessions_list[session_id] == NULL)
         return -1;
-    
-    if(sessions_list[session_id]->locks[fd] == NULL)
-        return -2;
     
     struct SyncQuery *sq = NULL;    
     

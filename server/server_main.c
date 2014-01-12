@@ -23,8 +23,6 @@ int status, sockd;
 struct sockaddr_in my_name;
 int server_handler = 0;
 
-pthread_t handlers_threads[1];
-
 int main(int argc, char* argv[]) {
 
 	if (argc < 2) {
@@ -52,17 +50,16 @@ int main(int argc, char* argv[]) {
 
 	while(1)
 	{
+        pthread_t handlers_thread;
+        
         struct IncomingRequest *request = (struct IncomingRequest *) calloc(1, sizeof(struct IncomingRequest));
         request->client_addr_len = sizeof(struct sockaddr_in);
 
 		recvfrom(sockd, (char*) &(request->request), MAX_BUF, 0, (struct sockaddr *) &(request->client_addr), &(request->client_addr_len));
 
-        // fixme: prawdziwy multithread.
-        pthread_create(&handlers_threads[0], NULL, server_thread_function, (void *) request);
-        pthread_join(handlers_threads[0], NULL);
-
-        //free(request->request);
-        //free(request);
+        pthread_create(&handlers_thread, NULL, server_thread_function, (void *) request);
+        pthread_detach(handlers_thread);
+        /* @todo sprawdzić, czy memleaka tu nie ma! */
 	}
 	
 	close(sockd);
