@@ -30,9 +30,10 @@ int main(int argc, char* argv[]) {
 		exit(1);
 	}
 
+
 	// create a socket
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
-    
+
 	if (sockd == -1) {
 		perror("Socket creation error");
 		exit(1);
@@ -43,7 +44,12 @@ int main(int argc, char* argv[]) {
 	my_name.sin_addr.s_addr = INADDR_ANY;
 	my_name.sin_port = htons (atoi (argv[1]));
 	status = bind(sockd, (struct sockaddr*) &my_name, sizeof (my_name));
-	
+
+    if(status != 0) {
+        perror("Socket binding error");
+        exit(1);
+    };
+
 	synchroniser_init();
     session_init();
     zombie_collector_init();
@@ -51,7 +57,7 @@ int main(int argc, char* argv[]) {
 	while(1)
 	{
         pthread_t handlers_thread;
-        
+
         struct IncomingRequest *request = (struct IncomingRequest *) calloc(1, sizeof(struct IncomingRequest));
         request->client_addr_len = sizeof(struct sockaddr_in);
 
@@ -59,14 +65,13 @@ int main(int argc, char* argv[]) {
 
         pthread_create(&handlers_thread, NULL, server_thread_function, (void *) request);
         pthread_detach(handlers_thread);
-        /* @todo sprawdzić, czy memleaka tu nie ma! */
+        // @todo sprawdzić, czy memleaka tu nie ma!
 	}
-	
+
 	close(sockd);
-	
+
     session_shutdown();
 	synchroniser_shutdown();
     zombie_collector_shutdown();
-    
 	return 0;
 }
