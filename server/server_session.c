@@ -119,6 +119,7 @@ static int session_remove_lock(unsigned session_id, unsigned fd) {
     free(sessions_list[session_id]->locks[fd]->file_name);
     free(sessions_list[session_id]->locks[fd]);
     sessions_list[session_id]->locks[fd] = NULL;
+    return 0;
 }
 
 /**
