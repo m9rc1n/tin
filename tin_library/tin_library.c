@@ -147,7 +147,7 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
 
     switch (response.answer)
     {
-        case OK:
+        case INFO_OK:
             printf ("File sended successfully\n");
             break;
         case FILE_SENDING_ERROR:

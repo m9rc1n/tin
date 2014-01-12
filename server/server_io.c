@@ -25,10 +25,10 @@ int s_open(IncomingRequest *inc_request) {
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ);
     else
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE);
-    
+
     // fopen(qwerty)
-    // session_set(sid, fd, FILE) 
-    
+    // session_set(sid, fd, FILE)
+
     FsResponse response;
 
     if(lock_result < 0) {
@@ -39,7 +39,7 @@ int s_open(IncomingRequest *inc_request) {
 
     } else {
         VDP0("Lock accepted, request accepted.\n");
-        response.answer = OK;
+        response.answer = INFO_OK;
         response.data.open.fd = lock_result;
     }
 
@@ -83,7 +83,7 @@ int s_write (IncomingRequest *inc_request)
         }
     }
 
-    response.answer = OK;
+    response.answer = INFO_OK;
 
     for (i=0; i<parts_number; ++i)
     {
@@ -99,12 +99,12 @@ int s_write (IncomingRequest *inc_request)
 int s_close (IncomingRequest *inc_request)
 {
     printf("trrza to popprawiic\n");
-    
+
     // tutaj se zamknijta plik
     session_unlock_file(inc_request->request.data.close.server_handler, inc_request->request.data.close.fd);
-    
+
     FsResponse response;
-    response.answer = OK;
+    response.answer = INFO_OK;
 
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }

@@ -57,7 +57,7 @@ typedef enum FsAnswer
 	// ===============================================
 	// OK
 	// Operacja zakonczona powodzeniem
-	OK = 200,
+	INFO_OK = 200,
 	// -----------------------------------------------
 	// Zaakceptowanie
 	// Serwer zaakceptowal polaczenie z klientem
