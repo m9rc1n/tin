@@ -34,7 +34,7 @@ static int session_add_lock(int session_id, char *file_name, FileLockType file_l
             break;
         
     if(i == MAX_FD_PER_SESSION)
-        return -1;
+        return -5;
     
     VDP2("Setting lock on file %s, SID: %d\n", file_name, session_id);   
     
@@ -64,6 +64,10 @@ static int session_find_free_id() {
 }
 
 static int session_remove_lock(unsigned session_id, unsigned fd) {
+    
+    if(sessions_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
+        return -3;
+    
     if(sessions_list[session_id] == NULL)
         return -1;
     
@@ -76,7 +80,7 @@ static int session_remove_lock(unsigned session_id, unsigned fd) {
     char *file_name = sessions_list[session_id]->locks[fd]->file_name;
 
     if(synchroniser_query(file_name, &sq) < 0)
-        return -1;
+        return -4;
     
     switch(sessions_list[session_id]->locks[fd]->lock_type) {
         
@@ -157,6 +161,10 @@ int session_init() {
 }
 
 int session_bump(int session_id) {
+    
+    if(sessions_id >= SESSION_MAX_NUMBER)
+        return -3;
+    
     if(sessions_list[session_id] == NULL)
         return -1;
     
@@ -165,18 +173,15 @@ int session_bump(int session_id) {
 
 int session_close(int session_id) {
 
+    if(session_id >= SESSION_MAX_NUMBER)
+        return -3;
+   
     sem_wait(&sem_sessions_list_access);
-
-    if(session_id >= SESSION_MAX_NUMBER) {
-
-        sem_post(&sem_sessions_list_access);
-        return -1;
-    }
 
     if(sessions_list[session_id] == NULL) {
 
         sem_post(&sem_sessions_list_access);
-        return -2;
+        return -1;
     }
 
     session_remove_locks(session_id);
@@ -245,23 +250,29 @@ int session_destroy_zombies() {
 
 FILE *session_get(int session_id, int fd) {
     
-    /* todo moar ifz */
-    
-    if(sessions_list[session_id] == NULL)
+    if(session_id >= SESSION_MAX_NUMBER || sessions_list[session_id] == NULL)
         return NULL;
     
-    if(sessions_list[session_id]->locks[fd] == NULL)
+    if(fd >= MAX_FD_PER_SESSION || [session_id]->locks[fd] == NULL)
         return NULL;
+    
+    session_bump(session_id);
     
     return sessions_list[session_id]->locks[fd]->fh;
 }
 
 int session_set(int session_id, int fd, FILE *fh) {
+    
+    if(sessions_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
+        return -3;
+    
     if(sessions_list[session_id] == NULL)
         return -1;
     
     if(sessions_list[session_id]->locks[fd] == NULL)
         return -2;
+    
+    session_bump(session_id);
     
     sessions_list[session_id]->locks[fd]->fh = fh;
     return 0;
@@ -269,10 +280,19 @@ int session_set(int session_id, int fd, FILE *fh) {
 
 int session_lock_file(int session_id, char *file_name, FileLockType file_lock_type) {
     
+    if(sessions_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
+        return -3;
+    
+    if(sessions_list[session_id] == NULL)
+        return -1;
+    
+    if(sessions_list[session_id]->locks[fd] == NULL)
+        return -2;
+    
     struct SyncQuery *sq = NULL;    
     
     if(synchroniser_query(file_name, &sq) < 0)
-        return -1;
+        return -4;
     
     assert(sq != NULL);
     
@@ -290,7 +310,7 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
                 return session_add_lock(session_id, file_name, file_lock_type);
             } else {
                 
-                return -2;
+                return -6;
             }
             
             break;
@@ -308,7 +328,7 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
                 return session_add_lock(session_id, file_name, file_lock_type);
             } else {
                 
-                return -3;
+                return -7;
             }
             
             break;

@@ -29,16 +29,26 @@ int session_init();
  * 
  * @todo być może zaimplementować w pozostałych session_* na wszelki wypadek, ale sami lepiej też 
  *  tego używajcie
+ * 
+ * -1 - sesja nie istnieje
+ * -3 - niepoprawne sid
  */
 int session_bump(int session_id);
 
 /**
  * Zamyka istniejącą sesję.
+ * 
+ * -1 - sesja nie istnieje
+ * -3 - niepoprawne sid
  */
 int session_close(int session_id);
 
 /**
  * Dodaje nową sesję, zwraca jej identyfikator.
+ * 
+ * wszystko >= 0 - nadane session_id
+ * 
+ * -1 - wyczerpany limit sesji
  */
 int session_create();
 
@@ -49,19 +59,33 @@ int session_destroy_zombies();
 
 /**
  * Oddaje wskaźnik na FILE dla konkretnego pliku.
+ *  Jeżeli nastąpił błąd (zły sid, zły fd), zwraca NULL.
  */
 FILE *session_get(int session_id, int fd);
 
 /**
- * Próbuje założyć podaną blokadę na plik. Ujemny kod wyjścia oznacza niepowodzenie.
+ * Próbuje założyć podaną blokadę na plik i nadać mu fd. Ujemny kod wyjścia oznacza niepowodzenie.
  * 
- * @todo kody błędów
+ * wszystko >= 0 - nadany fd
+ *  
+ * -1 - sesja nie istnieje
+ * -2 - fd nie istnieje
+ * -3 - niepoprawne sid/fd
+ * -4 - błąd wewnętrzny
+ * -5 - wyczerpany limit fd dla sesji
+ * -6 - nie da się zablokować - ktoś już pisze do pliku
+ * -7 - nie da się zablokować - ktoś czyta z pliku
  */
 int session_lock_file(int session_id, char *file_name, FileLockType file_lock_type) ;
 
 /**
  * Ustawia wskaźnik FILE dla konkretnego pliku.
  *  Dobrze wywołać po fopen().
+ * 
+ *  0 - wszystko ok
+ * -1 - sesja nie istnieje
+ * -2 - fd nie istnieje
+ * -3 - niepoprawne sid/fd
  */
 int session_set(int session_id, int fd, FILE *fh);
 
@@ -72,6 +96,12 @@ int session_shutdown();
 
 /**
  * Odblokowuje plik (zdejmuje blokadę założoną przez odpowiednią sesję.
+ * 
+ *  0 - wszystko ok
+ * -1 - sesja nie istnieje
+ * -2 - fd nie istnieje
+ * -3 - niepoprawne sid/fd
+ * -4 - błąd wewnętrzny
  */
 int session_unlock_file(int session_id, int fd);
 
