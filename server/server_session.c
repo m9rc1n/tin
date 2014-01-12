@@ -10,10 +10,9 @@
 
 struct SessionLock {
     char *file_name;
+    FILE *fh;
+    int fd;
     FileLockType lock_type;
-    
-    struct SessionLock *prev;
-    struct SessionLock *next;
 };
 
 struct Session {
@@ -22,30 +21,34 @@ struct Session {
     struct sockaddr_in client_addr;
     unsigned int client_addr_len;
 
-    struct SessionLock *locks;
+    struct SessionLock *locks[MAX_FD_PER_SESSION];
 };
 
 /** Lista aktywnych (jeszcze...) sesji. */
 static struct Session *sessions_list[SESSION_MAX_NUMBER];
 
 static int session_add_lock(int session_id, char *file_name, FileLockType file_lock_type) {
+    int i;
     
-    VDP2("Setting lock on file %s, SID: %d\n", file_name, session_id);
+    for(i = 0; i < MAX_FD_PER_SESSION; ++ i) 
+        if(sessions_list[session_id]->locks[i] == NULL)
+            break;
+        
+    if(i == MAX_FD_PER_SESSION)
+        return -1;
+    
+    VDP2("Setting lock on file %s, SID: %d\n", file_name, session_id);   
     
     struct SessionLock *session_lock = (struct SessionLock *) calloc(1, sizeof(struct SessionLock));
     session_lock->file_name = (char *) calloc(strlen(file_name), sizeof(char));
     strncpy(session_lock->file_name, file_name, strlen(file_name));
     session_lock->lock_type = file_lock_type;
-    session_lock->prev = NULL;
-    session_lock->next = sessions_list[session_id]->locks;
+    session_lock->fd = i;
+    session_lock->fh = NULL;
     
+    sessions_list[session_id]->locks[i] = session_lock;
     
-    if(sessions_list[session_id]->locks != NULL)
-        sessions_list[session_id]->locks->prev = session_lock;
-    
-    sessions_list[session_id]->locks = session_lock;
-    
-    return 0;
+    return i;
 }
 
 /**
@@ -61,77 +64,78 @@ static int session_find_free_id() {
     return -1;
 }
 
+static int session_remove_lock(unsigned session_id, unsigned fd) {
+    if(sessions_list[session_id] == NULL)
+        return -1;
+    
+    if(sessions_list[session_id]->locks[fd] == NULL)
+        return -2;
+    
+    VDP2("Unlocking file %s SID: %d\n", sessions_list[session_id]->locks[fd]->file_name, session_id);
+            
+    struct SyncQuery *sq = NULL;    
+    char *file_name = sessions_list[session_id]->locks[fd]->file_name;
+
+    if(synchroniser_query(file_name, &sq) < 0)
+        return -1;
+    
+    switch(sessions_list[session_id]->locks[fd]->lock_type) {
+        
+        case FLOCK_READ:
+    
+            -- sq->readers;
+            
+            if(sq->readers == 0) {
+                if(sq->lock_type == FLOCK_WRITE_PENDING) {
+                    //sq->lock_type = FLOCK_WRITE;
+                    /** @todo można już pisać - coś trzeba z tym fantem zrobić. */
+                } else {
+                    sq->lock_type = FLOCK_NONE;
+                }
+            }
+            
+            break;
+            
+        case FLOCK_WRITE_PENDING:
+            
+            if(sq->readers == 0) {
+                sq->lock_type = FLOCK_NONE;
+            } else {
+                sq->lock_type = FLOCK_READ;
+            }
+            
+            break;
+            
+        case FLOCK_WRITE:
+            
+            sq->lock_type = FLOCK_NONE;
+            break;
+            
+        default:
+            assert(0);
+    }
+    
+    
+    free(sessions_list[session_id]->locks[fd]->file_name);
+    free(sessions_list[session_id]->locks[fd]);
+    sessions_list[session_id]->locks[fd] = NULL;
+}
+
 /**
  * Zdejmuje blokady nałożone przez daną sesję.
  */
 static int session_remove_locks(unsigned session_id) {
-
+    int i;
+    
     if(sessions_list[session_id] == NULL)
         return -1;
     
-    while(sessions_list[session_id]->locks != NULL) {
-        
-        VDP2("Unlocking file %s SID: %d\n", sessions_list[session_id]->locks->file_name, session_id);
-        
-        struct SyncQuery *sq = NULL;    
-        char *file_name = sessions_list[session_id]->locks->file_name;
-    
-        if(synchroniser_query(file_name, &sq) < 0)
-            return -1;
-        
-        switch(sessions_list[session_id]->locks->lock_type) {
-            
-            case FLOCK_READ:
-        
-                -- sq->readers;
-                
-                if(sq->readers == 0) {
-                    if(sq->lock_type == FLOCK_WRITE_PENDING) {
-                        //sq->lock_type = FLOCK_WRITE;
-                        /** @todo można już pisać - coś trzeba z tym fantem zrobić. */
-                    } else {
-                        sq->lock_type = FLOCK_NONE;
-                    }
-                }
-                
-                break;
-                
-            case FLOCK_WRITE_PENDING:
-                
-                if(sq->readers == 0) {
-                    sq->lock_type = FLOCK_NONE;
-                } else {
-                    sq->lock_type = FLOCK_READ;
-                }
-                
-                break;
-                
-            case FLOCK_WRITE:
-                
-                sq->lock_type = FLOCK_NONE;
-                break;
-                
-            default:
-                assert(0);
-        }
-        
-        
-        if(sessions_list[session_id]->locks->next == NULL) {
-            
-            free(sessions_list[session_id]->locks->file_name);
-            free(sessions_list[session_id]->locks);
-            sessions_list[session_id]->locks = NULL;
-        } else {
-            
-            sessions_list[session_id]->locks = sessions_list[session_id]->locks->next;
-            free(sessions_list[session_id]->locks->prev->file_name);
-            free(sessions_list[session_id]->locks->prev);
-        }
-        
+    for(i = 0; i < MAX_FD_PER_SESSION; ++ i) {
+        if(sessions_list[session_id]->locks[i] == NULL) 
+            session_remove_lock(session_id, i);             
     }
     
-    VDP1("Unlocked files from %d sesssion.\n", session_id);
-    
+    VDP1("Unlocked files from %d sesssion.\n", session_id);    
     return 0;
 }
 
@@ -174,6 +178,8 @@ int session_close(int session_id) {
 
     sem_post(&sem_sessions_list_access);
 
+    VDP1("Session %d closed.\n", session_id);
+    
     return 0;
 }
 
@@ -194,9 +200,11 @@ int session_create(struct sockaddr_in client_addr, unsigned client_addr_len) {
     sessions_list[session_id] = (struct Session *) calloc(1, sizeof(struct Session));
     sessions_list[session_id]->id = session_id;
     sessions_list[session_id]->time_active = time(NULL);
-    sessions_list[session_id]->locks = NULL;
     sessions_list[session_id]->client_addr_len = sizeof(struct sockaddr_in);
 
+    for(int i = 0; i < MAX_FD_PER_SESSION; ++ i)
+        sessions_list[session_id]->locks[i] = NULL;
+    
     memcpy(&sessions_list[session_id]->client_addr, &client_addr, sizeof(struct sockaddr_in));
 
     sem_post(&sem_sessions_list_access);
@@ -228,6 +236,30 @@ int session_destroy_zombies() {
     return 0;
 }
 
+FILE *session_get(int session_id, int fd) {
+    
+    /* todo moar ifz */
+    
+    if(sessions_list[session_id] == NULL)
+        return NULL;
+    
+    if(sessions_list[session_id]->locks[fd] == NULL)
+        return NULL;
+    
+    return sessions_list[session_id]->locks[fd]->fh;
+}
+
+int session_set(int session_id, int fd, FILE *fh) {
+    if(sessions_list[session_id] == NULL)
+        return -1;
+    
+    if(sessions_list[session_id]->locks[fd] == NULL)
+        return -2;
+    
+    sessions_list[session_id]->locks[fd]->fh = fh;
+    return 0;
+}
+
 int session_lock_file(int session_id, char *file_name, FileLockType file_lock_type) {
     
     struct SyncQuery *sq = NULL;    
@@ -248,8 +280,7 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
                 
                 sq->lock_type = FLOCK_READ;
                 ++ sq->readers;
-                session_add_lock(session_id, file_name, file_lock_type);
-                return 0;
+                return session_add_lock(session_id, file_name, file_lock_type);
             } else {
                 
                 return -2;
@@ -263,13 +294,11 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
             if(sq->lock_type == FLOCK_NONE) {
                 
                 sq->lock_type = FLOCK_WRITE;
-                session_add_lock(session_id, file_name, file_lock_type);
-                return 0;
+                return session_add_lock(session_id, file_name, file_lock_type);
             } else if(sq->lock_type == FLOCK_READ) {
                 
                 sq->lock_type = FLOCK_WRITE_PENDING;
-                session_add_lock(session_id, file_name, file_lock_type);
-                return 1;
+                return session_add_lock(session_id, file_name, file_lock_type);
             } else {
                 
                 return -3;
@@ -284,6 +313,10 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
     return -4;
 }
 
+int session_unlock_file(int session_id, int fd) {
+    return session_remove_lock(session_id, fd);
+}
+
 int session_shutdown() {
     int i;
 
@@ -291,7 +324,7 @@ int session_shutdown() {
 
     for(i = 0; i < SESSION_MAX_NUMBER; ++ i)
         if(sessions_list[i] != NULL)
-            free(sessions_list[i]);
+            session_close(i);
 
     return 0;
 }

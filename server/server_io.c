@@ -26,15 +26,21 @@ int s_open(IncomingRequest *inc_request) {
     else
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE);
     
+    // fopen(qwerty)
+    // session_set(sid, fd, FILE) 
+    
     FsResponse response;
     
     if(lock_result < 0) {
         /* Nie udało się dostać blokady na plik - trzeba powiadomić o tym klienta. */
         /* @todo ja się nie znam na protokole tak dobrze, jak Wy - może trzeba ucywilizować. ~ AK */
+        VDP0("Lock failed, request turned down.\n");
         response.answer = FILE_BLOCKED;
         
     } else {
+        VDP0("Lock accepted, request accepted.\n");
         response.answer = OK;
+        response.data.open.fd = lock_result;
     }
     
     free(file_name);
@@ -53,7 +59,15 @@ int s_write (IncomingRequest *inc_request)
 
 int s_close (IncomingRequest *inc_request)
 {
-    return -1;
+    printf("trrza to popprawiic\n");
+    
+    // tutaj se zamknijta plik
+    session_unlock_file(inc_request->request.data.close.server_handler, inc_request->request.data.close.fd);
+    
+    FsResponse response;
+    response.answer = OK;
+
+    return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
 
 int s_read (IncomingRequest *inc_request)

@@ -2,6 +2,7 @@
 #define SEVER_SESSION_H
 
 #include "server_const.h"
+#include <stdio.h>
 
 /**
  * Możliwe blokady do nałożenia na plik.
@@ -37,16 +38,22 @@ int session_create();
  */
 int session_destroy_zombies();
 
+FILE *session_get(int session_id, int fd);
+
 /**
  * Próbuje założyć podaną blokadę na plik. Ujemny kod wyjścia oznacza niepowodzenie.
  * 
  * @todo kody błędów
  */
-int session_lock_file(int session_id, char *file_name, FileLockType file_lock_type);
+int session_lock_file(int session_id, char *file_name, FileLockType file_lock_type) ;
+
+int session_set(int session_id, int fd, FILE *fh);
 
 /**
  * Zamyka zarządcę sesji.
  */
 int session_shutdown();
+
+int session_unlock_file(int session_id, int fd);
 
 #endif

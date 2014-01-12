@@ -56,4 +56,11 @@
 #define SESSION_ZOMBIE_TIME 15
 #endif
 
+/**
+ * Maksymalna ilość plików otwartych w jednej sesji.
+ */
+#ifndef MAX_FD_PER_SESSION
+#define MAX_FD_PER_SESSION 4
+#endif
+
 #endif
