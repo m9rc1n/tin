@@ -41,9 +41,6 @@ int s_open(IncomingRequest *inc_request) {
     else
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE);
     
-    // fopen(qwerty)
-    // session_set(sid, fd, FILE)
-
     if(lock_result < 0) {
         /* Nie udało się dostać blokady na plik - trzeba powiadomić o tym klienta. */
         /* @todo ja się nie znam na protokole tak dobrze, jak Wy - może trzeba ucywilizować. ~ AK */
@@ -51,15 +48,31 @@ int s_open(IncomingRequest *inc_request) {
         response.answer = EF_FILE_BLOCKED;
 
     } else {
-        VDP0("Lock accepted, request accepted.\n");
-        
+        VDP0("Lock accepted, request accepted.\n");        
         VDP2("Attempting to open %s file in %s mode...\n", file_name, file_mode);
-        //FILE *fh = fopen(file_name, 
         
-        response.answer = IF_OK;
-        response.data.open.fd = lock_result;
+        /* todo ścieżkę zmodyfikować? */
+        FILE *fh = fopen(file_name, file_mode);
+        
+        if(fh == NULL) {
+            
+            VDP1("File %s cannot be opened.", file_name);
+            session_unlock_file(inc_request->request.data.open.server_handler, lock_result);
+
+            // set response to DUPA (ale może być inny powód błędu).
+            response.answer = EF_NOT_FOUND;
+            response.data.open.fd = -1;
+        } else {
+         
+            VDP0("LOL, SUCCESS\n");
+            session_set(inc_request->request.data.open.server_handler, lock_result, fh);
+            
+            response.answer = IF_OK;
+            response.data.open.fd = lock_result;
+        }
     }
 
+    free(file_mode);
     free(file_name);
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
