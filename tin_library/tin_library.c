@@ -1,5 +1,6 @@
 #include "tin_library.h"
 #include <errno.h>
+#include <curses.h>
 
 /**
  * UDP jest protokolem bezpolaczeniowym,
@@ -29,7 +30,7 @@ int fs_open_server (const char* server_address, int server_port)
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockd == -1)
     {
-        perror("Socket creation error");
+        mvprintw(22,1,"Socket creation error");
         return -1;
     }
 
@@ -44,7 +45,7 @@ int fs_open_server (const char* server_address, int server_port)
     {
         close(sockd);
         sockd = -1;
-        perror("Socket binding error");
+        mvprintw(22,1,"Socket binding error");
         return -1;
     }
 
@@ -68,7 +69,7 @@ int fs_open_server (const char* server_address, int server_port)
     count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        perror("Receiving packets error");
+        mvprintw(22,1,"Receiving packets error");
         return -1;
     }
 
@@ -88,7 +89,7 @@ int fs_close_server (int server_handler)
 
     if (sockd == -1)
     {
-        perror("Socket is closed");
+        mvprintw(22,1,"Socket is closed");
         return -1;
     }
 
@@ -96,7 +97,7 @@ int fs_close_server (int server_handler)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        perror("Receiving packets error");
+        mvprintw(22,1,"Receiving packets error");
         return -1;
     }
 
@@ -119,7 +120,7 @@ int fs_open (int server_handler, const char* name, const char* mode)
     int status, count;
     if (sockd == -1)
     {
-        perror("Socket is closed");
+        mvprintw(22,1,"Socket is closed");
         return -1;
     }
 
@@ -127,7 +128,7 @@ int fs_open (int server_handler, const char* name, const char* mode)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        perror("Receiving packets error");
+        mvprintw(22,1,"Receiving packets error");
         return -1;
     }
 
@@ -153,7 +154,7 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
 
     if (sockd == -1)
     {
-        perror("Socket is closed");
+        mvprintw(22,1,"Socket is closed");
         return -1;
     }
 
@@ -186,7 +187,7 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
 
         if (errno != 0)
         {
-            perror("Error while receiving packets");
+            mvprintw(22,1,"Error while receiving packets");
             return -1;
         }
     }
@@ -208,7 +209,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
 
 	if (sockd == -1)
     {
-        perror("Socket is closed");
+        mvprintw(22,1,"Socket is closed");
         return -1;
     }
 
@@ -226,14 +227,14 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
         strncpy (buf + response.data.read.part_id * BUF_LEN, response.data.read.buffer, response.data.read.buffer_len);
         int *current_index = received_parts + i;
         *current_index = 1;
-        printf ("czesc paczuszko %d\n", response.data.read.part_id);
+        //printf ("czesc paczuszko %d\n", response.data.read.part_id);
     }
 
     sleep (WAIT_TO_RCV);
     count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        perror("Receiving packets error");
+        mvprintw(22,1,"Receiving packets error");
         return -1;
     }
 
@@ -255,7 +256,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
         FILE* new_file = fopen(response.data.read.name, "w");
         if (new_file == NULL)
         {
-            perror("Cannot save file, which was read from server");
+            mvprintw(22,1,"Cannot save file, which was read from server");
         }
         fwrite(buf, sizeof(char), file_size, new_file);
     }
@@ -281,7 +282,7 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
 
     if (sockd == -1)
     {
-        perror("Socket is closed");
+        mvprintw(22,1,"Socket is closed");
         return -1;
     }
 
@@ -289,7 +290,7 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        perror("Receiving packets error");
+        mvprintw(22,1,"Receiving packets error");
         return -1;
     }
 
@@ -310,7 +311,7 @@ int fs_close (int server_handler, int fd)
 
     if (sockd == -1)
     {
-        perror("Socket is closed");
+        mvprintw(22,1,"Socket is closed");
         return -1;
     }
 
@@ -318,7 +319,7 @@ int fs_close (int server_handler, int fd)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        perror("Receiving packets error");
+        mvprintw(22,1,"Receiving packets error");
         return -1;
     }
 
@@ -340,7 +341,7 @@ int fs_lock (int server_handler, int fd, int mode)
 
     if (sockd == -1)
     {
-        perror("Socket is closed");
+        mvprintw(22,1,"Socket is closed");
         return -1;
     }
 
@@ -348,7 +349,7 @@ int fs_lock (int server_handler, int fd, int mode)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        perror("Receiving packets error");
+        mvprintw(22,1,"Receiving packets error");
         return -1;
     }
 
@@ -368,7 +369,7 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
 
     if (sockd == -1)
     {
-        perror("Socket is closed");
+        mvprintw(22,1,"Socket is closed");
         return -1;
     }
 
@@ -376,7 +377,7 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        perror("Receiving packets error");
+        mvprintw(22,1,"Receiving packets error");
         return -1;
     }
 
@@ -396,17 +397,17 @@ int info (FsAnswer answer)
     switch (answer)
     {
         case IF_OK:
-            printf("File operation ended with success\n");
+            mvprintw(22,1,"File operation ended with success\n");
             break;
         case EF_CORRUPT_PACKAGE:
-            perror("File not send, corrupt package, check your file descriptor or server handler");
+            mvprintw(22,1,"File not send, corrupt package, check your file descriptor or server handler");
             return -1;
         case IF_CONTINUE:
             break;
         case EC_SESSION_TIMED_OUT:
             close(sockd);
             sockd = -1;
-            perror("Session in server timed out");
+            mvprintw(22,1,"Session in server timed out");
             return -1;
         default:
             break;
