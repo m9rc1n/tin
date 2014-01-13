@@ -19,14 +19,14 @@ int main(int argc, char* argv[]) {
     sid = fs_open_server("0.0.0.0", port);
     printf("Otwieram session_id %d\n", sid);
 
-    FILE* sendFile = fopen("a.x", "r+");
+    int fd = fs_open (sid, "a.x", "r");
 
-    // char* buf = (char*) calloc(1024, sizeof(char));
-    char buf[1024];
-    // fread (&buf, sizeof(char), 1024, sendFile);
+    char* buf = (char*) calloc(8, sizeof(char));
+    fs_read(sid, fd, buf, 8);
 
-    fs_read(sid, 10, &buf, sizeof(buf));
-    printf ("%s", buf);
+    fs_close(sid, fd);
+
+    printf ("Odczytany string z serwera :\n%s\n", buf);
 
     fs_close_server(sid);
     printf("Zamykam session_id %d\n", sid);

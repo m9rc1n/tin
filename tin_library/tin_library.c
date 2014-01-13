@@ -198,9 +198,6 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
 {
     int status=0;
     size_t count = 0;
-    size_t parts = (len-1)/BUF_LEN+1;
-    size_t last_part = len%BUF_LEN;
-    int* received_parts = (int*) calloc(parts, sizeof(int));
     FsResponse response;
 
     FsRequest request;
@@ -216,6 +213,12 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     }
 
     status = send(sockd, &request, sizeof(FsRequest), 0);
+    count = recv(sockd, &response, sizeof(FsResponse), 0);
+
+    size_t parts = response.data.read.parts_number;
+    size_t file_size = response.data.read.buffer_len;
+
+    int* received_parts = (int*) calloc(parts, sizeof(int));
 
     for(int i=0; i<parts; ++i)
     {
@@ -223,6 +226,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
         strncpy (buf + response.data.read.part_id * BUF_LEN, response.data.read.buffer, response.data.read.buffer_len);
         int *current_index = received_parts + i;
         *current_index = 1;
+        printf ("czesc paczuszko %d\n", response.data.read.part_id);
     }
 
     sleep (WAIT_TO_RCV);
@@ -244,16 +248,19 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
         }
     }
 
+    /*
+
     if (response.answer == IF_OK)
     {
-        // FILE* new_file = fopen(response.answer.data.name, "w");
-        FILE* new_file = fopen("a.x", "w");
+        FILE* new_file = fopen(response.data.read.name, "w");
         if (new_file == NULL)
         {
             perror("Cannot save file, which was read from server");
         }
-        fwrite(buf, sizeof(char), response.data.read.file_size, new_file);
+        fwrite(buf, sizeof(char), file_size, new_file);
     }
+
+    */
 
     info(response.answer);
 	return response.data.read.status;

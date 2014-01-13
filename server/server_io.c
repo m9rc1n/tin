@@ -157,7 +157,6 @@ int s_write (IncomingRequest *inc_request)
                 } else
                 {
                     fwrite(session_buffer->buffer, sizeof(char), session_buffer->file_size, new_file);
-                    fclose (new_file);
                 }
             }
             if (session_buffer!=NULL) free(session_buffer->received_parts);
@@ -199,11 +198,61 @@ int s_read (IncomingRequest *inc_request)
     FsResponse response;
     FsReadC data_c = inc_request->request.data.read;
     int server_handler = data_c.server_handler;
+    int buffer_len = data_c.buffer_len;
+
+    size_t parts = buffer_len/BUF_LEN;
+    size_t last_part = buffer_len%BUF_LEN;
+
+    int i = 0;
+    int fd = data_c.fd;
+    void* buf;
+
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
         // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
+        status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+    }
+
+    FILE* new_file = session_get (server_handler, fd);
+    if (new_file == NULL)
+    {
+        VDP0 ("Could not save to file\n");
+    } else
+    {
+        // send info
+        /* PRZYDA SIE DO OBSLUGI BLEDOW
+        fseek(new_file, 0, SEEK_END);
+        if (buffer_len == 0) buffer_len = ftell(new_file);
+        fseek(new_file, 0, SEEK_SET);
+        */
+        response.answer = IF_CONTINUE;
+        response.data.read.buffer_len = buffer_len;
+        response.data.read.parts_number = parts;
+        status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+
+        buf = (char*) malloc(buffer_len);
+        fread(buf, sizeof(char), buffer_len, new_file);
+
+        // response
+        for(i=0; i<parts; i++)
+        {
+            strncpy (response.data.read.buffer, buf + i * BUF_LEN, BUF_LEN);
+            response.data.read.part_id = i;
+            response.data.read.buffer_len = BUF_LEN;
+            status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+        }
+        if (last_part != 0) //  last_part = BUF_LEN;
+        {
+            response.data.read.buffer_len = last_part;
+            response.data.read.part_id = i;
+            status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+        }
+
+        sleep(1);
+
+        response.answer = IF_OK;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
     }
 
