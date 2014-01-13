@@ -21,7 +21,7 @@ typedef enum FileLockType {
 typedef struct SessionFileBuffer {
     int *received_parts;
     char* buffer;
-    size_t parts_number;
+    size_t file_size;
 } SessionFileBuffer;
 
 /**

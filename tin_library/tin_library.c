@@ -116,8 +116,6 @@ int fs_open (int server_handler, const char* name, const char* mode)
     strncpy (request.data.open.mode, mode, strlen(mode));
     request.data.open.mode_len = strlen(mode);
 
-    printf("\tX:%lu [%s]\n", request.data.open.mode_len, mode);
-
     int status, count;
     if (sockd == -1)
     {
@@ -254,7 +252,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
         {
             perror("Cannot save file, which was read from server");
         }
-        // fwrite(buf, sizeof(char), response.answer.data.read.file_size, new_file);
+        fwrite(buf, sizeof(char), response.data.read.file_size, new_file);
     }
 
     info(response.answer);

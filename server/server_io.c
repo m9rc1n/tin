@@ -40,7 +40,7 @@ int s_open(IncomingRequest *inc_request) {
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ);
     else
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE);
-    
+
     if(lock_result < 0) {
         /* Nie udało się dostać blokady na plik - trzeba powiadomić o tym klienta. */
         /* @todo ja się nie znam na protokole tak dobrze, jak Wy - może trzeba ucywilizować. ~ AK */
@@ -48,14 +48,14 @@ int s_open(IncomingRequest *inc_request) {
         response.answer = EF_FILE_BLOCKED;
 
     } else {
-        VDP0("Lock accepted, request accepted.\n");        
+        VDP0("Lock accepted, request accepted.\n");
         VDP2("Attempting to open %s file in %s mode...\n", file_name, file_mode);
-        
+
         /* todo ścieżkę zmodyfikować? */
         FILE *fh = fopen(file_name, file_mode);
-        
+
         if(fh == NULL) {
-            
+
             VDP1("File %s cannot be opened.", file_name);
             session_unlock_file(inc_request->request.data.open.server_handler, lock_result);
 
@@ -63,10 +63,10 @@ int s_open(IncomingRequest *inc_request) {
             response.answer = EF_NOT_FOUND;
             response.data.open.fd = -1;
         } else {
-         
+
             VDP0("LOL, SUCCESS\n");
             session_set(inc_request->request.data.open.server_handler, lock_result, fh);
-            
+
             response.answer = IF_OK;
             response.data.open.fd = lock_result;
         }
@@ -106,6 +106,7 @@ int s_write (IncomingRequest *inc_request)
             VDP1("Session %d allowed to receive file\n", server_handler);
             session_buffer->received_parts = (int*) calloc(parts_number, sizeof(int));
             session_buffer->buffer = (char*) calloc(data_c.buffer_len, sizeof(char));
+            session_buffer->file_size = data_c.buffer_len;
             for (int i = 0; i<data_c.buffer_len; i++)
             {
                 char a = '-';
@@ -145,6 +146,19 @@ int s_write (IncomingRequest *inc_request)
                     response.answer = EF_CORRUPT_PACKAGE;
                     break;
                 }
+
+            }
+            if (response.answer == IF_OK)
+            {
+                FILE* new_file = session_get (server_handler, fd);
+                if (new_file == NULL)
+                {
+                    VDP0 ("Could not save to file\n");
+                } else
+                {
+                    fwrite(session_buffer->buffer, sizeof(char), session_buffer->file_size, new_file);
+                    fclose (new_file);
+                }
             }
             if (session_buffer!=NULL) free(session_buffer->received_parts);
             if (session_buffer!=NULL) free(session_buffer->buffer);
@@ -154,22 +168,7 @@ int s_write (IncomingRequest *inc_request)
             break;
         default:
             break;
-    }
-
-    if (response.answer == IF_OK)
-    {
-        FILE* new_file = session_get (server_handler, fd);
-        if (new_file == NULL)
-        {
-            VDP0 ("Could not save to file\n");
-        } else
-        {
-            printf ("New file address: %d", new_file);
-            fwrite(session_buffer->buffer, sizeof(char), 400, new_file);
-            fclose (new_file);
-        }
-    }
-}
+    }}
 
 int s_close (IncomingRequest *inc_request)
 {

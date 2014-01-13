@@ -6,7 +6,7 @@
 #define BUF_LEN 2
 #define NAME_LEN 32
 #define MODE_LEN 3
-#define MAX_BUF BUF_LEN+100
+#define MAX_BUF BUF_LEN+120
 
 typedef enum FsCommand
 {
@@ -181,9 +181,9 @@ typedef struct FsWriteC
     // ilosc bajtow do zapisania
     size_t buffer_len;
     // identyfikator czesci
-    int part_id;
+    size_t part_id;
     // ilosc czesci
-    int parts_number;
+    size_t parts_number;
 }
 FsWriteC;
 
@@ -220,9 +220,13 @@ typedef struct FsReadS
     // ile danych chcemy wczytac
     size_t buffer_len;
     // identyfikator czesci
-    int part_id;
+    size_t part_id;
     // ilosc czesci
-    int parts_number;
+    size_t parts_number;
+    // nazwa pliku
+    char name[NAME_LEN];
+    // rozmiar pliku
+    size_t file_size;
 }
 FsReadS;
 
