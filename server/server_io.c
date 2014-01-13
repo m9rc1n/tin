@@ -35,11 +35,11 @@ int s_open(IncomingRequest *inc_request) {
         /* Nie udało się dostać blokady na plik - trzeba powiadomić o tym klienta. */
         /* @todo ja się nie znam na protokole tak dobrze, jak Wy - może trzeba ucywilizować. ~ AK */
         VDP0("Lock failed, request turned down.\n");
-        response.answer = FILE_BLOCKED;
+        response.answer = EF_FILE_BLOCKED;
 
     } else {
         VDP0("Lock accepted, request accepted.\n");
-        response.answer = INFO_OK;
+        response.answer = IF_OK;
         response.data.open.fd = lock_result;
     }
 
@@ -65,7 +65,7 @@ int s_write (IncomingRequest *inc_request)
     {
         VDP0("Session timed out\n");
         free(session_buffer);
-        response.answer= INFO_SESSION_TIMED_OUT;
+        response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
@@ -83,15 +83,15 @@ int s_write (IncomingRequest *inc_request)
                 strncpy(session_buffer->buffer+i, &a , 1);
             }
             session_set_buffer(server_handler, fd, session_buffer);
-            response.answer = INFO_CONTINUE;
+            response.answer = IF_CONTINUE;
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
             // errors
             break;
-        case RECEIVE_PACKAGES:
+        case WRITE_PACKAGES:
             session_buffer = session_get_buffer (server_handler, fd);
             if ( session_buffer == NULL )
             {
-                response.answer = FILE_SENDING_ERROR;
+                response.answer = EF_ACCESS_ERROR;
                 break;
             }
             VDP3("Session %d received part %d/%zu\n", server_handler, part_id, parts_number);
@@ -101,7 +101,7 @@ int s_write (IncomingRequest *inc_request)
             int* current_package = session_buffer->received_parts + data_c.part_id;
             *current_package = 1;
             break;
-        case RECEIVED_ALL:
+        case WRITE_ALL:
             session_buffer = session_get_buffer (server_handler, fd);
             VDP1("Buffer All: \n%s\n", session_buffer->buffer);
             free(session_buffer->received_parts);
@@ -111,14 +111,14 @@ int s_write (IncomingRequest *inc_request)
             // free
             // check
             // respond
-            response.answer= FILE_SENDING_SUCCESS;
+            response.answer = IF_OK;
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
             break;
         default:
             break;
     }
 
-    if (response.answer == FILE_SENDING_SUCCESS)
+    if (response.answer == IF_OK)
     {
         FILE* new_file = session_get (server_handler, fd);
         if (new_file == NULL)
@@ -132,8 +132,6 @@ int s_write (IncomingRequest *inc_request)
         }
     }
 
-    session_buffer = NULL;
-
     return 0;//sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
 
@@ -145,7 +143,7 @@ int s_close (IncomingRequest *inc_request)
     session_unlock_file(inc_request->request.data.close.server_handler, inc_request->request.data.close.fd);
 
     FsResponse response;
-    response.answer = INFO_OK;
+    response.answer = IF_OK;
 
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }

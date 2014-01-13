@@ -18,6 +18,10 @@ typedef enum FsCommand
 	OPEN = 3,
 	// Zapisz do pliku
 	WRITE = 4,
+    // Odbierz paczki
+    WRITE_PACKAGES = 40,
+    // Odbierz wiadomosc o przeslaniu wszystkich paczek
+    WRITE_ALL = 41,
 	// Odczytaj plik
 	READ = 5,
 	// Polecenie zmiany miejsca w ktorym
@@ -28,11 +32,7 @@ typedef enum FsCommand
 	// Przeslanie informacji o pliku
 	FSTAT = 8,
 	// Zablokowanie pliku na serwerze
-	LOCK = 9,
-    // Odbierz paczki
-    RECEIVE_PACKAGES = 10,
-    // Odbierz wiadomosc o przeslaniu wszystkich paczek
-    RECEIVED_ALL = 11
+	LOCK = 9
 	// Przeslij ponownie plik
     // Potencjalnie do usuniecia
 	// AGAIN = 10
@@ -41,96 +41,94 @@ FsCommand;
 
 typedef enum FsAnswer
 {
-	// Kody informacyjne
-	// ===============================================
-	// Kontynuacja
-	// Serwer czeka na polecenia Klienta
-	INFO_CONTINUE = 100,
-	// -----------------------------------------------
-	// Przekroczenie czasu
-	// Sesja uzytkownika wygasla
-	INFO_SESSION_TIMED_OUT = 110,
-	// -----------------------------------------------
-	// Odmowa polaczenia
-	// Serwer odmowil polaczenia z baza
-	INFO_CONNECTION_REFUSED = 111,
 
-	// Kody powodzenia
-	// ===============================================
+// KODY INFORMACYJNE ZWIAZANE Z OBSLUGA POLACZENIA 
+
 	// OK
 	// Operacja zakonczona powodzeniem
-	INFO_OK = 200,
-	// -----------------------------------------------
-	// Zaakceptowanie
+	IC_OK = 100,
+
+    // Kontynuacja
+	// Serwer czeka na polecenia Klienta
+	IC_CONTINUE = 101,
+
+    // Zaakceptowanie
 	// Serwer zaakceptowal polaczenie z klientem
-	ACCEPTED = 203,
+	IC_ACCEPTED = 102,
 
     // Zamkniecie polaczenia
-	// Serwer zamknal polaczenie z klientem
-	CLOSED = 204,
+ 	// Serwer zamknal polaczenie z klientem
+	IC_CLOSED = 103,
 
-    // Plik przeslany pomyslnie
-    FILE_SENDING_SUCCESS = 205,
+// KODY BLEDOW ZWIAZANE Z OSLUGA POLACZENIA
+	
+	// Przekroczenie czasu
+	// Sesja uzytkownika wygasla
+	EC_SESSION_TIMED_OUT = 201,
 
-	// Kody bledow operacji plikowych
-	// ===============================================
-	// Niezmodyfikowany
-	// Dany plik nie zostal zmodyfikowany na serwerze
-	FILE_NOT_MODIFIED = 300,
-    // -----------------------------------------------
-    // Blad przesylania pliku
-    // Plik zostal niepoprawnie przeslany
-    FILE_SENDING_ERROR = 301,
-    // ----------------------------------------------
-    // Brak praw dostepu
-    // Pakiet przeslany do nieodpowiedniego
-    // uzytkownika
-    FILE_ACCESS_ERROR = 302,
+    // Odmowa polaczenia
+	// Serwer odmowil polaczenia z klientem
+	EC_CONNECTION_REFUSED = 202,
 
-	// Kody bledu aplikacji klienta
-	// ===============================================
 	// Nieprawidlowe zapytanie
 	// Zadanie nie moze byc obsluzone przez serwer
 	// z powodu blednej skladni zapytania
-	BAD_REQUEST = 400,
-	// -----------------------------------------------
-	// Nie znaleziono
-	// serwer nie odnalazl zasobu wedlug podanego wzorca
-	FILE_NOT_FOUND = 401,
-	// -----------------------------------------------
-	// Niedozwolone
-	// zazadany zasob nie jest w stanie zwrocic
-	// odpowiedzi mogacej byc obsluzonej przez klienta
-	// wedlug informacji podanych w zapytaniu
-	NOT_ACCETABLE = 402,
-	// -----------------------------------------------
-	// Blokada na pliku
-	// Konflikt z obecnym statusem zasobu na serwerze.
-	// Zwracany gdy klient nie moze uzyskac dostepu
-	// do zablokowanego pliku
-	FILE_BLOCKED = 403,
-	// -----------------------------------------------
-	// Plik istnieje juz na serwerze
-	// Podany plik znajduje sie już w danym katalogu
-	// na serwerze
-	FILE_ALREADY_EXIST = 404,
-	// -----------------------------------------------
-	// Jest katalogiem
-	// Podany plik jest katalogiem
-	FILE_IS_DIR = 405,
+    EC_BAD_REQUEST = 203,
 
 	// Kody bledow wewnetrznych
-	// ===============================================
 	// Wewnetrzny blad serwera
 	// Serwer napotkal niespodziewane trudnosci
 	// ktore uniemozliwily zrealizowanie zadania
-	INTERNAL_SERVER_ERROR = 500,
-	// ----------------------------------------------
+	EC_INTERNAL_SERVER_ERROR = 204,
+
+// KODY INFORMACJNE ZWIAZANE Z OBLUGA PLIKOW
+
+	// Operacja wykonana poprawnie
+    IF_OK = 300,
+
+    // Kontynuacja
+	// Serwer czeka na polecenia Klienta
+	IF_CONTINUE = 302,
+
+	// Niezmodyfikowany
+	// Dany plik nie zostal zmodyfikowany na serwerze
+	IF_NOT_MODIFIED = 303,
+
+// KODY BLEDOW ZWIAZANE Z OBLUGA PLIKOW
+
+    // Blad przesylania pliku
+    // Plik zostal niepoprawnie przeslany
+    EF_CORRUPT_PACKAGE = 400,
+
+    // Brak praw dostepu
+    // Pakiet przeslany do nieodpowiedniego
+    // uzytkownika
+    EF_ACCESS_ERROR = 401,
+
+	// Nie znaleziono
+	// serwer nie odnalazl zasobu wedlug podanego wzorca
+    EF_NOT_FOUND = 402,
+
 	// Nie zaimplementowano
 	// Serwer nie dysponuje funkcjonalnoscia wymagana
 	// w zapytaniu ten kod jest zwracany gdy serwer
 	// otrzymal nieznany typ zapytania
-	NOT_IMPLEMENTED = 501
+	EF_NOT_IMPLEMENTED = 403,
+
+	// Blokada na pliku
+	// Konflikt z obecnym statusem zasobu na serwerze.
+	// Zwracany gdy klient nie moze uzyskac dostepu
+	// do zablokowanego pliku
+	EF_FILE_BLOCKED = 404,
+
+    // Podany plik znajduje sie już w danym katalogu
+	// na serwerze
+	EF_FILE_ALREADY_EXIST = 405,
+
+    // Jest katalogiem
+	// Podany plik jest katalogiem
+    EF_FILE_IS_DIR = 406
+
 }
 FsAnswer;
 

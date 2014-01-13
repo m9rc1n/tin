@@ -3,8 +3,6 @@
 void *server_thread_function(void *parameters) {
     struct IncomingRequest *inc_request = (struct IncomingRequest *) parameters;
 
-    printf("%d\n", inc_request->request.command);
-
     switch(inc_request->request.command) {
         case OPEN_SERVER:
             s_open_server(inc_request);
@@ -23,6 +21,10 @@ void *server_thread_function(void *parameters) {
             break;
 
         case WRITE:
+
+        case WRITE_PACKAGES:
+
+        case WRITE_ALL:
             s_write(inc_request);
             break;
 
@@ -42,18 +44,10 @@ void *server_thread_function(void *parameters) {
             s_lock(inc_request);
             break;
 
-        case RECEIVE_PACKAGES:
-            s_write(inc_request);
-            break;
-
-        case RECEIVED_ALL:
-            s_write(inc_request);
-
         default:
             break;
     }
 
-    /* @todo wywalić z pamięci request, skoro jest już przetworzony. */
     free(parameters);
 
     pthread_exit(NULL);

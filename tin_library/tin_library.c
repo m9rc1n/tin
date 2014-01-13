@@ -60,6 +60,8 @@ int fs_open_server (const char* server_address, int server_port)
 
     setsockopt(sockd, SOL_SOCKET, SO_RCVTIMEO, (char*) &time_val, sizeof(struct timeval));
 
+    status = connect (sockd, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+
     status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
     count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
 
@@ -157,15 +159,14 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
         return -1;
     }
 
-    status = connect (sockd, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
     status = send (sockd, &request, sizeof(FsRequest), 0);
     count = recv (sockd, &response, sizeof(FsResponse), 0);
 
     if (info(response.answer) == -1) return response.data.write.status;
 
-    if (response.answer == INFO_CONTINUE)
+    if (response.answer == IF_CONTINUE)
     {
-        request.command = RECEIVE_PACKAGES;
+        request.command = WRITE_PACKAGES;
         for(i=0; i<parts; i++)
         {
             strncpy (request.data.write.buffer, buf + i * BUF_LEN, BUF_LEN);
@@ -181,13 +182,13 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
 
         sleep (1);
 
-        request.command = RECEIVED_ALL;
+        request.command = WRITE_ALL;
         status = send (sockd, &request, sizeof(FsRequest), 0);
         count = recv (sockd, &response, sizeof(FsResponse), 0);
 
         if (errno != 0)
         {
-            perror("Receiving packets in writig error");
+            perror("Error while receiving packets");
             return -1;
         }
     }
@@ -364,17 +365,15 @@ int info (FsAnswer answer)
 {
     switch (answer)
     {
-        case INFO_OK:
+        case IF_OK:
+            printf("File operation ended with success\n");
             break;
-        case FILE_SENDING_SUCCESS:
-            printf ("File sended successfully\n");
-            break;
-        case FILE_SENDING_ERROR:
-            perror("Unable to send file");
+        case EF_CORRUPT_PACKAGE:
+            perror("File not send, corrupt package, check your file descriptor or server handler");
             return -1;
-        case INFO_CONTINUE:
+        case IF_CONTINUE:
             break;
-        case INFO_SESSION_TIMED_OUT:
+        case EC_SESSION_TIMED_OUT:
             close(sockd);
             sockd = -1;
             perror("Session in server timed out");

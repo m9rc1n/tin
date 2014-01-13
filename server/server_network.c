@@ -10,7 +10,7 @@ int s_open_server(IncomingRequest *inc_request)
 	printf ("Opening session with: %d\n", session_id);
     FsResponse response;
     response.data.open_server.server_handler = session_id;
-    response.answer = ACCEPTED;
+    response.answer = IC_ACCEPTED;
 
 	return sendto(sockd, &response, sizeof (FsResponse), 0, (struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
@@ -24,7 +24,7 @@ int s_close_server(IncomingRequest *inc_request)
 
 	printf("Closing session with: %d\n", session_id);
     FsResponse response;
-    response.answer = CLOSED;
+    response.answer = IC_CLOSED;
 
 	return sendto(sockd, &response, sizeof (FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
