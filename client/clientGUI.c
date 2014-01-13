@@ -6,7 +6,7 @@
 #include "ncurses-readstring.h"
 #include "../tin_library/tin_library.h"
 
-char address[20], portString[20], fileName[50], readBufor[1024], writeBufor[1024];
+char address[20], portString[20], fileName[50], readBufor[512], writeBufor[512];
 volatile int serverHandler;
 volatile int fileDescriptor; 
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 	char mainMenu[][100] = {{"Connect"}, {"Setup"}, {"Quit"},};
 	char configMenu[][100] = {{"Address"}, {"Port"}, {"Save config"}, {"Load config"}, {"Return"},};
 	char connectedMenu[][100] = {{"Run test"},{"Open file"},{"Disconnect"}}; 
-	char fileMenu[][100] = {{"Read file"},{"Write file"},{"Edit file"},{"File info"},{"Close file"},};
+	char fileMenu[][100] = {{"Read file"},{"Write file"},{"Edit file"},{"File info"},{"Return"},};
 
 	setlocale(LC_CTYPE, "");
 	
@@ -89,30 +89,33 @@ int main(int argc, char *argv[])
 				}
 				else if(connectedMenuReturn == 2)
 				{
-					///otwieramy plik lub go tworzymy jesli takiego nie ma
-					mvreadstr (COORD_Y + 5,COORD_X + WIDTH + 5, fileName, 18, 0);
-					fileDescriptor = fs_open(serverHandler, fileName, "rw"); //zakladam ze jak nie ma to serwer sam zrobi ten plik!!
-
 					erase();
 					do
 					{
 						fileMenuReturn = print_menu(COORD_Y,COORD_X,5,WIDTH,"File operations",fileMenu,fileMenuReturn);
 						if(fileMenuReturn == 1)
 						{
-							//odczyt, fs_read na razie nie dziala..
-							//erase();
-							//fs_read(serverHandler, fileDescriptor, &readBufor, sizeof(readBufor));
-							//mvprintw(1,1,readBufor);
-							//getch();
-							//erase();
+							mvreadstr (COORD_Y + 3,COORD_X + WIDTH + 5, fileName, 18, 0);
+							fileDescriptor = fs_open(serverHandler, fileName, "r");
+							//odczyt
+							erase();
+							fs_read(serverHandler, fileDescriptor, &readBufor, sizeof(readBufor));
+							mvprintw(1,1,readBufor);
+							getch();
+							fs_close(serverHandler, fileDescriptor);
+							erase();
 						}
 						else if(fileMenuReturn == 2)
 						{
+							//otwarcie pliku
+							mvreadstr (COORD_Y + 5,COORD_X + WIDTH + 5, fileName, 18, 0);
+							fileDescriptor = fs_open(serverHandler, fileName, "w+");
 							//zapis, fs_write tez cos na razie nie dziala
-							//erase();
-							//mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 18, 0);
-							//fs_write(serverHandler, fileDescriptor, writeBufor, sizeof(writeBufor));
-							//erase();
+							erase();
+							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);
+							erase();
+							fs_write(serverHandler, fileDescriptor, writeBufor, sizeof(writeBufor));
+							fs_close(serverHandler, fileDescriptor);
 						}
 						else if(fileMenuReturn == 3)
 						{
@@ -121,11 +124,6 @@ int main(int argc, char *argv[])
 						else if(fileMenuReturn == 4)
 						{
 							//informacje o pliku
-						}
-						else if(fileMenuReturn == 5)
-						{
-							//zamkniecie pliku
-							fs_close(serverHandler, fileDescriptor);
 						}
 					} while(fileMenuReturn != 5);
 					erase();
