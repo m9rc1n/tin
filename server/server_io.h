@@ -4,6 +4,7 @@
 
 #include "server_const.h"
 
+#include <sys/stat.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

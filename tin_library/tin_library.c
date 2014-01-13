@@ -364,12 +364,6 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
     request.command = FSTAT;
     request.data.fstat.server_handler = server_handler;
     request.data.fstat.fd = fd;
-    request.data.fstat.stat.mode = buf->st_mode;
-    request.data.fstat.stat.size = buf->st_size;
-    request.data.fstat.stat.atime = buf->st_atime;
-    request.data.fstat.stat.mtime = buf->st_mtime;
-    request.data.fstat.stat.ctime = buf->st_ctime;
-
 	int status, count;
 
     if (sockd == -1)
@@ -387,7 +381,14 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
     }
 
     info(response.answer);
-	return response.data.fstat.status;
+
+    buf->st_mode = response.data.fstat.stat.mode;
+    buf->st_size = response.data.fstat.stat.size;
+    buf->st_atime = response.data.fstat.stat.atime;
+    buf->st_mtime = response.data.fstat.stat.mtime;
+    buf->st_ctime = response.data.fstat.stat.ctime;
+
+    return response.data.fstat.status;
 }
 
 int info (FsAnswer answer)

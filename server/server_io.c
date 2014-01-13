@@ -221,7 +221,7 @@ int s_read (IncomingRequest *inc_request)
         VDP0 ("Could not save to file\n");
     } else
     {
-        // send info
+       // send info
         /* PRZYDA SIE DO OBSLUGI BLEDOW
         fseek(new_file, 0, SEEK_END);
         if (buffer_len == 0) buffer_len = ftell(new_file);
@@ -256,8 +256,7 @@ int s_read (IncomingRequest *inc_request)
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
     }
 
-   // printf ("\nBuffer_len: %zu id: %d: %s\n", data_c.buffer_len, data_c.part_id, data_c.buffer);
-    return -1;
+    return 0;
 }
 
 int s_fstat (IncomingRequest *inc_request)
@@ -265,13 +264,31 @@ int s_fstat (IncomingRequest *inc_request)
     FsResponse response;
     FsFstatC data_c = inc_request->request.data.fstat;
     int server_handler = data_c.server_handler;
+    int fd = data_c.fd;
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+        return -1;
     }
-    return -1;
+    FILE* new_file = session_get (server_handler, fd);
+    if (new_file == NULL)
+    {
+        VDP0 ("Could not save to file\n");
+    } else
+    {
+        struct stat* new_stat = (struct stat*) malloc(sizeof(struct stat));
+        status = fstat (new_file, new_stat);
+        response.data.fstat.stat.mode = new_stat->st_mode;
+        response.data.fstat.stat.size = new_stat->st_size;
+        response.data.fstat.stat.atime = new_stat->st_atime;
+        response.data.fstat.stat.mtime = new_stat->st_mtime;
+        response.data.fstat.stat.ctime = new_stat->st_ctime;
+        status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+        free(new_stat);
+    }
+    return 0;
 }
 
 int s_lock (IncomingRequest *inc_request)
