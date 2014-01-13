@@ -303,7 +303,15 @@ int s_lock (IncomingRequest *inc_request)
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
     }
-    return -1;
+
+    FILE* new_file = session_get (server_handler, fd);
+    if (new_file == NULL)
+    {
+        VDP0 ("Could not save to file\n");
+    } else
+    {
+    }
+    return 0;
 }
 
 int s_lseek (IncomingRequest *inc_request)
@@ -318,5 +326,13 @@ int s_lseek (IncomingRequest *inc_request)
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
     }
-    return -1;
+    FILE* new_file = session_get (server_handler, fd);
+    if (new_file == NULL)
+    {
+        VDP0 ("Could not save to file\n");
+    } else
+    {
+        status = fseek (new_file, data_c.offset, data_c.whence;
+    }
+    return 0;
 }
