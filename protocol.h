@@ -6,7 +6,7 @@
 #define BUF_LEN 2
 #define NAME_LEN 32
 #define MODE_LEN 3
-#define MAX_BUF BUF_LEN+60
+#define MAX_BUF BUF_LEN+100
 
 typedef enum FsCommand
 {
@@ -42,7 +42,7 @@ FsCommand;
 typedef enum FsAnswer
 {
 
-// KODY INFORMACYJNE ZWIAZANE Z OBSLUGA POLACZENIA 
+// KODY INFORMACYJNE ZWIAZANE Z OBSLUGA POLACZENIA
 
 	// OK
 	// Operacja zakonczona powodzeniem
@@ -61,7 +61,7 @@ typedef enum FsAnswer
 	IC_CLOSED = 103,
 
 // KODY BLEDOW ZWIAZANE Z OSLUGA POLACZENIA
-	
+
 	// Przekroczenie czasu
 	// Sesja uzytkownika wygasla
 	EC_SESSION_TIMED_OUT = 201,
