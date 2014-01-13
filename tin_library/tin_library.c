@@ -115,6 +115,8 @@ int fs_open (int server_handler, const char* name, const char* mode)
     request.data.open.name_len = strlen(name);
     strncpy (request.data.open.mode, mode, strlen(mode));
     request.data.open.mode_len = strlen(mode);
+    
+    printf("\tX:%lu [%s]\n", request.data.open.mode_len, mode);
 
     printf("%zu", strlen(mode));
 

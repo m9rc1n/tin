@@ -20,9 +20,11 @@ int s_open(IncomingRequest *inc_request) {
     }
 
     char *file_name = (char *) calloc(inc_request->request.data.open.name_len, sizeof(char));
+    char *file_mode = (char *) calloc(inc_request->request.data.open.mode_len, sizeof(char));
     strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
+    strncpy(file_mode, inc_request->request.data.open.mode, inc_request->request.data.open.mode_len);
 
-    VDP2("Incoming OPEN request: %s (mode: %s)\n", file_name, inc_request->request.data.open.mode);
+    VDP4("Incoming OPEN request: %s, len = %zu (mode: %s, len = %zu)\n", file_name, inc_request->request.data.open.name_len, file_mode, inc_request->request.data.open.mode_len);
 
     printf ("%d %d\n", data_c.mode_len, data_c.name_len);
    /** @todo faktyczna obsługa tych plików */
@@ -38,7 +40,7 @@ int s_open(IncomingRequest *inc_request) {
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ);
     else
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE);
-
+    
     // fopen(qwerty)
     // session_set(sid, fd, FILE)
 
@@ -50,6 +52,10 @@ int s_open(IncomingRequest *inc_request) {
 
     } else {
         VDP0("Lock accepted, request accepted.\n");
+        
+        VDP2("Attempting to open %s file in %s mode...\n", file_name, file_mode);
+        //FILE *fh = fopen(file_name, 
+        
         response.answer = IF_OK;
         response.data.open.fd = lock_result;
     }
