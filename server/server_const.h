@@ -6,11 +6,13 @@
 #define VDP1(x,y) (printf(x,y))
 #define VDP2(x,y,z) (printf(x,y,z))
 #define VDP3(x,y,z,q) (printf(x,y,z,q))
+#define VDP4(x,y,z,q,w) (printf(x,y,z,q,w))
 #else
 #define VDP0(x)
 #define VDP1(x,y)
 #define VDP2(x,y,z)
 #define VDP3(x,y,z,q)
+#define VDP4(x,y,z,q,w)
 #endif
 
 /**

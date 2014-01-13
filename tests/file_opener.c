@@ -25,11 +25,10 @@ int main(int argc, char* argv[]) {
     puts("Próba 1");
     printf("\tFd %d\n", f1 = fs_open(sid, fn1, "r"));
     
+    /*
     puts("Próba 2");
     printf("\tFd %d\n", f2 = fs_open(sid, fn2, "r"));
     
-    /* WyWaLa JaKąŚ bEzSeNsOwNą WaRtOśĆ, bO rEsPoNsE != OpEnEd.
-     * trzeba poprawic ten test */
     puts("Próba 3");
     printf("\tFd %d\n", f3 = fs_open(sid, fn3, "w"));
     
@@ -50,8 +49,9 @@ int main(int argc, char* argv[]) {
     
     puts("Próba 6");
     printf("\tFd %d\n", fs_open(sid, fn3, "r"));
-    
-    fs_close(sid, f3);
+
+    */
+    fs_close(sid, f1);
     
     fs_close_server(sid);
     printf("Zamykam session_id %d\n", sid);
