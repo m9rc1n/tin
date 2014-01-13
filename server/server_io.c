@@ -167,15 +167,16 @@ int s_write (IncomingRequest *inc_request)
             break;
         default:
             break;
-    }}
+    }
+}
 
 int s_close (IncomingRequest *inc_request)
 {
     FsResponse response;
-    printf("trrza to popprawiic\n");
 
     FsCloseC data_c = inc_request->request.data.close;
     int server_handler = data_c.server_handler;
+    int fd = data_c.fd;
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
@@ -184,12 +185,17 @@ int s_close (IncomingRequest *inc_request)
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
-
-    // tutaj se zamknijta plik
-    session_unlock_file(inc_request->request.data.close.server_handler, inc_request->request.data.close.fd);
-
-    response.answer = IF_OK;
-
+    FILE* new_file = session_get (server_handler, fd);
+    if (new_file == NULL)
+    {
+        VDP0 ("Could not save to file\n");
+    }
+    else
+    {
+        response.data.close.status = fclose(new_file);
+        session_unlock_file(inc_request->request.data.close.server_handler, inc_request->request.data.close.fd);
+        response.answer = IF_OK;
+    }
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
 
@@ -233,7 +239,7 @@ int s_read (IncomingRequest *inc_request)
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 
         buf = (char*) malloc(buffer_len);
-        fread(buf, sizeof(char), buffer_len, new_file);
+        response.data.read.status = fread(buf, sizeof(char), buffer_len, new_file);
 
         // response
         for(i=0; i<parts; i++)
@@ -279,7 +285,7 @@ int s_fstat (IncomingRequest *inc_request)
     } else
     {
         struct stat* new_stat = (struct stat*) malloc(sizeof(struct stat));
-        status = fstat (new_file, new_stat);
+        response.data.fstat.status = fstat (new_file, new_stat);
         response.data.fstat.stat.mode = new_stat->st_mode;
         response.data.fstat.stat.size = new_stat->st_size;
         response.data.fstat.stat.atime = new_stat->st_atime;
@@ -313,7 +319,7 @@ int s_lock (IncomingRequest *inc_request)
     } else
     {
         // blokowanie dostepu! z poziomu serwera
-        status = flock(new_file, data_c.mode);
+        response.data.lock.status = flock(new_file, data_c.mode);
     }
     return 0;
 }
@@ -338,7 +344,7 @@ int s_lseek (IncomingRequest *inc_request)
         VDP0 ("Could not save to file\n");
     } else
     {
-        status = fseek (new_file, data_c.offset, data_c.whence);
+        response.data.lseek.status = fseek (new_file, data_c.offset, data_c.whence);
     }
     return 0;
 }
