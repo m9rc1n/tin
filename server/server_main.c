@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     time_val.tv_sec = WAIT_TO_STOP_RCV;
     time_val.tv_usec = 0;
 
-    setsockopt (sockd, SOL_SOCKET, SO_RCVTIMEO, (char *) &time_val, sizeof(struct timeval));
+    //   setsockopt (sockd, SOL_SOCKET, SO_RCVTIMEO, (char *) &time_val, sizeof(struct timeval));
 
 	if (sockd == -1) {
 		perror("Socket creation error");
