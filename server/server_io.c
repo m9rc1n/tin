@@ -296,6 +296,8 @@ int s_lock (IncomingRequest *inc_request)
     FsResponse response;
     FsLockC data_c = inc_request->request.data.lock;
     int server_handler = data_c.server_handler;
+    int fd = data_c.fd;
+
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
@@ -310,6 +312,8 @@ int s_lock (IncomingRequest *inc_request)
         VDP0 ("Could not save to file\n");
     } else
     {
+        // blokowanie dostepu! z poziomu serwera
+        status = flock(new_file, data_c.mode);
     }
     return 0;
 }
@@ -319,6 +323,8 @@ int s_lseek (IncomingRequest *inc_request)
     FsResponse response;
     FsLseekC data_c = inc_request->request.data.lseek;
     int server_handler = data_c.server_handler;
+    int fd = data_c.fd;
+
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
@@ -332,7 +338,7 @@ int s_lseek (IncomingRequest *inc_request)
         VDP0 ("Could not save to file\n");
     } else
     {
-        status = fseek (new_file, data_c.offset, data_c.whence;
+        status = fseek (new_file, data_c.offset, data_c.whence);
     }
     return 0;
 }
