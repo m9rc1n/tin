@@ -12,6 +12,7 @@
 #define PORT 2000
 #define WAIT_TO_STOP_RCV 1
 #define WAIT_TO_SEND 1
+#define WAIT_TO_RCV 1
 
 int sockd;
 int port;
@@ -100,7 +101,6 @@ int fs_close_server (int server_handler)
     }
 
     info (response.answer);
-
 	return response.data.close_server.status;
 }
 
@@ -115,6 +115,8 @@ int fs_open (int server_handler, const char* name, const char* mode)
     request.data.open.name_len = strlen(name);
     strncpy (request.data.open.mode, mode, strlen(mode));
     request.data.open.mode_len = strlen(mode);
+
+    printf("%zu", strlen(mode));
 
     int status, count;
     if (sockd == -1)
@@ -131,6 +133,7 @@ int fs_open (int server_handler, const char* name, const char* mode)
         return -1;
     }
 
+    info(response.answer);
 	return response.data.open.fd;
 }
 
@@ -189,18 +192,17 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
             return -1;
         }
     }
-
     info(response.answer);
     return response.data.write.status;
 }
 
 int fs_read (int server_handler, int fd, void *buf, size_t len)
 {
-    int i, status=0;
+    int status=0;
     size_t count = 0;
-    size_t parts = (len-1)/BUF_LEN;
+    size_t parts = (len-1)/BUF_LEN+1;
     size_t last_part = len%BUF_LEN;
-
+    int* received_parts = (int*) calloc(parts, sizeof(int));
     FsResponse response;
 
     FsRequest request;
@@ -220,16 +222,42 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     for(int i=0; i<parts; ++i)
     {
         count = recv(sockd, &response, sizeof(FsResponse), 0);
-        memcpy (buf + i*BUF_LEN*sizeof(char), response.data.read.buffer, BUF_LEN*sizeof(char));
+        strncpy (buf + response.data.read.part_id * BUF_LEN, response.data.read.buffer, response.data.read.buffer_len);
+        int *current_index = received_parts + i;
+        *current_index = 1;
     }
+
+    sleep (WAIT_TO_RCV);
     count = recv(sockd, &response, sizeof(FsResponse), 0);
-    memcpy (buf + i*BUF_LEN, response.data.read.buffer, last_part);
 
     if (errno != 0) {
         perror("Receiving packets error");
         return -1;
     }
 
+    // check if correct create file
+    for(int i=0; i<parts; ++i)
+    {
+        int* current_index = received_parts + i;
+        if (*current_index == 0)
+        {
+            response.answer = EF_CORRUPT_PACKAGE;
+            break;
+        }
+    }
+
+    if (response.answer == IF_OK)
+    {
+        // FILE* new_file = fopen(response.answer.data.name, "w");
+        FILE* new_file = fopen("a.x", "w");
+        if (new_file == NULL)
+        {
+            perror("Cannot save file, which was read from server");
+        }
+        // fwrite(buf, sizeof(char), response.answer.data.read.file_size, new_file);
+    }
+
+    info(response.answer);
 	return response.data.read.status;
 }
 
@@ -260,6 +288,7 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
         return -1;
     }
 
+    info(response.answer);
 	return response.data.lseek.status;
 }
 
@@ -288,6 +317,7 @@ int fs_close (int server_handler, int fd)
         return -1;
     }
 
+    info(response.answer);
 	return response.data.close.status;
 }
 
@@ -317,6 +347,7 @@ int fs_lock (int server_handler, int fd, int mode)
         return -1;
     }
 
+    info(response.answer);
 	return response.data.lock.status;
 }
 
@@ -350,6 +381,7 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
         return -1;
     }
 
+    info(response.answer);
 	return response.data.fstat.status;
 }
 

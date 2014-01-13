@@ -6,14 +6,14 @@
 
 int s_open(IncomingRequest *inc_request) {
     FsResponse response;
-    FsWriteC data_c = inc_request->request.data.write;
+    FsOpenC data_c = inc_request->request.data.open;
     int lock_result;
     int server_handler = data_c.server_handler;
 
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
-        free(session_buffer);
+        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
@@ -24,6 +24,7 @@ int s_open(IncomingRequest *inc_request) {
 
     VDP2("Incoming OPEN request: %s (mode: %s)\n", file_name, inc_request->request.data.open.mode);
 
+    printf ("%d %d\n", data_c.mode_len, data_c.name_len);
    /** @todo faktyczna obsługa tych plików */
 
 
@@ -69,17 +70,16 @@ int s_write (IncomingRequest *inc_request)
     int fd = data_c.fd;
     int part_id = data_c.part_id;
     size_t file_size = data_c.buffer_len;
+    SessionFileBuffer* session_buffer = (SessionFileBuffer*) malloc(sizeof(SessionFileBuffer));
 
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
-        free(session_buffer);
+        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
-
-    SessionFileBuffer* session_buffer = (SessionFileBuffer*) malloc(sizeof(SessionFileBuffer));
 
     switch (inc_request->request.command)
     {
@@ -106,6 +106,7 @@ int s_write (IncomingRequest *inc_request)
             }
             VDP3("Session %d received part %d/%zu\n", server_handler, part_id, parts_number);
             strncpy(session_buffer->buffer + data_c.part_id * BUF_LEN, data_c.buffer, data_c.buffer_len);
+            int *current_package = session_buffer->received_parts + data_c.part_id;
             *current_package = 1;
             return 0;
         case WRITE_ALL:
@@ -153,14 +154,15 @@ int s_write (IncomingRequest *inc_request)
 
 int s_close (IncomingRequest *inc_request)
 {
+    FsResponse response;
     printf("trrza to popprawiic\n");
 
-    FsWriteC data_c = inc_request->request.data.write;
+    FsCloseC data_c = inc_request->request.data.close;
     int server_handler = data_c.server_handler;
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
-        free(session_buffer);
+        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
@@ -169,7 +171,6 @@ int s_close (IncomingRequest *inc_request)
     // tutaj se zamknijta plik
     session_unlock_file(inc_request->request.data.close.server_handler, inc_request->request.data.close.fd);
 
-    FsResponse response;
     response.answer = IF_OK;
 
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
@@ -177,15 +178,15 @@ int s_close (IncomingRequest *inc_request)
 
 int s_read (IncomingRequest *inc_request)
 {
+    FsResponse response;
     FsReadC data_c = inc_request->request.data.read;
     int server_handler = data_c.server_handler;
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
-        free(session_buffer);
+        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
-        return -1;
     }
 
    // printf ("\nBuffer_len: %zu id: %d: %s\n", data_c.buffer_len, data_c.part_id, data_c.buffer);
@@ -194,45 +195,44 @@ int s_read (IncomingRequest *inc_request)
 
 int s_fstat (IncomingRequest *inc_request)
 {
-    FsWriteC data_c = inc_request->request.data.write;
+    FsResponse response;
+    FsFstatC data_c = inc_request->request.data.fstat;
     int server_handler = data_c.server_handler;
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
-        free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
-        return -1;
     }
     return -1;
 }
 
 int s_lock (IncomingRequest *inc_request)
 {
-    FsWriteC data_c = inc_request->request.data.write;
+    FsResponse response;
+    FsLockC data_c = inc_request->request.data.lock;
     int server_handler = data_c.server_handler;
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
-        free(session_buffer);
+        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
-        return -1;
     }
     return -1;
 }
 
 int s_lseek (IncomingRequest *inc_request)
 {
-    FsWriteC data_c = inc_request->request.data.write;
+    FsResponse response;
+    FsLseekC data_c = inc_request->request.data.lseek;
     int server_handler = data_c.server_handler;
     if (session_check_if_exist(server_handler) == -1)
     {
         VDP0("Session timed out\n");
-        free(session_buffer);
+        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
-        return -1;
     }
     return -1;
 }
