@@ -18,6 +18,12 @@ typedef enum FileLockType {
     FLOCK_WRITE
 } FileLockType;
 
+typedef struct SessionFileBuffer {
+    int *received_parts;
+    char* buffer;
+    size_t parts_number;
+} SessionFileBuffer;
+
 /**
  * Inicjuje zarządcę sesji.
  */
@@ -68,6 +74,18 @@ int session_destroy_zombies();
  */
 FILE *session_get(int session_id, int fd);
 
+/**
+ * Oddaje strukture potrzebna to zapisywania pliku w czesciach
+ * Jesli nie istnieje skojarzadne z nia sid lub fd zwraca NULL
+ */
+
+SessionFileBuffer *session_get_buffer(int session_id, int fd);
+
+/**
+ * Ustawia nowa sesje dla bufora
+ */
+
+int session_set_buffer(int session_id, int fd, SessionFileBuffer* session_buffer);
 /**
  * Próbuje założyć podaną blokadę na plik i nadać mu fd. Ujemny kod wyjścia oznacza niepowodzenie.
  *

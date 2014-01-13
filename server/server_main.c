@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "../protocol.h"
 
@@ -33,6 +34,13 @@ int main(int argc, char* argv[]) {
 
 	// create a socket
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
+
+    struct timeval time_val;
+
+    time_val.tv_sec = 60;
+    time_val.tv_usec = 0;
+
+    setsockopt (sockd, SOL_SOCKET, SO_RCVTIMEO, (char *) &time_val, sizeof(struct timeval));
 
 	if (sockd == -1) {
 		perror("Socket creation error");
@@ -66,6 +74,12 @@ int main(int argc, char* argv[]) {
         pthread_create(&handlers_thread, NULL, server_thread_function, (void *) request);
         pthread_detach(handlers_thread);
         // @todo sprawdzić, czy memleaka tu nie ma!
+        //
+        /*
+        int err = errno;
+        if (err != 0);
+            break;
+        */
 	}
 
 	close(sockd);

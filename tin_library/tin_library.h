@@ -17,7 +17,6 @@ extern int sockd;
 extern int port;
 extern struct sockaddr_in my_addr;
 extern struct sockaddr_in srv_addr;
-extern struct timeval time_val;
 
 int fs_open_server (const char* server_address, int server_port);
 int fs_close_server (int server_handler);

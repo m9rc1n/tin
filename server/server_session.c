@@ -10,6 +10,7 @@
 struct SessionLock {
     char *file_name;
     FILE *fh;
+    SessionFileBuffer *session_buffer;
     int fd;
     FileLockType lock_type;
 };
@@ -269,6 +270,36 @@ FILE *session_get(int session_id, int fd) {
     session_bump(session_id);
 
     return sessions_list[session_id]->locks[fd]->fh;
+}
+
+SessionFileBuffer* session_get_buffer(int session_id, int fd) {
+
+    if(session_id >= SESSION_MAX_NUMBER || sessions_list[session_id] == NULL)
+        return NULL;
+
+    if(fd >= MAX_FD_PER_SESSION || sessions_list[session_id]->locks[fd] == NULL)
+        return NULL;
+
+    session_bump(session_id);
+
+    return sessions_list[session_id]->locks[fd]->session_buffer;
+}
+
+int session_set_buffer(int session_id, int fd, SessionFileBuffer *session_buffer) {
+
+    if(session_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
+        return -3;
+
+    if(sessions_list[session_id] == NULL)
+        return -1;
+
+    if(sessions_list[session_id]->locks[fd] == NULL)
+        return -2;
+
+    session_bump(session_id);
+
+    sessions_list[session_id]->locks[fd]->session_buffer = session_buffer;
+    return 0;
 }
 
 int session_set(int session_id, int fd, FILE *fh) {

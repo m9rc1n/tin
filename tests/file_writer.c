@@ -11,7 +11,7 @@
 #include "../tin_library/tin_library.h"
 
 int main(int argc, char* argv[]) {
-    int sid, fd, port;
+    int sid, fd = 0, port = 0;
 
     printf("Podaj port serwera: ");
     scanf("%d", &port);
@@ -29,10 +29,15 @@ int main(int argc, char* argv[]) {
     fseek(send_file, 0, SEEK_SET);
     char* buf = (char*) calloc(file_size, sizeof(char));
     fread (buf, sizeof(char), file_size, send_file);
-    fd = fs_open(sid,"b.x", "w");
+
+    fd = fs_open(sid, "b.x", "w");
     fs_write(sid, fd, buf, file_size);
+    fs_close(sid, fd);
+
+    sleep(5);
     fs_close_server(sid);
 
+    free(buf);
     printf("Zamykam session_id %d\n", sid);
 
     return 0;

@@ -10,13 +10,12 @@
  */
 
 #define PORT 2000
-#define TIME_WAIT 30
+#define TIME_WAIT 1
 
 int sockd;
 int port;
 struct sockaddr_in my_addr;
 struct sockaddr_in srv_addr;
-struct timeval time_val;
 int fs_open_server (const char* server_address, int server_port)
 {
     FsResponse response;
@@ -54,6 +53,8 @@ int fs_open_server (const char* server_address, int server_port)
     port = server_port;
     srv_addr.sin_port = htons(port);
 
+    struct timeval time_val;
+
     time_val.tv_sec = TIME_WAIT;
     time_val.tv_usec = 0;
 
@@ -90,12 +91,12 @@ int fs_close_server (int server_handler)
 
     status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
-
+/*
     if (errno != 0) {
         perror("Receiving packets error");
         return -1;
     }
-
+*/
     info (response.answer);
 
 	return response.data.close_server.status;
@@ -165,27 +166,33 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
     if (response.answer == INFO_CONTINUE)
     {
         request.command = RECEIVE_PACKAGES;
-        for(i=0; i<parts; ++i)
+        for(i=0; i<parts; i++)
         {
-            memcpy (request.data.write.buffer, buf + i * BUF_LEN * sizeof(char), BUF_LEN * sizeof(char));
+            strncpy (request.data.write.buffer, buf + i * BUF_LEN, BUF_LEN);
             request.data.write.part_id = i;
             request.data.write.buffer_len = BUF_LEN;
             status = send (sockd, &request, sizeof(FsRequest), 0);
         }
+        if (last_part == 0) last_part = BUF_LEN;
         request.data.write.buffer_len = last_part;
-        memcpy (request.data.write.buffer, buf + i * BUF_LEN * sizeof(char), last_part * sizeof(char));
+        strncpy (request.data.write.buffer, buf + i * BUF_LEN, last_part);
         request.data.write.part_id = i;
         status = send (sockd, &request, sizeof(FsRequest), 0);
-        count = recv (sockd, &response, sizeof(FsResponse), 0);
-    }
 
-    if (errno != 0) {
-        perror("Receiving packets error");
-        return -1;
+        sleep (1);
+
+        request.command = RECEIVED_ALL;
+        status = send (sockd, &request, sizeof(FsRequest), 0);
+        count = recv (sockd, &response, sizeof(FsResponse), 0);
+
+        if (errno != 0)
+        {
+            perror("Receiving packets in writig error");
+            return -1;
+        }
     }
 
     info(response.answer);
-
     return response.data.write.status;
 }
 
@@ -364,7 +371,7 @@ int info (FsAnswer answer)
             break;
         case FILE_SENDING_ERROR:
             perror("Unable to send file");
-            break;
+            return -1;
         case INFO_CONTINUE:
             break;
         case INFO_SESSION_TIMED_OUT:

@@ -3,7 +3,7 @@
 
 #include <sys/types.h>
 
-#define BUF_LEN 200
+#define BUF_LEN 2
 #define NAME_LEN 32
 #define MODE_LEN 3
 
@@ -30,7 +30,9 @@ typedef enum FsCommand
 	// Zablokowanie pliku na serwerze
 	LOCK = 9,
     // Odbierz paczki
-    RECEIVE_PACKAGES = 10
+    RECEIVE_PACKAGES = 10,
+    // Odbierz wiadomosc o przeslaniu wszystkich paczek
+    RECEIVED_ALL = 11
 	// Przeslij ponownie plik
     // Potencjalnie do usuniecia
 	// AGAIN = 10
