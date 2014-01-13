@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 
     struct timeval time_val;
 
-    time_val.tv_sec = 60;
+    time_val.tv_sec = WAIT_TO_STOP_RCV;
     time_val.tv_usec = 0;
 
     setsockopt (sockd, SOL_SOCKET, SO_RCVTIMEO, (char *) &time_val, sizeof(struct timeval));
@@ -71,15 +71,14 @@ int main(int argc, char* argv[]) {
 
 		recvfrom(sockd, (char*) &(request->request), MAX_BUF, 0, (struct sockaddr *) &(request->client_addr), &(request->client_addr_len));
 
+        /* zamknij serwer jak cisza dluzej niz WAIT_TO_STOP_RCV */
+/*        int err = errno;
+        if (err == EWOULDBLOCK || err==EAGAIN);
+           break;
+*/
         pthread_create(&handlers_thread, NULL, server_thread_function, (void *) request);
         pthread_detach(handlers_thread);
         // @todo sprawdzić, czy memleaka tu nie ma!
-        //
-        /*
-        int err = errno;
-        if (err != 0);
-            break;
-        */
 	}
 
 	close(sockd);

@@ -6,7 +6,7 @@
 #define BUF_LEN 2
 #define NAME_LEN 32
 #define MODE_LEN 3
-
+#define MAX_BUF BUF_LEN+60
 
 typedef enum FsCommand
 {
@@ -133,10 +133,7 @@ typedef enum FsAnswer
 FsAnswer;
 
 typedef struct FsOpenServerC
-{
-	// adres serwera
-	char server_address[16];
-}
+{}
 FsOpenServerC;
 
 typedef struct FsOpenServerS

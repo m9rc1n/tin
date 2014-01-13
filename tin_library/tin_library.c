@@ -10,7 +10,8 @@
  */
 
 #define PORT 2000
-#define TIME_WAIT 1
+#define WAIT_TO_STOP_RCV 1
+#define WAIT_TO_SEND 1
 
 int sockd;
 int port;
@@ -55,15 +56,15 @@ int fs_open_server (const char* server_address, int server_port)
 
     struct timeval time_val;
 
-    time_val.tv_sec = TIME_WAIT;
+    time_val.tv_sec = WAIT_TO_STOP_RCV;
     time_val.tv_usec = 0;
 
     setsockopt(sockd, SOL_SOCKET, SO_RCVTIMEO, (char*) &time_val, sizeof(struct timeval));
 
     status = connect (sockd, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
 
-    status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-    count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+    status = send(sockd, &request, sizeof(FsRequest), 0);
+    count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
         perror("Receiving packets error");
@@ -82,7 +83,6 @@ int fs_close_server (int server_handler)
     request.command = CLOSE_SERVER;
     request.data.close_server.server_handler = server_handler;
 
-    socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
     if (sockd == -1)
@@ -91,14 +91,14 @@ int fs_close_server (int server_handler)
         return -1;
     }
 
-    status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
-/*
+    status = send(sockd, &request, sizeof(FsRequest), 0);
+	count = recv(sockd, &response, sizeof(FsResponse), 0);
+
     if (errno != 0) {
         perror("Receiving packets error");
         return -1;
     }
-*/
+
     info (response.answer);
 
 	return response.data.close_server.status;
@@ -116,8 +116,6 @@ int fs_open (int server_handler, const char* name, const char* mode)
     strncpy (request.data.open.mode, mode, strlen(mode));
     request.data.open.mode_len = strlen(mode);
 
-	socklen_t addrlen = sizeof(struct sockaddr_in);
-
     int status, count;
     if (sockd == -1)
     {
@@ -125,8 +123,8 @@ int fs_open (int server_handler, const char* name, const char* mode)
         return -1;
     }
 
-	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+	status = send(sockd, &request, sizeof(FsRequest), 0);
+	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
         perror("Receiving packets error");
@@ -142,7 +140,6 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
     size_t count = 0;;
     size_t parts = (len-1)/BUF_LEN;
     size_t last_part = len%BUF_LEN;
-    socklen_t addrlen = sizeof(struct sockaddr_in);
 
     FsResponse response;
 
@@ -180,7 +177,7 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
         request.data.write.part_id = i;
         status = send (sockd, &request, sizeof(FsRequest), 0);
 
-        sleep (1);
+        sleep(WAIT_TO_SEND);
 
         request.command = WRITE_ALL;
         status = send (sockd, &request, sizeof(FsRequest), 0);
@@ -203,7 +200,6 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     size_t count = 0;
     size_t parts = (len-1)/BUF_LEN;
     size_t last_part = len%BUF_LEN;
-    socklen_t addrlen = sizeof(struct sockaddr_in);
 
     FsResponse response;
 
@@ -219,14 +215,14 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
         return -1;
     }
 
-    status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
+    status = send(sockd, &request, sizeof(FsRequest), 0);
 
     for(int i=0; i<parts; ++i)
     {
-        count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+        count = recv(sockd, &response, sizeof(FsResponse), 0);
         memcpy (buf + i*BUF_LEN*sizeof(char), response.data.read.buffer, BUF_LEN*sizeof(char));
     }
-    count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+    count = recv(sockd, &response, sizeof(FsResponse), 0);
     memcpy (buf + i*BUF_LEN, response.data.read.buffer, last_part);
 
     if (errno != 0) {
@@ -248,7 +244,6 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
     request.data.lseek.offset = offset;
     request.data.lseek.whence = whence;
 
-    socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
     if (sockd == -1)
@@ -257,8 +252,8 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
         return -1;
     }
 
-	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+	status = send(sockd, &request, sizeof(FsRequest), 0);
+	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
         perror("Receiving packets error");
@@ -277,7 +272,6 @@ int fs_close (int server_handler, int fd)
     request.data.close.server_handler = server_handler;
     request.data.close.fd = fd;
 
-    socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
     if (sockd == -1)
@@ -286,8 +280,8 @@ int fs_close (int server_handler, int fd)
         return -1;
     }
 
-	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+	status = send(sockd, &request, sizeof(FsRequest), 0);
+	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
         perror("Receiving packets error");
@@ -307,7 +301,6 @@ int fs_lock (int server_handler, int fd, int mode)
     request.data.lock.fd = fd;
     request.data.lock.mode = mode;
 
-    socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
     if (sockd == -1)
@@ -316,8 +309,8 @@ int fs_lock (int server_handler, int fd, int mode)
         return -1;
     }
 
-	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+	status = send(sockd, &request, sizeof(FsRequest), 0);
+	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
         perror("Receiving packets error");
@@ -341,7 +334,6 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
     request.data.fstat.stat.mtime = buf->st_mtime;
     request.data.fstat.stat.ctime = buf->st_ctime;
 
-    socklen_t addrlen = sizeof(struct sockaddr_in);
 	int status, count;
 
     if (sockd == -1)
@@ -350,8 +342,8 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
         return -1;
     }
 
-	status = sendto (sockd, &request, sizeof(FsRequest), 0, (struct sockaddr*) &srv_addr, sizeof(srv_addr));
-	count = recvfrom(sockd, &response, sizeof(FsResponse), 0, (struct sockaddr*)&srv_addr, &addrlen);
+	status = send(sockd, &request, sizeof(FsRequest), 0);
+	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
         perror("Receiving packets error");

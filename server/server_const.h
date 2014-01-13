@@ -20,11 +20,10 @@
  */
 
 /**
- * Wielkosc bufora przesylana miedzy kientem a serwerem
- * @todo Pozniej pojdzie do protokolu albo wymysle cos lepszego
+ * Stop receiving on socket after that time in seconds
  */
-#ifndef MAX_BUF
-#define MAX_BUF 256
+#ifndef WAIT_TO_STOP_RCV
+#define WAIT_TO_STOP_RCV 120
 #endif
 
 /**
