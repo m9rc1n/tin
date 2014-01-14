@@ -94,6 +94,11 @@ SessionFileBuffer *session_get_buffer(int session_id, int fd);
 off_t session_get_offset(int session_id, int fd);
 
 /**
+ * Ustawiam offset dla sesji
+ */
+off_t session_set_offset(int session_id, int fd, off_t offset);
+
+/**
  * Próbuje założyć podaną blokadę na plik i nadać mu fd. Ujemny kod wyjścia oznacza niepowodzenie.
  *
  * wszystko >= 0 - nadany fd

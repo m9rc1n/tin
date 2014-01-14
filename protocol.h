@@ -126,7 +126,10 @@ typedef enum FsAnswer
 
     // Jest katalogiem
 	// Podany plik jest katalogiem
-    EF_FILE_IS_DIR = 406
+    EF_FILE_IS_DIR = 406,
+
+    // Niepoprawna skladnia zapytania
+    EF_BAD_REQUEST = 407
 
 }
 FsAnswer;

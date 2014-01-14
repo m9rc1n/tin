@@ -493,8 +493,13 @@ int info (FsAnswer answer)
             mvprintw(ANS_X, ANS_Y, "File not send, corrupt package, check your file descriptor or server handler");
             return -1;
 
-        case IF_CONTINUE:
-            break;
+        case EF_BAD_REQUEST:
+            mvprintw(ANS_X, ANS_Y, "Check request parameters");
+            return -1;
+
+        case EF_NOT_FOUND:
+            mvprintw(ANS_X, ANS_Y, "File not found on server");
+            return -1;
 
         case EC_SESSION_TIMED_OUT:
             close(sockd);

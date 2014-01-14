@@ -72,7 +72,7 @@ int s_write (IncomingRequest *inc_request)
     int server_handler = data_c.server_handler;
     int fd = data_c.fd;
     int part_id = data_c.part_id;
-    size_t file_size = data_c.buffer_len;
+
     SessionFileBuffer* session_buffer;
 
     if (session_check_if_exist(server_handler) == -1)
@@ -90,6 +90,7 @@ int s_write (IncomingRequest *inc_request)
             session_buffer->received_parts = (int*) calloc(parts_number, sizeof(int));
             session_buffer->buffer = (char*) calloc(data_c.buffer_len, sizeof(char));
             session_buffer->file_size = data_c.buffer_len;
+
             for (int i = 0; i<data_c.buffer_len; i++)
             {
                 char a = '-';
@@ -140,7 +141,8 @@ int s_write (IncomingRequest *inc_request)
                     VDP0 ("Could not save to file\n");
                 } else
                 {
-                    write(file, session_buffer->buffer, session_buffer->file_size);
+                    size_t count = write(file, session_buffer->buffer, session_buffer->file_size);
+                    if (count <= 0) response.answer = EF_NOT_FOUND;
                 }
             }
             if (session_buffer!=NULL) free(session_buffer->received_parts);
@@ -221,12 +223,12 @@ int s_read (IncomingRequest *inc_request)
         status = fstat (file, &stat_of_file);
         if (offset < 0 || status < 0)
         {
-            response.answer = EF_FILE_NOT_FOUND;
+            response.answer = EF_NOT_FOUND;
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
             return -1;
         }
 
-        size_t file_size = stat_of_file->st_size;
+        size_t file_size = stat_of_file.st_size;
         size_t size_to_end = file_size - offset;
 
         if (buffer_len > size_to_end)
@@ -249,6 +251,14 @@ int s_read (IncomingRequest *inc_request)
 
         buf = (char*) malloc(buffer_len);
         response.data.read.status = read(file, buf, buffer_len);
+
+        if (response.data.read.status <= 0)
+        {
+            free(buf);
+            response.answer = EF_NOT_FOUND;
+            status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+            return -1;
+        }
 
         for (i=0; i<parts; i++)
         {
@@ -362,7 +372,7 @@ int s_lseek (IncomingRequest *inc_request)
     {
         off_t offset = lseek (file, data_c.offset, data_c.whence);
         if (offset < 0) offset = 0;
-        int status = session_set_offset (server_handler, fd, offset);
+        off_t status = session_set_offset (server_handler, fd, offset);
         if (status < 0) response.answer = EF_ACCESS_ERROR;
     }
 
