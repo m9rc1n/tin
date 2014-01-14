@@ -268,6 +268,8 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     status = send(sockd, &request, sizeof(FsRequest), 0);
     count = recv(sockd, &response, sizeof(FsResponse), 0);
 
+    if (info(response.answer) < 0) return -1;
+
     size_t parts = response.data.read.parts_number;
     size_t file_size = response.data.read.buffer_len;
 
@@ -290,7 +292,6 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
         return -1;
     }
 
-    // check if correct create file
     for(int i=0; i<parts; ++i)
     {
         int* current_index = received_parts + i;

@@ -199,6 +199,8 @@ int s_read (IncomingRequest *inc_request)
     int i = 0;
     int fd = data_c.fd;
     void* buf;
+    off_t offset = 0;
+    struct stat stat_of_file;
 
     if (session_check_if_exist(server_handler) == -1)
     {
@@ -215,12 +217,31 @@ int s_read (IncomingRequest *inc_request)
     }
     else
     {
-       // send info
-        /* PRZYDA SIE DO OBSLUGI BLEDOW
-        fseek(new_file, 0, SEEK_END);
-        if (buffer_len == 0) buffer_len = ftell(new_file);
-        fseek(new_file, 0, SEEK_SET);
-        */
+        offset = session_get_offset (server_handler, fd);
+        status = fstat (file, &stat_of_file);
+        if (offset < 0 || status < 0)
+        {
+            response.answer = EF_FILE_NOT_FOUND;
+            status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+            return -1;
+        }
+
+        size_t file_size = stat_of_file->st_size;
+        size_t size_to_end = file_size - offset;
+
+        if (buffer_len > size_to_end)
+        {
+            buffer_len = size_to_end;
+        }
+
+        if (buffer_len <= 0)
+        {
+            response.answer = EF_BAD_REQUEST;
+            response.data.read.buffer_len = buffer_len;
+            status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+            return -1;
+        }
+
         response.answer = IF_CONTINUE;
         response.data.read.buffer_len = buffer_len;
         response.data.read.parts_number = parts;
@@ -310,6 +331,7 @@ int s_lock (IncomingRequest *inc_request)
     }
     else
     {
+        // @todo ustawiamy flocka jedynie gdy chcemy czytac cos po kryjomu
         response.data.lock.status = flock(file, data_c.mode);
     }
 
@@ -338,8 +360,10 @@ int s_lseek (IncomingRequest *inc_request)
     }
     else
     {
-        response.data.lseek.status = lseek (file, data_c.offset, data_c.whence);
-        // @todo przetrzymuj info o fseek gdzies
+        off_t offset = lseek (file, data_c.offset, data_c.whence);
+        if (offset < 0) offset = 0;
+        int status = session_set_offset (server_handler, fd, offset);
+        if (status < 0) response.answer = EF_ACCESS_ERROR;
     }
 
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
