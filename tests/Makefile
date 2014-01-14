@@ -1,6 +1,6 @@
 CXX = clang
 CXXFLAGS = -O2 -Wall -DVDBG
-LDFLAGS = 
+LDFLAGS = -lncurses
 TESTS = file_reader file_simple file_writer file_opener session_basic session_timeouter
 
 SRCS = $(addsuffix .c, $(TESTS))

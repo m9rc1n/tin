@@ -115,15 +115,29 @@ int main(int argc, char *argv[])
 							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);
 							erase();
 							fs_write(serverHandler, fileDescriptor, writeBufor, sizeof(writeBufor));
+							getch();
 							fs_close(serverHandler, fileDescriptor);
 						}
 						else if(fileMenuReturn == 3)
 						{
+//cos write nie dizala wiec nie moge potestowac
+							mvreadstr (COORD_Y + 7,COORD_X + WIDTH + 5, fileName, 18, 0);
+							fileDescriptor = fs_open(serverHandler, fileName, "a");
 							//edycja pliku od pewnego miejsca = fs_write + fs_lseek
+							erase();
+							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);
+							erase();
+							fs_write(serverHandler, fileDescriptor, writeBufor, sizeof(writeBufor));
+							getch();
+							fs_close(serverHandler, fileDescriptor);
 						}
 						else if(fileMenuReturn == 4)
 						{
+							mvreadstr (COORD_Y + 9,COORD_X + WIDTH + 5, fileName, 18, 0);
+							fileDescriptor = fs_open(serverHandler, fileName, "r");
 							//informacje o pliku
+							//TODO
+							fs_close(serverHandler, fileDescriptor);
 						}
 					} while(fileMenuReturn != 5);
 					erase();
