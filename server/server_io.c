@@ -12,54 +12,41 @@ int s_open(IncomingRequest *inc_request) {
 
     if (session_check_if_exist(server_handler) == -1)
     {
-        VDP0("Session timed out\n");
-        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
 
-    char *file_name = (char *) calloc(inc_request->request.data.open.name_len, sizeof(char));
-    char *file_mode = (char *) calloc(inc_request->request.data.open.mode_len, sizeof(char));
-    strncpy(file_name, inc_request->request.data.open.name, inc_request->request.data.open.name_len);
-    strncpy(file_mode, inc_request->request.data.open.mode, inc_request->request.data.open.mode_len);
+    char *file_name = (char *) calloc(data_c.name_len, sizeof(char));
+    strncpy(file_name, data_c.name, data_c.name_len);
 
-    VDP4("Incoming OPEN request: %s, len = %zu (mode: %s, len = %zu)\n", file_name, inc_request->request.data.open.name_len, file_mode, inc_request->request.data.open.mode_len);
+    VDP3("Incoming OPEN request: %s, len = %zu (flags: %d)\n", file_name, data_c.name_len, data_c.flags);
 
-    printf ("%d %d\n", data_c.mode_len, data_c.name_len);
-   /** @todo faktyczna obsługa tych plików */
+   /** @todo faktyczna obsluga tych plikow */
 
-
-    /** @fixme tych flag nie widzę zdefiniowanych nigdzie. */
-    /** @fixme to chyba nie miało tak wyglądać... :P */
-
-    /* Ludzie, kurde, to jest C, ono nie działa intuicyjnie.
-     *  http://pl.wikibooks.org/wiki/C/strcmp
-     */
-    if(strcmp(inc_request->request.data.open.mode, "r") == 0)
-        lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_READ);
+    if (inc_request->request.data.open.flags == O_RDONLY)
+        lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_SH);
     else
-        lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_WRITE);
+        lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_EX);
 
     if(lock_result < 0) {
-        /* Nie udało się dostać blokady na plik - trzeba powiadomić o tym klienta. */
-        /* @todo ja się nie znam na protokole tak dobrze, jak Wy - może trzeba ucywilizować. ~ AK */
+        /* Nie udalo sie dostac blokady na plik - trzeba powiadomic o tym klienta. */
         VDP0("Lock failed, request turned down.\n");
         response.answer = EF_FILE_BLOCKED;
 
     } else {
         VDP0("Lock accepted, request accepted.\n");
-        VDP2("Attempting to open %s file in %s mode...\n", file_name, file_mode);
+        VDP2("Attempting to open %s file in %d mode...\n", file_name, data_c.flags);
 
-        /* todo ścieżkę zmodyfikować? */
-        FILE *fh = fopen(file_name, file_mode);
+        /* todo ścieżkę zmodyfikowac? */
+        int fh = open(file_name, data_c.flags);
 
-        if(fh == NULL) {
+        if(fh == -1) {
 
             VDP1("File %s cannot be opened.", file_name);
             session_unlock_file(inc_request->request.data.open.server_handler, lock_result);
 
-            // set response to DUPA (ale może być inny powód błędu).
+            // set response to DUPA (ale moze byc inny powod bledu).
             response.answer = EF_NOT_FOUND;
             response.data.open.fd = -1;
         } else {
@@ -71,8 +58,6 @@ int s_open(IncomingRequest *inc_request) {
             response.data.open.fd = lock_result;
         }
     }
-
-    free(file_mode);
     free(file_name);
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
@@ -82,19 +67,16 @@ int s_write (IncomingRequest *inc_request)
     FsResponse response;
     FsWriteC data_c = inc_request->request.data.write;
 
-    int i, status = 0;
-    size_t count = 0;
+    int status = 0;
     size_t parts_number = data_c.parts_number;
     int server_handler = data_c.server_handler;
     int fd = data_c.fd;
     int part_id = data_c.part_id;
     size_t file_size = data_c.buffer_len;
-    SessionFileBuffer* session_buffer = (SessionFileBuffer*) malloc(sizeof(SessionFileBuffer));
+    SessionFileBuffer* session_buffer;
 
     if (session_check_if_exist(server_handler) == -1)
     {
-        VDP0("Session timed out\n");
-        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
@@ -104,6 +86,7 @@ int s_write (IncomingRequest *inc_request)
     {
         case WRITE:
             VDP1("Session %d allowed to receive file\n", server_handler);
+            session_buffer = session_get_buffer (server_handler, fd);
             session_buffer->received_parts = (int*) calloc(parts_number, sizeof(int));
             session_buffer->buffer = (char*) calloc(data_c.buffer_len, sizeof(char));
             session_buffer->file_size = data_c.buffer_len;
@@ -112,11 +95,11 @@ int s_write (IncomingRequest *inc_request)
                 char a = '-';
                 strncpy(session_buffer->buffer+i, &a , 1);
             }
-            session_set_buffer(server_handler, fd, session_buffer);
             response.answer = IF_CONTINUE;
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
             // errors
             return 0;
+
         case WRITE_PACKAGES:
             session_buffer = session_get_buffer (server_handler, fd);
             if ( session_buffer == NULL )
@@ -129,6 +112,7 @@ int s_write (IncomingRequest *inc_request)
             int *current_package = session_buffer->received_parts + data_c.part_id;
             *current_package = 1;
             return 0;
+
         case WRITE_ALL:
             session_buffer = session_get_buffer (server_handler, fd);
             if (session_buffer == NULL)
@@ -150,13 +134,13 @@ int s_write (IncomingRequest *inc_request)
             }
             if (response.answer == IF_OK)
             {
-                FILE* new_file = session_get (server_handler, fd);
-                if (new_file == NULL)
+                int file = session_get (server_handler, fd);
+                if (file == -1)
                 {
                     VDP0 ("Could not save to file\n");
                 } else
                 {
-                    fwrite(session_buffer->buffer, sizeof(char), session_buffer->file_size, new_file);
+                    write(file, session_buffer->buffer, session_buffer->file_size);
                 }
             }
             if (session_buffer!=NULL) free(session_buffer->received_parts);
@@ -165,9 +149,12 @@ int s_write (IncomingRequest *inc_request)
             session_buffer->buffer = NULL;
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
             break;
+
         default:
             break;
     }
+
+    return 0;
 }
 
 int s_close (IncomingRequest *inc_request)
@@ -177,25 +164,27 @@ int s_close (IncomingRequest *inc_request)
     FsCloseC data_c = inc_request->request.data.close;
     int server_handler = data_c.server_handler;
     int fd = data_c.fd;
+
     if (session_check_if_exist(server_handler) == -1)
     {
-        VDP0("Session timed out\n");
-        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
-    FILE* new_file = session_get (server_handler, fd);
-    if (new_file == NULL)
+
+    int file = session_get (server_handler, fd);
+
+    if (file == -1)
     {
         VDP0 ("Could not save to file\n");
     }
     else
     {
-        response.data.close.status = fclose(new_file);
-        session_unlock_file(inc_request->request.data.close.server_handler, inc_request->request.data.close.fd);
+        response.data.close.status = close(file);
+        session_unlock_file(server_handler, fd);
         response.answer = IF_OK;
     }
+
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
 
@@ -205,27 +194,26 @@ int s_read (IncomingRequest *inc_request)
     FsReadC data_c = inc_request->request.data.read;
     int server_handler = data_c.server_handler;
     int buffer_len = data_c.buffer_len;
-
     size_t parts = buffer_len/BUF_LEN;
     size_t last_part = buffer_len%BUF_LEN;
-
     int i = 0;
     int fd = data_c.fd;
     void* buf;
 
     if (session_check_if_exist(server_handler) == -1)
     {
-        VDP0("Session timed out\n");
-        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+        return -1;
     }
 
-    FILE* new_file = session_get (server_handler, fd);
-    if (new_file == NULL)
+    int file = session_get (server_handler, fd);
+
+    if (file == -1)
     {
         VDP0 ("Could not save to file\n");
-    } else
+    }
+    else
     {
        // send info
         /* PRZYDA SIE DO OBSLUGI BLEDOW
@@ -239,17 +227,17 @@ int s_read (IncomingRequest *inc_request)
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 
         buf = (char*) malloc(buffer_len);
-        response.data.read.status = fread(buf, sizeof(char), buffer_len, new_file);
+        response.data.read.status = read(file, buf, buffer_len);
 
-        // response
-        for(i=0; i<parts; i++)
+        for (i=0; i<parts; i++)
         {
             strncpy (response.data.read.buffer, buf + i * BUF_LEN, BUF_LEN);
             response.data.read.part_id = i;
             response.data.read.buffer_len = BUF_LEN;
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         }
-        if (last_part != 0) //  last_part = BUF_LEN;
+
+        if (last_part != 0)
         {
             response.data.read.buffer_len = last_part;
             response.data.read.part_id = i;
@@ -257,7 +245,7 @@ int s_read (IncomingRequest *inc_request)
         }
 
         sleep(1);
-
+        free(buf);
         response.answer = IF_OK;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
     }
@@ -271,22 +259,24 @@ int s_fstat (IncomingRequest *inc_request)
     FsFstatC data_c = inc_request->request.data.fstat;
     int server_handler = data_c.server_handler;
     int fd = data_c.fd;
+
     if (session_check_if_exist(server_handler) == -1)
     {
-        VDP0("Session timed out\n");
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
-    char* file = session_get_file_name (server_handler, fd);
-    if (file == NULL)
+
+    int file = session_get (server_handler, fd);
+
+    if (file == -1)
     {
         VDP0 ("Could not save to file\n");
-    } else
+    }
+    else
     {
-        //int filed = open(file, O_
         struct stat* new_stat = (struct stat*) malloc(sizeof(struct stat));
-        response.data.fstat.status = lstat (file, new_stat);
+        response.data.fstat.status = fstat (file, new_stat);
         response.data.fstat.stat.mode = new_stat->st_mode;
         response.data.fstat.stat.size = new_stat->st_size;
         response.data.fstat.stat.atime = new_stat->st_atime;
@@ -307,24 +297,23 @@ int s_lock (IncomingRequest *inc_request)
 
     if (session_check_if_exist(server_handler) == -1)
     {
-        VDP0("Session timed out\n");
-        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+        return -1;
     }
 
-    char* new_file = session_get_file_name (server_handler, fd);
-    if (new_file == NULL)
+    int file = session_get (server_handler, fd);
+
+    if (file == -1)
     {
         VDP0 ("Could not save to file\n");
-    } else
-    {
-        // blokowanie dostepu! z poziomu serwera
-        // int filed = open(new_file, O_RDONLY);
-        // response.data.lock.status = flock(new_file, data_c.mode);
-        // close(filed);
     }
-    return 0;
+    else
+    {
+        response.data.lock.status = flock(file, data_c.mode);
+    }
+
+    return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }
 
 int s_lseek (IncomingRequest *inc_request)
@@ -336,18 +325,22 @@ int s_lseek (IncomingRequest *inc_request)
 
     if (session_check_if_exist(server_handler) == -1)
     {
-        VDP0("Session timed out\n");
-        // free(session_buffer);
         response.answer= EC_SESSION_TIMED_OUT;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
+        return -1;
     }
-    FILE* new_file = session_get (server_handler, fd);
-    if (new_file == NULL)
+
+    int file = session_get (server_handler, fd);
+
+    if (file == -1)
     {
         VDP0 ("Could not save to file\n");
-    } else
-    {
-        response.data.lseek.status = fseek (new_file, data_c.offset, data_c.whence);
     }
-    return 0;
+    else
+    {
+        response.data.lseek.status = lseek (file, data_c.offset, data_c.whence);
+        // @todo przetrzymuj info o fseek gdzies
+    }
+
+    return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
 }

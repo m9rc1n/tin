@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #include "../protocol.h"
 #include "../tin_library/tin_library.h"
@@ -19,7 +20,7 @@ int main(int argc, char* argv[]) {
     sid = fs_open_server("0.0.0.0", port);
     printf("Otwieram session_id %d\n", sid);
 
-    int fd = fs_open (sid, "a.x", "r");
+    int fd = fs_open (sid, "a.x", O_RDONLY);
 
     char* buf = (char*) calloc(8, sizeof(char));
     fs_read(sid, fd, buf, 8);

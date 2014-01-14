@@ -9,10 +9,11 @@
 
 struct SessionLock {
     char *file_name;
-    FILE *fh;
+    int fh;
     SessionFileBuffer *session_buffer;
     int fd;
     FileLockType lock_type;
+    off_t offset;
 };
 
 struct Session {
@@ -41,10 +42,12 @@ static int session_add_lock(int session_id, char *file_name, FileLockType file_l
 
     struct SessionLock *session_lock = (struct SessionLock *) calloc(1, sizeof(struct SessionLock));
     session_lock->file_name = (char *) calloc(strlen(file_name), sizeof(char));
+    session_lock->session_buffer = (SessionFileBuffer *) malloc(sizeof(SessionFileBuffer));
     strncpy(session_lock->file_name, file_name, strlen(file_name));
     session_lock->lock_type = file_lock_type;
     session_lock->fd = i;
-    session_lock->fh = NULL;
+    session_lock->fh = -1;
+    session_lock->offset = 0;
 
     sessions_list[session_id]->locks[i] = session_lock;
 
@@ -85,42 +88,42 @@ static int session_remove_lock(unsigned session_id, unsigned fd) {
 
     switch(sessions_list[session_id]->locks[fd]->lock_type) {
 
-        case FLOCK_READ:
+        case FLOCK_SH:
 
             -- sq->readers;
 
             if(sq->readers == 0) {
-                if(sq->lock_type == FLOCK_WRITE_PENDING) {
-                    //sq->lock_type = FLOCK_WRITE;
+                if(sq->lock_type == FLOCK_EX_PENDING) {
+                    //sq->lock_type = FLOCK_EX;
                     /** @todo można już pisać - coś trzeba z tym fantem zrobić. */
                 } else {
-                    sq->lock_type = FLOCK_NONE;
+                    sq->lock_type = FLOCK_NB;
                 }
             }
 
             break;
 
-        case FLOCK_WRITE_PENDING:
+        case FLOCK_EX_PENDING:
 
             if(sq->readers == 0) {
-                sq->lock_type = FLOCK_NONE;
+                sq->lock_type = FLOCK_NB;
             } else {
-                sq->lock_type = FLOCK_READ;
+                sq->lock_type = FLOCK_SH;
             }
 
             break;
 
-        case FLOCK_WRITE:
+        case FLOCK_EX:
 
-            sq->lock_type = FLOCK_NONE;
+            sq->lock_type = FLOCK_NB;
             break;
 
         default:
             assert(0);
     }
 
-
     free(sessions_list[session_id]->locks[fd]->file_name);
+    free(sessions_list[session_id]->locks[fd]->session_buffer);
     free(sessions_list[session_id]->locks[fd]);
     sessions_list[session_id]->locks[fd] = NULL;
     return 0;
@@ -272,20 +275,46 @@ char* session_get_file_name(int session_id, int fd) {
     return sessions_list[session_id]->locks[fd]->file_name;
 }
 
-FILE *session_get(int session_id, int fd) {
+int session_get(int session_id, int fd) {
 
     if(session_id >= SESSION_MAX_NUMBER || sessions_list[session_id] == NULL)
-        return NULL;
+        return -1;
 
     if(fd >= MAX_FD_PER_SESSION || sessions_list[session_id]->locks[fd] == NULL)
-        return NULL;
+        return -1;
 
     session_bump(session_id);
 
     return sessions_list[session_id]->locks[fd]->fh;
 }
 
+off_t session_get_offset(int session_id, int fd) {
 
+    if(session_id >= SESSION_MAX_NUMBER || sessions_list[session_id] == NULL)
+        return -1;
+
+    if(fd >= MAX_FD_PER_SESSION || sessions_list[session_id]->locks[fd] == NULL)
+        return -1;
+
+    session_bump(session_id);
+
+    return sessions_list[session_id]->locks[fd]->offset;
+}
+
+off_t session_set_offset(int session_id, int fd, off_t offset) {
+
+    if(session_id >= SESSION_MAX_NUMBER || sessions_list[session_id] == NULL)
+        return -1;
+
+    if(fd >= MAX_FD_PER_SESSION || sessions_list[session_id]->locks[fd] == NULL)
+        return -1;
+
+    session_bump(session_id);
+
+    sessions_list[session_id]->locks[fd]->offset = offset;
+
+    return sessions_list[session_id]->locks[fd]->offset;
+}
 
 SessionFileBuffer* session_get_buffer(int session_id, int fd) {
 
@@ -300,24 +329,7 @@ SessionFileBuffer* session_get_buffer(int session_id, int fd) {
     return sessions_list[session_id]->locks[fd]->session_buffer;
 }
 
-int session_set_buffer(int session_id, int fd, SessionFileBuffer *session_buffer) {
-
-    if(session_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
-        return -3;
-
-    if(sessions_list[session_id] == NULL)
-        return -1;
-
-    if(sessions_list[session_id]->locks[fd] == NULL)
-        return -2;
-
-    session_bump(session_id);
-
-    sessions_list[session_id]->locks[fd]->session_buffer = session_buffer;
-    return 0;
-}
-
-int session_set(int session_id, int fd, FILE *fh) {
+int session_set(int session_id, int fd, int fh) {
 
     if(session_id >= SESSION_MAX_NUMBER || fd >= MAX_FD_PER_SESSION)
         return -3;
@@ -353,12 +365,12 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
 
     switch(file_lock_type) {
 
-        case FLOCK_READ:
-            VDP0("Attempting READ lock.\n");
+        case FLOCK_SH:
+            VDP0("Attempting SHARED lock.\n");
 
-            if(sq->lock_type == FLOCK_READ || sq->lock_type == FLOCK_NONE) {
+            if(sq->lock_type == FLOCK_SH || sq->lock_type == FLOCK_NB) {
 
-                sq->lock_type = FLOCK_READ;
+                sq->lock_type = FLOCK_SH;
                 ++ sq->readers;
                 return session_add_lock(session_id, file_name, file_lock_type);
             } else {
@@ -368,16 +380,16 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
 
             break;
 
-        case FLOCK_WRITE:
-            VDP0("Attempting WRITE lock.\n");
+        case FLOCK_EX:
+            VDP0("Attempting EXCLUSIVE lock.\n");
 
-            if(sq->lock_type == FLOCK_NONE) {
+            if(sq->lock_type == FLOCK_NB) {
 
-                sq->lock_type = FLOCK_WRITE;
+                sq->lock_type = FLOCK_EX;
                 return session_add_lock(session_id, file_name, file_lock_type);
-            } else if(sq->lock_type == FLOCK_READ) {
+            } else if(sq->lock_type == FLOCK_SH) {
 
-                sq->lock_type = FLOCK_WRITE_PENDING;
+                sq->lock_type = FLOCK_EX_PENDING;
                 return session_add_lock(session_id, file_name, file_lock_type);
             } else {
 

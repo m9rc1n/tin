@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <fcntl.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <string.h>
@@ -30,7 +31,7 @@ int main(int argc, char* argv[]) {
     char* buf = (char*) calloc(file_size, sizeof(char));
     fread (buf, sizeof(char), file_size, send_file);
 
-    fd = fs_open(sid, "b.txt", "w+");
+    fd = fs_open(sid, "b.txt", O_WRONLY | O_CREAT);
     fs_write(sid, fd, buf, file_size);
     fs_close(sid, fd);
 

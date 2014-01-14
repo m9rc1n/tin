@@ -5,7 +5,6 @@
 
 #define BUF_LEN 120
 #define NAME_LEN 32
-#define MODE_LEN 3
 #define MAX_BUF BUF_LEN+120
 
 typedef enum FsCommand
@@ -156,8 +155,6 @@ typedef struct FsOpenC
     // flaga otworzenia pliku
     // O_RDONLY O_WRONLY O_RDWR O_CREAT O_APPEND
     int flags;
-    // rozmiar tablicy z ustawieniami
-    size_t mode_len;
 }
 FsOpenC;
 

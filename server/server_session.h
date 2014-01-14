@@ -1,6 +1,7 @@
 #ifndef SEVER_SESSION_H
 #define SEVER_SESSION_H
 
+#include <sys/types.h>
 #include "server_const.h"
 #include <stdio.h>
 
@@ -12,10 +13,11 @@
  *  FLICK_WRITE - pisarz zajął plik.
  */
 typedef enum FileLockType {
-    FLOCK_NONE,
-    FLOCK_READ,
-    FLOCK_WRITE_PENDING,
-    FLOCK_WRITE
+    FLOCK_NB,
+    FLOCK_SH,
+    FLOCK_EX,
+    FLOCK_EX_PENDING,
+    FLOCK_UN
 } FileLockType;
 
 typedef struct SessionFileBuffer {
@@ -72,7 +74,7 @@ int session_destroy_zombies();
  * Oddaje wskaźnik na FILE dla konkretnego pliku.
  *  Jeżeli nastąpił błąd (zły sid, zły fd), zwraca NULL.
  */
-FILE *session_get(int session_id, int fd);
+int session_get(int session_id, int fd);
 
 /**
  * Oddaje wskaźnik na FILE dla konkretnego pliku.
@@ -84,14 +86,13 @@ char *session_get_file_name(int session_id, int fd);
  * Oddaje strukture potrzebna to zapisywania pliku w czesciach
  * Jesli nie istnieje skojarzadne z nia sid lub fd zwraca NULL
  */
-
 SessionFileBuffer *session_get_buffer(int session_id, int fd);
 
 /**
- * Ustawia nowa sesje dla bufora
+ * Zwraca pozycje kursora w pliku
  */
+off_t session_get_offset(int session_id, int fd);
 
-int session_set_buffer(int session_id, int fd, SessionFileBuffer* session_buffer);
 /**
  * Próbuje założyć podaną blokadę na plik i nadać mu fd. Ujemny kod wyjścia oznacza niepowodzenie.
  *
@@ -115,7 +116,7 @@ int session_lock_file(int session_id, char *file_name, FileLockType file_lock_ty
  * -2 - fd nie istnieje
  * -3 - niepoprawne sid/fd
  */
-int session_set(int session_id, int fd, FILE *fh);
+int session_set(int session_id, int fd, int fh);
 
 /**
  * Zamyka zarządcę sesji.
