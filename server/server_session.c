@@ -259,6 +259,19 @@ int session_destroy_zombies() {
     return 0;
 }
 
+char* session_get_file_name(int session_id, int fd) {
+
+    if(session_id >= SESSION_MAX_NUMBER || sessions_list[session_id] == NULL)
+        return NULL;
+
+    if(fd >= MAX_FD_PER_SESSION || sessions_list[session_id]->locks[fd] == NULL)
+        return NULL;
+
+    session_bump(session_id);
+
+    return sessions_list[session_id]->locks[fd]->file_name;
+}
+
 FILE *session_get(int session_id, int fd) {
 
     if(session_id >= SESSION_MAX_NUMBER || sessions_list[session_id] == NULL)
@@ -271,6 +284,8 @@ FILE *session_get(int session_id, int fd) {
 
     return sessions_list[session_id]->locks[fd]->fh;
 }
+
+
 
 SessionFileBuffer* session_get_buffer(int session_id, int fd) {
 

@@ -15,10 +15,14 @@
 #define WAIT_TO_SEND 1
 #define WAIT_TO_RCV 1
 
+const int ANS_X = 22;
+const int ANS_Y = 1;
+
 int sockd;
 int port;
 struct sockaddr_in my_addr;
 struct sockaddr_in srv_addr;
+
 int fs_open_server (const char* server_address, int server_port)
 {
     FsResponse response;
@@ -30,11 +34,11 @@ int fs_open_server (const char* server_address, int server_port)
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockd == -1)
     {
-        mvprintw(22,1,"Socket creation error");
+        mvprintw(ANS_X, ANS_Y, "Socket creation error");
         return -1;
     }
 
-	/* client address */
+    /* client address */
 	my_addr.sin_family = AF_INET;
     my_addr.sin_addr.s_addr = INADDR_ANY;
     my_addr.sin_port = 0;
@@ -45,7 +49,7 @@ int fs_open_server (const char* server_address, int server_port)
     {
         close(sockd);
         sockd = -1;
-        mvprintw(22,1,"Socket binding error");
+        mvprintw(ANS_X, ANS_Y, "Socket binding error");
         return -1;
     }
 
@@ -69,7 +73,7 @@ int fs_open_server (const char* server_address, int server_port)
     count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        mvprintw(22,1,"Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
         return -1;
     }
 
@@ -89,7 +93,7 @@ int fs_close_server (int server_handler)
 
     if (sockd == -1)
     {
-        mvprintw(22,1,"Socket is closed");
+        mvprintw(ANS_X, ANS_Y, "Socket is closed");
         return -1;
     }
 
@@ -97,7 +101,7 @@ int fs_close_server (int server_handler)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        mvprintw(22,1,"Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
         return -1;
     }
 
@@ -105,7 +109,7 @@ int fs_close_server (int server_handler)
 	return response.data.close_server.status;
 }
 
-int fs_open (int server_handler, const char* name, const char* mode)
+int fs_open (int server_handler, const char* name, int flags)
 {
     FsResponse response;
 
@@ -114,13 +118,12 @@ int fs_open (int server_handler, const char* name, const char* mode)
     request.data.open.server_handler = server_handler;
     strncpy (request.data.open.name, name, strlen(name));
     request.data.open.name_len = strlen(name);
-    strncpy (request.data.open.mode, mode, strlen(mode));
-    request.data.open.mode_len = strlen(mode);
+    request.data.open.flags = flags;
 
     int status, count;
     if (sockd == -1)
     {
-        mvprintw(22,1,"Socket is closed");
+        mvprintw(ANS_X, ANS_Y, "Socket is closed");
         return -1;
     }
 
@@ -128,7 +131,7 @@ int fs_open (int server_handler, const char* name, const char* mode)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        mvprintw(22,1,"Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
         return -1;
     }
 
@@ -154,7 +157,7 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
 
     if (sockd == -1)
     {
-        mvprintw(22,1,"Socket is closed");
+        mvprintw(ANS_X, ANS_Y, "Socket is closed");
         return -1;
     }
 
@@ -187,7 +190,7 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
 
         if (errno != 0)
         {
-            mvprintw(22,1,"Error while receiving packets");
+            mvprintw(ANS_X, ANS_Y, "Error while receiving packets");
             return -1;
         }
     }
@@ -209,7 +212,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
 
 	if (sockd == -1)
     {
-        mvprintw(22,1,"Socket is closed");
+        mvprintw(ANS_X, ANS_Y, "Socket is closed");
         return -1;
     }
 
@@ -227,14 +230,13 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
         strncpy (buf + response.data.read.part_id * BUF_LEN, response.data.read.buffer, response.data.read.buffer_len);
         int *current_index = received_parts + i;
         *current_index = 1;
-        //printf ("czesc paczuszko %d\n", response.data.read.part_id);
     }
 
     sleep (WAIT_TO_RCV);
     count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        mvprintw(22,1,"Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
         return -1;
     }
 
@@ -248,20 +250,6 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
             break;
         }
     }
-
-    /*
-
-    if (response.answer == IF_OK)
-    {
-        FILE* new_file = fopen(response.data.read.name, "w");
-        if (new_file == NULL)
-        {
-            mvprintw(22,1,"Cannot save file, which was read from server");
-        }
-        fwrite(buf, sizeof(char), file_size, new_file);
-    }
-
-    */
 
     info(response.answer);
 	return response.data.read.status;
@@ -282,7 +270,7 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
 
     if (sockd == -1)
     {
-        mvprintw(22,1,"Socket is closed");
+        mvprintw(ANS_X, ANS_Y, "Socket is closed");
         return -1;
     }
 
@@ -290,7 +278,7 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        mvprintw(22,1,"Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
         return -1;
     }
 
@@ -311,7 +299,7 @@ int fs_close (int server_handler, int fd)
 
     if (sockd == -1)
     {
-        mvprintw(22,1,"Socket is closed");
+        mvprintw(ANS_X, ANS_Y, "Socket is closed");
         return -1;
     }
 
@@ -319,7 +307,7 @@ int fs_close (int server_handler, int fd)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        mvprintw(22,1,"Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
         return -1;
     }
 
@@ -341,7 +329,7 @@ int fs_lock (int server_handler, int fd, int mode)
 
     if (sockd == -1)
     {
-        mvprintw(22,1,"Socket is closed");
+        mvprintw(ANS_X, ANS_Y, "Socket is closed");
         return -1;
     }
 
@@ -349,7 +337,7 @@ int fs_lock (int server_handler, int fd, int mode)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        mvprintw(22,1,"Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
         return -1;
     }
 
@@ -369,7 +357,7 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
 
     if (sockd == -1)
     {
-        mvprintw(22,1,"Socket is closed");
+        mvprintw(ANS_X, ANS_Y, "Socket is closed");
         return -1;
     }
 
@@ -377,7 +365,7 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (errno != 0) {
-        mvprintw(22,1,"Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
         return -1;
     }
 
@@ -397,17 +385,17 @@ int info (FsAnswer answer)
     switch (answer)
     {
         case IF_OK:
-            mvprintw(22,1,"File operation ended with success\n");
+            mvprintw(ANS_X, ANS_Y, "File operation ended with success\n");
             break;
         case EF_CORRUPT_PACKAGE:
-            mvprintw(22,1,"File not send, corrupt package, check your file descriptor or server handler");
+            mvprintw(ANS_X, ANS_Y, "File not send, corrupt package, check your file descriptor or server handler");
             return -1;
         case IF_CONTINUE:
             break;
         case EC_SESSION_TIMED_OUT:
             close(sockd);
             sockd = -1;
-            mvprintw(22,1,"Session in server timed out");
+            mvprintw(ANS_X, ANS_Y, "Session in server timed out");
             return -1;
         default:
             break;

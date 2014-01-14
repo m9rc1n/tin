@@ -3,7 +3,7 @@
 
 #include <sys/types.h>
 
-#define BUF_LEN 2
+#define BUF_LEN 120
 #define NAME_LEN 32
 #define MODE_LEN 3
 #define MAX_BUF BUF_LEN+120
@@ -155,7 +155,7 @@ typedef struct FsOpenC
     size_t name_len;
     // flaga otworzenia pliku
     // O_RDONLY O_WRONLY O_RDWR O_CREAT O_APPEND
-    char mode[MODE_LEN];
+    int flags;
     // rozmiar tablicy z ustawieniami
     size_t mode_len;
 }
@@ -196,9 +196,6 @@ typedef struct FsWriteS
 }
 FsWriteS;
 
-// @todo SPRAWDZIC POPRAWNOSC!
-// marcin: przesunalem buffer do danych otrzymywanych z serwera
-
 typedef struct FsReadC
 {
     // uchwyt do serwera
@@ -223,10 +220,6 @@ typedef struct FsReadS
     size_t part_id;
     // ilosc czesci
     size_t parts_number;
-    // nazwa pliku
-    char name[NAME_LEN];
-    // rozmiar pliku
-    size_t file_size;
 }
 FsReadS;
 

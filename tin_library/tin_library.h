@@ -21,7 +21,7 @@ extern struct sockaddr_in srv_addr;
 int fs_open_server (const char* server_address, int server_port);
 int fs_close_server (int server_handler);
 
-int fs_open (int server_handler, const char* name, const char* mode);
+int fs_open (int server_handler, const char* name, int flags);
 int fs_write (int server_handler, int fd, const void *buf, size_t len);
 int fs_read (int server_handler, int fd, void *buf, size_t len);
 int fs_close (int server_handler, int fd);

@@ -278,14 +278,15 @@ int s_fstat (IncomingRequest *inc_request)
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
-    FILE* new_file = session_get (server_handler, fd);
-    if (new_file == NULL)
+    char* file = session_get_file_name (server_handler, fd);
+    if (file == NULL)
     {
         VDP0 ("Could not save to file\n");
     } else
     {
+        //int filed = open(file, O_
         struct stat* new_stat = (struct stat*) malloc(sizeof(struct stat));
-        response.data.fstat.status = fstat (new_file, new_stat);
+        response.data.fstat.status = lstat (file, new_stat);
         response.data.fstat.stat.mode = new_stat->st_mode;
         response.data.fstat.stat.size = new_stat->st_size;
         response.data.fstat.stat.atime = new_stat->st_atime;
@@ -312,14 +313,16 @@ int s_lock (IncomingRequest *inc_request)
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
     }
 
-    FILE* new_file = session_get (server_handler, fd);
+    char* new_file = session_get_file_name (server_handler, fd);
     if (new_file == NULL)
     {
         VDP0 ("Could not save to file\n");
     } else
     {
         // blokowanie dostepu! z poziomu serwera
-        response.data.lock.status = flock(new_file, data_c.mode);
+        // int filed = open(new_file, O_RDONLY);
+        // response.data.lock.status = flock(new_file, data_c.mode);
+        // close(filed);
     }
     return 0;
 }

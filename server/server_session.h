@@ -75,6 +75,12 @@ int session_destroy_zombies();
 FILE *session_get(int session_id, int fd);
 
 /**
+ * Oddaje wskaźnik na FILE dla konkretnego pliku.
+ *  Jeżeli nastąpił błąd (zły sid, zły fd), zwraca NULL.
+ */
+char *session_get_file_name(int session_id, int fd);
+
+/**
  * Oddaje strukture potrzebna to zapisywania pliku w czesciach
  * Jesli nie istnieje skojarzadne z nia sid lub fd zwraca NULL
  */
