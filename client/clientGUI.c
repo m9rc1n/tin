@@ -2,13 +2,15 @@
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include "ncurses-menu.h"
 #include "ncurses-readstring.h"
 #include "../tin_library/tin_library.h"
 
-char address[20], portString[20], fileName[50], readBufor[512], writeBufor[512];
+char address[20], portString[20], fileName[50], readBufor[512], writeBufor[15];
 volatile int serverHandler;
 volatile int fileDescriptor; 
+struct stat *staty;
 
 void loadConfiguration()
 {
@@ -95,7 +97,7 @@ int main(int argc, char *argv[])
 						fileMenuReturn = print_menu(COORD_Y,COORD_X,5,WIDTH,"File operations",fileMenu,fileMenuReturn);
 						if(fileMenuReturn == 1)
 						{
-							mvreadstr (COORD_Y + 3,COORD_X + WIDTH + 5, fileName, 18, 0);
+							mvreadstr(COORD_Y + 3,COORD_X + WIDTH + 5, fileName, 18, 0);
 							fileDescriptor = fs_open(serverHandler, fileName, "r");
 							//odczyt
 							erase();
@@ -110,25 +112,22 @@ int main(int argc, char *argv[])
 							//otwarcie pliku
 							mvreadstr (COORD_Y + 5,COORD_X + WIDTH + 5, fileName, 18, 0);
 							fileDescriptor = fs_open(serverHandler, fileName, "w+");
-							//zapis, fs_write tez cos na razie nie dziala
+							//zapis
 							erase();
-							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);
+							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 15, 0);
 							erase();
 							fs_write(serverHandler, fileDescriptor, writeBufor, sizeof(writeBufor));
-							getch();
 							fs_close(serverHandler, fileDescriptor);
 						}
 						else if(fileMenuReturn == 3)
 						{
-//cos write nie dizala wiec nie moge potestowac
-							mvreadstr (COORD_Y + 7,COORD_X + WIDTH + 5, fileName, 18, 0);
+							mvreadstr(COORD_Y + 7,COORD_X + WIDTH + 5, fileName, 18, 0);
 							fileDescriptor = fs_open(serverHandler, fileName, "a");
-							//edycja pliku od pewnego miejsca = fs_write + fs_lseek
+							//edycja pliku od pewnego miejsca = fs_write + f_opend z append
 							erase();
-							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);
+							mvreadstr(COORD_Y - 3,COORD_X - 9, writeBufor, 15, 0);
 							erase();
 							fs_write(serverHandler, fileDescriptor, writeBufor, sizeof(writeBufor));
-							getch();
 							fs_close(serverHandler, fileDescriptor);
 						}
 						else if(fileMenuReturn == 4)
@@ -136,7 +135,10 @@ int main(int argc, char *argv[])
 							mvreadstr (COORD_Y + 9,COORD_X + WIDTH + 5, fileName, 18, 0);
 							fileDescriptor = fs_open(serverHandler, fileName, "r");
 							//informacje o pliku
-							//TODO
+							//fs_fstat(serverHandler, fileDescriptor, staty);
+							//mvprintw(1,1, sprintf(str, "%d", staty.st_size ));
+							//getch();
+							//staty.st_size, .mode, .st_atime, .ctime, mtime
 							fs_close(serverHandler, fileDescriptor);
 						}
 					} while(fileMenuReturn != 5);
