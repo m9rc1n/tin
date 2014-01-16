@@ -25,9 +25,11 @@ int status, sockd;
 struct sockaddr_in my_name;
 int server_handler = 0;
 
-void handler()
+void exit_handler(int signo)
 {
+    printf("\nClosing socket\n");
     close(sockd);
+    printf("Closing program\n");
     exit(0);
 }
 
@@ -38,7 +40,7 @@ int main(int argc, char* argv[]) {
 		exit(1);
 	}
 
-    signal (SIGINT, &handler);
+    signal (SIGINT, exit_handler);
 
 	// create a socket
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
