@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <signal.h>
 #include <string.h>
 #include <pthread.h>
 #include <stdio.h>
@@ -24,6 +25,12 @@ int status, sockd;
 struct sockaddr_in my_name;
 int server_handler = 0;
 
+void handler()
+{
+    close(sockd);
+    exit(0);
+}
+
 int main(int argc, char* argv[]) {
 
 	if (argc < 2) {
@@ -31,6 +38,7 @@ int main(int argc, char* argv[]) {
 		exit(1);
 	}
 
+    signal (SIGINT, &handler);
 
 	// create a socket
 	sockd = socket(AF_INET, SOCK_DGRAM, 0);
