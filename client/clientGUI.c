@@ -94,6 +94,8 @@ int main(int argc, char *argv[])
 						testMenuReturn = print_menu(COORD_Y,COORD_X,7,WIDTH,"Tests Menu",testMenu,testMenuReturn);
 						if(testMenuReturn == 1)
 						{
+							erase();
+							getch();
 							int pid = fork();
 							char *arguments[4] = {"./file_opener.out", address, portString, NULL};
 							if(pid == 0)
