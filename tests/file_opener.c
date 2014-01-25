@@ -7,20 +7,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+//#include <curses.h>
 
 #include "../protocol.h"
 #include "../tin_library/tin_library.h"
 
 int main(int argc, char* argv[]) {
+	//int ANS_X = 22, ANS_Y = 1;
+	
+	if (argc < 3) {
+		fprintf(stderr, "Usage: %s address port_number\n", argv[0]);
+		exit(1);
+	}
+
     int sid, port, f1, f2, f3;
+	port = atoi(argv[2]); 
     char *fn1 = "plik.rd";
     char *fn2 = "plik.wr";
     char *fn3 = "plik.??";
 
-    printf("Podaj port serwera: ");
-    scanf("%d", &port);
-
-    sid = fs_open_server("0.0.0.0", port);
+    sid = fs_open_server(argv[1], port);
     printf("Otwieram session_id %d\n", sid);
 
     puts("Próba 1");

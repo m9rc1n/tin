@@ -52,11 +52,12 @@ int main(int argc, char *argv[])
 	int COORD_Y = 4, COORD_X = 10, WIDTH = 15;
 
 
-	int mainMenuReturn = 1, configMenuReturn = 1, connectedMenuReturn = 1, fileMenuReturn = 1;
+	int mainMenuReturn = 1, configMenuReturn = 1, connectedMenuReturn = 1, fileMenuReturn = 1, testMenuReturn = 1;
 	char mainMenu[][100] = {{"Connect"}, {"Setup"}, {"Quit"},};
 	char configMenu[][100] = {{"Address"}, {"Port"}, {"Save config"}, {"Load config"}, {"Return"},};
 	char connectedMenu[][100] = {{"Run test"},{"Create file"},{"Open file"},{"Disconnect"}}; 
 	char fileMenu[][100] = {{"Read file"},{"Write file"},{"Edit file"},{"File info"},{"Return"},};
+	char testMenu[][100] = {{"Test Open"},{"Test Read"},{"Test Write"},{"Simple test"},{"Basic session"},{"Session timeout"},{"Return"},};
 
 	setlocale(LC_CTYPE, "");
 	
@@ -87,11 +88,73 @@ int main(int argc, char *argv[])
 				connectedMenuReturn = print_menu(COORD_Y,COORD_X,4,WIDTH,"File operations",connectedMenu,connectedMenuReturn);
 				if(connectedMenuReturn == 1)
 				{
-					//TODO
-					//uruchamiamy testy przez exec(adres, port)
-					//int id = fork();
-					//if(id == 0){
-					//execl("/bin/ls", "ls" NULL);}
+					erase();
+					do
+					{
+						testMenuReturn = print_menu(COORD_Y,COORD_X,7,WIDTH,"Tests Menu",testMenu,testMenuReturn);
+						if(testMenuReturn == 1)
+						{
+							int pid = fork();
+							char *arguments[4] = {"./file_opener.out", address, portString, NULL};
+							if(pid == 0)
+							{
+								execv("../tests/bin/file_opener.out", arguments);
+							}
+							sleep(2);
+						}
+						else if (testMenuReturn == 2)
+						{
+							int pid = fork();
+							char *arguments[4] = {"./file_reader.out", address, portString, NULL};
+							if(pid == 0)
+							{
+								execv("../tests/bin/file_reader.out", arguments);
+							}
+							sleep(2);
+						}
+						else if (testMenuReturn == 3)
+						{
+							int pid = fork();
+							char *arguments[4] = {"./file_writer.out", address, portString, NULL};
+							if(pid == 0)
+							{
+								execv("../tests/bin/file_writer.out", arguments);
+							}
+							sleep(2);
+						}
+						else if (testMenuReturn == 4)
+						{
+							int pid = fork();
+							char *arguments[4] = {"./file_simple.out", address, portString, NULL};
+							if(pid == 0)
+							{
+								execv("../tests/bin/file_simple.out", arguments);
+							}
+							sleep(2);
+						}
+						else if (testMenuReturn == 5)
+						{
+							int pid = fork();
+							char *arguments[5] = {"./session_basic.out", address, portString, "40", NULL};
+							if(pid == 0)
+							{
+								execv("../tests/bin/session_basic.out", arguments);
+							}
+							sleep(2);
+						}
+						else if (testMenuReturn == 6)
+						{
+							int pid = fork();
+							char *arguments[4] = {"./session_timeouter.out", address, portString, NULL};
+							if(pid == 0)
+							{
+								execv("../tests/bin/session_timeouter.out", arguments);
+							}
+							sleep(2);
+						}
+						erase();
+					} while(testMenuReturn != 7);
+					erase();
 				}
 				else if(connectedMenuReturn == 2)
 				{
