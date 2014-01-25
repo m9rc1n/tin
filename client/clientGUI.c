@@ -3,14 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include "ncurses-menu.h"
 #include "ncurses-readstring.h"
 #include "../tin_library/tin_library.h"
 
-char address[20], portString[20], fileName[50], readBufor[512], writeBufor[15];
+char address[20], portString[20], fileName[50], readBufor[512], writeBufor[512], str[15];
 volatile int serverHandler;
 volatile int fileDescriptor; 
-struct stat *staty;
+struct stat* buf;
 
 void loadConfiguration()
 {
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
 	int mainMenuReturn = 1, configMenuReturn = 1, connectedMenuReturn = 1, fileMenuReturn = 1;
 	char mainMenu[][100] = {{"Connect"}, {"Setup"}, {"Quit"},};
 	char configMenu[][100] = {{"Address"}, {"Port"}, {"Save config"}, {"Load config"}, {"Return"},};
-	char connectedMenu[][100] = {{"Run test"},{"Open file"},{"Disconnect"}}; 
+	char connectedMenu[][100] = {{"Run test"},{"Create file"},{"Open file"},{"Disconnect"}}; 
 	char fileMenu[][100] = {{"Read file"},{"Write file"},{"Edit file"},{"File info"},{"Return"},};
 
 	setlocale(LC_CTYPE, "");
@@ -82,14 +83,26 @@ int main(int argc, char *argv[])
 			serverHandler = fs_open_server(address, strtol(portString, NULL, 0));
 			erase();
 			do
-			{	//powinno jeszcze byc edytowanie pliku lub edytowawnie przez lseek...
-				connectedMenuReturn = print_menu(COORD_Y,COORD_X,3,WIDTH,"File operations",connectedMenu,connectedMenuReturn);
+			{
+				connectedMenuReturn = print_menu(COORD_Y,COORD_X,4,WIDTH,"File operations",connectedMenu,connectedMenuReturn);
 				if(connectedMenuReturn == 1)
 				{
 					//TODO
-					//uruchamiamy testy
+					//uruchamiamy testy przez exec(adres, port)
+					//int id = fork();
+					//if(id == 0){
+					//execl("/bin/ls", "ls" NULL);}
 				}
 				else if(connectedMenuReturn == 2)
+				{
+					//TODO
+					// towrzy sie ale ze zlymi prawami dostepu (z zadnymi, treba jakos te prawa dodac)
+					mvreadstr (COORD_Y + 5,COORD_X + WIDTH + 5, fileName, 18, 0);
+					fileDescriptor = fs_open(serverHandler, fileName, O_CREAT);
+					fs_close(serverHandler, fileDescriptor);
+					erase();
+				}
+				else if(connectedMenuReturn == 3)
 				{
 					erase();
 					do
@@ -98,7 +111,7 @@ int main(int argc, char *argv[])
 						if(fileMenuReturn == 1)
 						{
 							mvreadstr(COORD_Y + 3,COORD_X + WIDTH + 5, fileName, 18, 0);
-							fileDescriptor = fs_open(serverHandler, fileName, "r");
+							fileDescriptor = fs_open(serverHandler, fileName, O_RDONLY);
 							//odczyt
 							erase();
 							fs_read(serverHandler, fileDescriptor, &readBufor, sizeof(readBufor));
@@ -109,35 +122,57 @@ int main(int argc, char *argv[])
 						}
 						else if(fileMenuReturn == 2)
 						{
+							//PLIK JEST NADPISYWANY ALE NIE CZYSZCZONY !!!
 							//otwarcie pliku
 							mvreadstr (COORD_Y + 5,COORD_X + WIDTH + 5, fileName, 18, 0);
-							fileDescriptor = fs_open(serverHandler, fileName, "w+");
+							fileDescriptor = fs_open(serverHandler, fileName, O_WRONLY);
 							//zapis
 							erase();
-							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 15, 0);
+							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);	
+							//konczymy plik zamist enterem (to zamyka pisanie ale nie dopisuje netera do bufora.... beach, peach, bitc							
+							char  ch = writeBufor[0];
+							int i = 0;
+							while(ch != ';')
+							{
+								i += 1;
+								ch = writeBufor[i];
+							}
+							//mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 15, 0);
 							erase();
-							fs_write(serverHandler, fileDescriptor, writeBufor, sizeof(writeBufor));
+							fs_write(serverHandler, fileDescriptor, writeBufor, i);
 							fs_close(serverHandler, fileDescriptor);
 						}
 						else if(fileMenuReturn == 3)
 						{
+							//TODO append nie dziala...
 							mvreadstr(COORD_Y + 7,COORD_X + WIDTH + 5, fileName, 18, 0);
-							fileDescriptor = fs_open(serverHandler, fileName, "a");
+							fileDescriptor = fs_open(serverHandler, fileName, O_APPEND);
 							//edycja pliku od pewnego miejsca = fs_write + f_opend z append
 							erase();
-							mvreadstr(COORD_Y - 3,COORD_X - 9, writeBufor, 15, 0);
+							mvreadstr(COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);
+							//konczymy plik zamist enterem (to zamyka pisanie ale nie dopisuje netera do bufora.... beach, peach, bitch
+							char  ch = writeBufor[0];
+							int i = 0;
+							while(ch != ';')
+							{
+								i += 1;
+								ch = writeBufor[i];
+							}
 							erase();
-							fs_write(serverHandler, fileDescriptor, writeBufor, sizeof(writeBufor));
+							fs_write(serverHandler, fileDescriptor, writeBufor, i);
 							fs_close(serverHandler, fileDescriptor);
 						}
 						else if(fileMenuReturn == 4)
 						{
+							//TODO - leci seg. fault nie wiedziec czemu :/
 							mvreadstr (COORD_Y + 9,COORD_X + WIDTH + 5, fileName, 18, 0);
-							fileDescriptor = fs_open(serverHandler, fileName, "r");
+							fileDescriptor = fs_open(serverHandler, fileName, O_RDONLY);
 							//informacje o pliku
-							//fs_fstat(serverHandler, fileDescriptor, staty);
-							//mvprintw(1,1, sprintf(str, "%d", staty.st_size ));
-							//getch();
+							fs_fstat(serverHandler, fileDescriptor, buf);
+							printf("%ld", buf->st_size);
+							//sprintf(str, "%d", (int)staty->st_size );
+							//mvprintw(1,1, str);
+							getch();
 							//staty.st_size, .mode, .st_atime, .ctime, mtime
 							fs_close(serverHandler, fileDescriptor);
 						}
@@ -145,13 +180,13 @@ int main(int argc, char *argv[])
 					erase();
 					
 				}
-				else if(connectedMenuReturn == 3)
+				else if(connectedMenuReturn == 4)
 				{
 					//Rozlaczamy sie z serwerem
 					fs_close_server(serverHandler);
 				}
 
-			} while(connectedMenuReturn != 3);
+			} while(connectedMenuReturn != 4);
 
 		}
 		else if(mainMenuReturn == 2) //SETTING MENU

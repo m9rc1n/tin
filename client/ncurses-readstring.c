@@ -179,7 +179,21 @@ mvreadstr (int y, int x, char *str, int maxn, int curss)
                 }
             }
         }
-
+		
+//		if(key == '\n')
+//		{
+//			char  ch = str[0];
+//			int buforSize = 0;
+//			while(true)
+//			{
+//				buforSize += 1;
+//				ch = str[buforSize];
+//				if(feof(str))
+//				{
+//					break;
+//				}
+//			}	
+//		}
         mvprintw (y, cx, "%s", str);    /* Prints the string (since it */
     }                                   /* is cleared above)           */
     while (key != '\n' && key != '\r' && key != 459);
