@@ -143,7 +143,7 @@ int s_write (IncomingRequest *inc_request)
                 int file = session_get (server_handler, fd);
                 if (file == -1)
                 {
-                    VDP0 ("Could not save to file\n");
+                     VDP0 ("Could not get file descriptor in write\n");
                 } else
                 {
                     size_t count = write(file, session_buffer->buffer, session_buffer->file_size);
@@ -186,7 +186,7 @@ int s_close (IncomingRequest *inc_request)
     if (file == -1)
     {
         response.data.close.status = -1;
-        VDP0 ("Could not save to file\n");
+        VDP0 ("Could not get file descriptor in close\n");
     }
     else
     {
@@ -225,7 +225,7 @@ int s_read (IncomingRequest *inc_request)
     if (file == -1)
     {
         response.data.read.status = -1;
-        VDP0 ("Could not save to file\n");
+        VDP0 ("Could not get file descriptor in read\n");
     }
     else
     {
@@ -316,7 +316,7 @@ int s_fstat (IncomingRequest *inc_request)
     if (file == -1)
     {
         response.data.fstat.status = -1;
-        VDP0 ("Could not save to file\n");
+        VDP0 ("Could not get file descriptor in fstat\n");
     }
     else
     {
@@ -352,7 +352,7 @@ int s_lock (IncomingRequest *inc_request)
 
     if (file == -1)
     {
-        VDP0 ("Could not save to file\n");
+        VDP0 ("Could not get file descriptor in lock\n");
         response.data.lock.status = -1;
     }
     else
@@ -383,7 +383,7 @@ int s_lseek (IncomingRequest *inc_request)
 
     if (file == -1)
     {
-        VDP0 ("Could not save to file\n");
+        VDP0 ("Could not get file descriptor in lseek\n");
         response.data.lseek.status = -1;
     }
     else

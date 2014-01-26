@@ -289,6 +289,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     if (errno != 0)
     {
         mvprintw(ANS_X, ANS_Y, "Receiving packets error");
+        free (received_parts);
         return -1;
     }
 
@@ -302,6 +303,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
         }
     }
 
+    free(received_parts);
     info(response.answer);
 	return response.data.read.status;
 }

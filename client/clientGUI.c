@@ -12,7 +12,7 @@
 
 char address[20], portString[20], fileName[50], readBufor[512], writeBufor[512], size[15], mode[15], atime[15], cctime[15], mtime[15], offset[15];
 volatile int serverHandler;
-volatile int fileDescriptor; 
+volatile int fileDescriptor;
 struct stat* buf;
 
 void loadConfiguration()
@@ -32,7 +32,7 @@ void loadConfiguration()
 			sscanf(tempLine, "%s", portString);
 		}
 		entry += 1;
-	}	
+	}
 	fclose(file);
 }
 
@@ -43,9 +43,9 @@ void saveConfiguration()
 
 	fprintf(file,"%s", address );
 	fprintf(file, "\n");
-	fprintf(file,"%s", portString ); 
+	fprintf(file,"%s", portString );
 
-	fclose(file); 	
+	fclose(file);
 }
 
 int main(int argc, char *argv[])
@@ -57,12 +57,12 @@ int main(int argc, char *argv[])
 	int mainMenuReturn = 1, configMenuReturn = 1, connectedMenuReturn = 1, fileMenuReturn = 1, testMenuReturn = 1;
 	char mainMenu[][100] = {{"Connect"}, {"Setup"}, {"Quit"},};
 	char configMenu[][100] = {{"Address"}, {"Port"}, {"Save config"}, {"Load config"}, {"Return"},};
-	char connectedMenu[][100] = {{"Run test"},{"Create file"},{"Open file"},{"Disconnect"}}; 
+	char connectedMenu[][100] = {{"Run test"},{"Create file"},{"Open file"},{"Disconnect"}};
 	char fileMenu[][100] = {{"Read file"},{"Read file from"},{"Write file"},{"Edit file"}, {"Edit file from"},{"File info"},{"Return"},};
 	char testMenu[][100] = {{"Test Open"},{"Test Read"},{"Test Write"},{"Simple test"},{"Basic session"},{"Session timeout"},{"Return"},};
 
 	setlocale(LC_CTYPE, "");
-	
+
 	initscr();
 	noecho();
 	keypad (stdscr, TRUE);
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 	do
 	{
 		mainMenuReturn = print_menu(COORD_Y,COORD_X,3,WIDTH,"Menu",mainMenu,mainMenuReturn); // 1, 2 i 4ty parametry mozna zmianiec zeby potestowac wyglad
-		
+
 		if(mainMenuReturn == 1) //FILE MENU
 		{
 			mvprintw(COORD_Y + 3,COORD_X + WIDTH + 3, "Connecting...");
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 							if(pid == 0)
 							{
 								execv("../tests/bin/file_opener.out", arguments);
-								wait(&errorCode);								
+								wait(&errorCode);
 							}
 							sleep(2);
 							if(errorCode == 0){mvprintw(20,1, "Test success");}else{mvprintw(20,1, "Test failed");}
@@ -212,8 +212,8 @@ int main(int argc, char *argv[])
 							fileDescriptor = fs_open(serverHandler, fileName, O_WRONLY);
 							//zapis
 							erase();
-							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);	
-							//konczymy plik zamist enterem (to zamyka pisanie ale nie dopisuje netera do bufora.... beach, peach, bitc							
+							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);
+							//konczymy plik zamist enterem (to zamyka pisanie ale nie dopisuje netera do bufora.... beach, peach, bitc
 							char  ch = writeBufor[0];
 							int i = 0;
 							while(ch != ';')
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
 							sprintf(atime, "%d", (int)buf->st_atime );
 							sprintf(cctime, "%d", (int)buf->st_ctime );
 							sprintf(mtime, "%d", (int)buf->st_mtime );
-							
+
 							mvprintw(1,1, "File size: ");
 							mvprintw(1,20, size);
 
@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
 							mvreadstr(COORD_Y + 5,COORD_X + WIDTH + 5, fileName, 18, 0);
 							//offset
 							mvreadstr(COORD_Y + 5,COORD_X + WIDTH + 20, offset, 18, 0);
-							
+
 
 							fileDescriptor = fs_open(serverHandler, fileName, O_RDONLY);
 							fs_lseek(serverHandler, fileDescriptor, atoi(offset), SEEK_SET);
@@ -295,7 +295,7 @@ int main(int argc, char *argv[])
 							getch();
 							fs_close(serverHandler, fileDescriptor);
 							erase();
-							
+
 						}
 						else if(fileMenuReturn == 5)
 						{
@@ -319,7 +319,7 @@ int main(int argc, char *argv[])
 						}
 					} while(fileMenuReturn != 7);
 					erase();
-					
+
 				}
 				else if(connectedMenuReturn == 4)
 				{
@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
 				erase();
 			} while(configMenuReturn != 5);
 		}
-		
+
 		erase();
 
 	} while(mainMenuReturn != 3);
