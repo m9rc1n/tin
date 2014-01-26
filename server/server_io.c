@@ -1,4 +1,6 @@
 #include "../protocol.h"
+#include "server_log.h"
+#include "server_const.h"
 #include "server_io.h"
 #include "server_network.h"
 #include "server_synchroniser.h"
@@ -52,7 +54,7 @@ int s_open(IncomingRequest *inc_request) {
             response.data.open.fd = -1;
         } else {
 
-            VDP0("LOL, SUCCESS\n");
+            VDP0("SUCCESS\n");
             session_set(inc_request->request.data.open.server_handler, lock_result, fh);
             response.data.open.status = lock_result;
             response.answer = IF_OK;

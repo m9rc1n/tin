@@ -1,0 +1,93 @@
+Creating session SID: 0
+Creating session SID: 1
+Creating session SID: 2
+Creating session SID: 3
+Creating session SID: 4
+Creating session SID: 5
+Creating session SID: 0
+Opening session with: 0
+Creating session SID: 1
+Opening session with: 1
+Creating session SID: 2
+Opening session with: 2
+Creating session SID: 3
+Opening session with: 3
+Creating session SID: 4
+Opening session with: 4
+Creating session SID: 0
+Opening session with: 0
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+SUCCESS
+Unlocking file a.x SID: 0
+Creating session SID: 1
+Opening session with: 1
+Creating session SID: 2
+Opening session with: 2
+Creating session SID: 3
+Opening session with: 3
+Creating session SID: 4
+Opening session with: 4
+Creating session SID: 5
+Opening session with: 5
+Creating session SID: 6
+Opening session with: 6
+Creating session SID: 7
+Opening session with: 7
+Creating session SID: 8
+Opening session with: 8
+Creating session SID: 9
+Opening session with: 9
+Creating session SID: 10
+Opening session with: 10
+Creating session SID: 11
+Opening session with: 11
+Creating session SID: 12
+Opening session with: 12
+Creating session SID: 13
+Opening session with: 13
+Creating session SID: 14
+Opening session with: 14
+Creating session SID: 15
+Opening session with: 15
+Opening session with: -1
+Opening session with: -1
+Opening session with: -1
+Opening session with: -1
+Opening session with: -1
+WAAAGH, SEZION NUMAH 0 IZ DESTROYYY'D
+Unlocked files from 0 sesssion.
+WAAAGH, SEZION NUMAH 1 IZ DESTROYYY'D
+Unlocked files from 1 sesssion.
+WAAAGH, SEZION NUMAH 2 IZ DESTROYYY'D
+Unlocked files from 2 sesssion.
+WAAAGH, SEZION NUMAH 3 IZ DESTROYYY'D
+Unlocked files from 3 sesssion.
+WAAAGH, SEZION NUMAH 4 IZ DESTROYYY'D
+Unlocked files from 4 sesssion.
+WAAAGH, SEZION NUMAH 5 IZ DESTROYYY'D
+Unlocked files from 5 sesssion.
+WAAAGH, SEZION NUMAH 6 IZ DESTROYYY'D
+Unlocked files from 6 sesssion.
+WAAAGH, SEZION NUMAH 7 IZ DESTROYYY'D
+Unlocked files from 7 sesssion.
+WAAAGH, SEZION NUMAH 8 IZ DESTROYYY'D
+Unlocked files from 8 sesssion.
+WAAAGH, SEZION NUMAH 9 IZ DESTROYYY'D
+Unlocked files from 9 sesssion.
+WAAAGH, SEZION NUMAH 10 IZ DESTROYYY'D
+Unlocked files from 10 sesssion.
+WAAAGH, SEZION NUMAH 11 IZ DESTROYYY'D
+Unlocked files from 11 sesssion.
+WAAAGH, SEZION NUMAH 12 IZ DESTROYYY'D
+Unlocked files from 12 sesssion.
+WAAAGH, SEZION NUMAH 13 IZ DESTROYYY'D
+Unlocked files from 13 sesssion.
+WAAAGH, SEZION NUMAH 14 IZ DESTROYYY'D
+Unlocked files from 14 sesssion.
+WAAAGH, SEZION NUMAH 15 IZ DESTROYYY'D
+Unlocked files from 15 sesssion.

@@ -1,19 +1,14 @@
 #ifndef SERVER_CONST_H
 #define SERVER_CONST_H
 
-#ifdef VDBG
-#define VDP0(x) (printf(x))
-#define VDP1(x,y) (printf(x,y))
-#define VDP2(x,y,z) (printf(x,y,z))
-#define VDP3(x,y,z,q) (printf(x,y,z,q))
-#define VDP4(x,y,z,q,w) (printf(x,y,z,q,w))
-#else
-#define VDP0(x)
-#define VDP1(x,y)
-#define VDP2(x,y,z)
-#define VDP3(x,y,z,q)
-#define VDP4(x,y,z,q,w)
-#endif
+#include "server_log.h"
+
+#define VDP0(x) sprintf(logbuffer, x); logprint();
+#define VDP1(x,y) sprintf(logbuffer, x, y); logprint();
+#define VDP2(x,y,z) sprintf(logbuffer, x, y, z); logprint();
+#define VDP3(x,y,z,q) sprintf(logbuffer, x, y, z, q); logprint();
+#define VDP4(x,y,z,q,w) sprintf(logbuffer, x, y, z, q, w); logprint();
+
 
 /**
  * Tutaj wrzucamjmy wszystkie makrodefinicje, żeby było potem prościej zmieniać wszelkiego rodzaju
