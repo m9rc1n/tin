@@ -13,6 +13,7 @@ int s_open(IncomingRequest *inc_request) {
     if (session_check_if_exist(server_handler) == -1)
     {
         response.answer= EC_SESSION_TIMED_OUT;
+        response.data.open.status = -1;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
@@ -32,6 +33,7 @@ int s_open(IncomingRequest *inc_request) {
     if(lock_result < 0) {
         /* Nie udalo sie dostac blokady na plik - trzeba powiadomic o tym klienta. */
         VDP0("Lock failed, request turned down.\n");
+        response.data.open.status = -1;
         response.answer = EF_FILE_BLOCKED;
 
     } else {
@@ -45,15 +47,14 @@ int s_open(IncomingRequest *inc_request) {
 
             VDP1("File %s cannot be opened.", file_name);
             session_unlock_file(inc_request->request.data.open.server_handler, lock_result);
-
-            // set response to DUPA (ale moze byc inny powod bledu).
+            response.data.open.status = -1;
             response.answer = EF_NOT_FOUND;
             response.data.open.fd = -1;
         } else {
 
             VDP0("LOL, SUCCESS\n");
             session_set(inc_request->request.data.open.server_handler, lock_result, fh);
-
+            response.data.open.status = lock_result;
             response.answer = IF_OK;
             response.data.open.fd = lock_result;
         }
@@ -78,6 +79,7 @@ int s_write (IncomingRequest *inc_request)
     if (session_check_if_exist(server_handler) == -1)
     {
         response.answer= EC_SESSION_TIMED_OUT;
+        response.data.write.status = -1;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
@@ -119,6 +121,7 @@ int s_write (IncomingRequest *inc_request)
             if (session_buffer == NULL)
             {
                 response.answer = EF_ACCESS_ERROR;
+                response.data.write.status = -1;
                 status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
                 break;
             }
@@ -129,6 +132,8 @@ int s_write (IncomingRequest *inc_request)
                 if (*current == 0)
                 {
                     response.answer = EF_CORRUPT_PACKAGE;
+                    response.data.write.status = -1;
+					printf("Corrupt package\n");
                     break;
                 }
 
@@ -142,6 +147,7 @@ int s_write (IncomingRequest *inc_request)
                 } else
                 {
                     size_t count = write(file, session_buffer->buffer, session_buffer->file_size);
+                    response.data.write.status = count;
                     if (count <= 0) response.answer = EF_NOT_FOUND;
                 }
             }
@@ -170,6 +176,7 @@ int s_close (IncomingRequest *inc_request)
     if (session_check_if_exist(server_handler) == -1)
     {
         response.answer= EC_SESSION_TIMED_OUT;
+        response.data.close.status = -1;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
@@ -178,6 +185,7 @@ int s_close (IncomingRequest *inc_request)
 
     if (file == -1)
     {
+        response.data.close.status = -1;
         VDP0 ("Could not save to file\n");
     }
     else
@@ -207,6 +215,7 @@ int s_read (IncomingRequest *inc_request)
     if (session_check_if_exist(server_handler) == -1)
     {
         response.answer= EC_SESSION_TIMED_OUT;
+        response.data.read.status = -1;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
@@ -215,6 +224,7 @@ int s_read (IncomingRequest *inc_request)
 
     if (file == -1)
     {
+        response.data.read.status = -1;
         VDP0 ("Could not save to file\n");
     }
     else
@@ -239,6 +249,7 @@ int s_read (IncomingRequest *inc_request)
         if (buffer_len <= 0)
         {
             response.answer = EF_BAD_REQUEST;
+            response.data.read.status = -1;
             response.data.read.buffer_len = buffer_len;
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
             return -1;
@@ -256,6 +267,7 @@ int s_read (IncomingRequest *inc_request)
         {
             free(buf);
             response.answer = EF_NOT_FOUND;
+            response.data.read.status = -1;
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
             return -1;
         }
@@ -294,6 +306,7 @@ int s_fstat (IncomingRequest *inc_request)
     if (session_check_if_exist(server_handler) == -1)
     {
         response.answer= EC_SESSION_TIMED_OUT;
+        response.data.fstat.status = -1;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
@@ -302,6 +315,7 @@ int s_fstat (IncomingRequest *inc_request)
 
     if (file == -1)
     {
+        response.data.fstat.status = -1;
         VDP0 ("Could not save to file\n");
     }
     else
@@ -329,6 +343,7 @@ int s_lock (IncomingRequest *inc_request)
     if (session_check_if_exist(server_handler) == -1)
     {
         response.answer= EC_SESSION_TIMED_OUT;
+        response.data.lock.status = -1;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
@@ -338,6 +353,7 @@ int s_lock (IncomingRequest *inc_request)
     if (file == -1)
     {
         VDP0 ("Could not save to file\n");
+        response.data.lock.status = -1;
     }
     else
     {
@@ -358,6 +374,7 @@ int s_lseek (IncomingRequest *inc_request)
     if (session_check_if_exist(server_handler) == -1)
     {
         response.answer= EC_SESSION_TIMED_OUT;
+        response.data.lseek.status = -1;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         return -1;
     }
@@ -367,6 +384,7 @@ int s_lseek (IncomingRequest *inc_request)
     if (file == -1)
     {
         VDP0 ("Could not save to file\n");
+        response.data.lseek.status = -1;
     }
     else
     {
@@ -374,6 +392,7 @@ int s_lseek (IncomingRequest *inc_request)
         if (offset < 0) offset = 0;
         off_t status = session_set_offset (server_handler, fd, offset);
         if (status < 0) response.answer = EF_ACCESS_ERROR;
+        response.data.lseek.status = status;
     }
 
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
