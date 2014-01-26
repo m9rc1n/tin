@@ -25,8 +25,6 @@ int s_open(IncomingRequest *inc_request) {
 
     VDP3("Incoming OPEN request: %s, len = %zu (flags: %d)\n", file_name, data_c.name_len, data_c.flags);
 
-   /** @todo faktyczna obsluga tych plikow */
-
     if (inc_request->request.data.open.flags == O_RDONLY)
         lock_result = session_lock_file(inc_request->request.data.open.server_handler, file_name, FLOCK_SH);
     else
@@ -42,19 +40,18 @@ int s_open(IncomingRequest *inc_request) {
         VDP0("Lock accepted, request accepted.\n");
         VDP2("Attempting to open %s file in %d mode...\n", file_name, data_c.flags);
 
-        /* todo ścieżkę zmodyfikowac? */
         int fh = open(file_name, data_c.flags);
 
         if(fh == -1) {
 
-            VDP1("File %s cannot be opened.", file_name);
+            VDP1("File %s cannot be opened.\n", file_name);
             session_unlock_file(inc_request->request.data.open.server_handler, lock_result);
             response.data.open.status = -1;
             response.answer = EF_NOT_FOUND;
             response.data.open.fd = -1;
         } else {
 
-            VDP0("SUCCESS\n");
+            VDP1("File %s opened successfully. \n", file_name);
             session_set(inc_request->request.data.open.server_handler, lock_result, fh);
             response.data.open.status = lock_result;
             response.answer = IF_OK;
@@ -296,7 +293,6 @@ int s_read (IncomingRequest *inc_request)
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         }
 
-        // sleep(1);
         free(buf);
         response.answer = IF_OK;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);

@@ -95,7 +95,6 @@ static int session_remove_lock(unsigned session_id, unsigned fd) {
             if(sq->readers == 0) {
                 if(sq->lock_type == FLOCK_EX_PENDING) {
                     //sq->lock_type = FLOCK_EX;
-                    /** @todo można już pisać - coś trzeba z tym fantem zrobić. */
                 } else {
                     sq->lock_type = FLOCK_NB;
                 }
@@ -249,7 +248,7 @@ int session_destroy_zombies() {
             if((time(NULL) - sessions_list[i]->time_active) > SESSION_ZOMBIE_TIME) {
 
                 /* Send REQUEST_TIMEOUT maybe? Definatelly not spam std out. */
-                VDP1("WAAAGH, SEZION NUMAH %d IZ DESTROYYY'D\n", i);
+                VDP1("Session #%d expired.\n", i);
                 session_remove_locks(i);
                 free(sessions_list[i]);
                 sessions_list[i] = NULL;

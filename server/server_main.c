@@ -15,7 +15,6 @@
 
 #include "server_io.h"
 #include "server_network.h"
-#include "server_reset.h"
 #include "server_session.h"
 #include "server_synchroniser.h"
 #include "server_thread.h"
