@@ -19,14 +19,17 @@ int main(int argc, char* argv[]) {
 
     int i, how_many = atoi(argv[3]), sid, port = atoi(argv[2]);
 
-    for(i = 0; i < how_many; ++ i) {
+    for(i = 0; i < how_many; ++ i) 
+    {
         sid = fs_open_server(argv[1], port);
-        printf("Otwieram %d z %d, session_id %d\n", i, how_many, sid);
+        
+        if(sid < 0)
+            return -2;
 
-        fs_close_server(sid);
-        printf("Zamykam %d z %d, session_id %d\n", i, how_many, sid);
+        if(fs_close_server(sid) < 0)
+            return -3;
 
     }
 
-        return 0;
+    return 0;
 }

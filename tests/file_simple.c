@@ -23,12 +23,15 @@ int main(int argc, char* argv[]) {
     char *fn1 = "plik.rd";
 
     sid = fs_open_server(argv[1], port);
-    printf("Otwieram session_id %d\n", sid);
+    
+    if(sid < 0)
+        return -1;
+    
+    if(fs_open(sid, fn1, O_CREAT | O_WRONLY) < 0)
+        return -2;
 
-    fs_open(sid, fn1, O_CREAT | O_WRONLY);
-
-    fs_close_server(sid);
-    printf("Zamykam session_id %d\n", sid);
-
+    if(fs_close_server(sid) < 0)
+        return -3;
+    
     return 0;
 }

@@ -12,7 +12,6 @@
 #include "../tin_library/tin_library.h"
 
 int main(int argc, char* argv[]) {
-	//int ANS_X = 22, ANS_Y = 1;
 	
 	if (argc < 3) {
 		fprintf(stderr, "Usage: %s address port_number\n", argv[0]);
