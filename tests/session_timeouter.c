@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <fcntl.h>
 #include <arpa/inet.h>
 #include <string.h>
 #include <stdio.h>
@@ -20,8 +21,14 @@ int main(int argc, char* argv[]) {
     int sid, port = atoi(argv[2]);
 
     sid = fs_open_server(argv[1], port);
-    printf("Otwieram, session_id %d\n", sid);
-
-    sleep(3600);
+    
+    if(sid < 0)
+        return -1;
+    
+    sleep(2 * 60);
+    
+    if(fs_open(sid, "foo.c", O_RDONLY) >= 0)
+        return -1;    
+    
     return 0;
 }

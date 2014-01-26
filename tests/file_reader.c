@@ -21,10 +21,11 @@ int main(int argc, char* argv[]) {
 	int sid, port;
 	port = atoi(argv[2]);
 
-
     sid = fs_open_server(argv[1], port);
-    printf("Otwieram session_id %d\n", sid);
-
+    
+    if(sid < 0)
+        return -1;
+    
     int fd = fs_open (sid, "a.x", O_RDONLY);
 
     char* buf = (char*) calloc(8, sizeof(char));
@@ -32,10 +33,11 @@ int main(int argc, char* argv[]) {
 
     fs_close(sid, fd);
 
-    printf ("Odczytany string z serwera :\n%s\n", buf);
-
-    fs_close_server(sid);
-    printf("Zamykam session_id %d\n", sid);
+    if(strcmp(buf, "1234567") != 0)
+        return -2;
+    
+    if(fs_close_server(sid) < 0)
+        return -3;
 
     return 0;
 }

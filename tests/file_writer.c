@@ -22,16 +22,19 @@ int main(int argc, char* argv[]) {
 
 
     sid = fs_open_server(argv[1], port);
-
-    printf("Otwieram session_id %d\n", sid);
+    
+    if(sid < 0)
+        return -1;
 
     FILE* send_file = fopen("a.x", "r+");
 
-    if (send_file == NULL) perror("Cannot open the file");
+    if (send_file == NULL) 
+        return -2;
 
     fseek(send_file, 0, SEEK_END);
     size_t file_size = ftell(send_file);
     fseek(send_file, 0, SEEK_SET);
+    
     char* buf = (char*) calloc(file_size, sizeof(char));
     fread (buf, sizeof(char), file_size, send_file);
 
@@ -43,7 +46,6 @@ int main(int argc, char* argv[]) {
     fs_close_server(sid);
 
     free(buf);
-    printf("Zamykam session_id %d\n", sid);
 
     return 0;
 }
