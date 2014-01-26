@@ -195,6 +195,7 @@ int s_close (IncomingRequest *inc_request)
         response.data.close.status = close(file);
         session_unlock_file(server_handler, fd);
         response.answer = IF_OK;
+        VDP2 ("Closing file with fd: %d with status %d\n", fd, response.data.close.status);
     }
 
     return sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
@@ -250,6 +251,7 @@ int s_read (IncomingRequest *inc_request)
 
         if (buffer_len <= 0)
         {
+            VDP0 ("To small buffer length in read\n");
             response.answer = EF_BAD_REQUEST;
             response.data.read.status = -1;
             response.data.read.buffer_len = buffer_len;
@@ -265,10 +267,14 @@ int s_read (IncomingRequest *inc_request)
         buf = (char*) malloc(buffer_len);
         response.data.read.status = read(file, buf, buffer_len);
 
+        parts = buffer_len/BUF_LEN;
+        last_part = buffer_len%BUF_LEN;
+
         if (response.data.read.status <= 0)
         {
             free(buf);
             response.answer = EF_NOT_FOUND;
+            VDP0 ("Could not read file in read\n");
             response.data.read.status = -1;
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
             return -1;
@@ -286,10 +292,11 @@ int s_read (IncomingRequest *inc_request)
         {
             response.data.read.buffer_len = last_part;
             response.data.read.part_id = i;
+            strncpy (response.data.read.buffer, buf + i * BUF_LEN, last_part);
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         }
 
-        sleep(1);
+        // sleep(1);
         free(buf);
         response.answer = IF_OK;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
