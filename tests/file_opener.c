@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-//#include <curses.h>
 
 #include "../protocol.h"
 #include "../tin_library/tin_library.h"
@@ -20,47 +19,59 @@ int main(int argc, char* argv[]) {
 		exit(1);
 	}
 
-    int sid, port, f1, f2, f3;
+    int sid, port, f1, f2, f3, f4, f5, f6;
 	port = atoi(argv[2]); 
+    
     char *fn1 = "plik.rd";
     char *fn2 = "plik.wr";
     char *fn3 = "plik.??";
 
     sid = fs_open_server(argv[1], port);
-    printf("Otwieram session_id %d\n", sid);
+    if(sid < 0)
+        return -1;
 
-    puts("Próba 1");
-    printf("\tFd %d\n", f1 = fs_open(sid, fn1, O_RDONLY));
-
-
-    puts("Próba 2");
-    printf("\tFd %d\n", f2 = fs_open(sid, fn2, O_RDONLY));
-
-    puts("Próba 3");
-    printf("\tFd %d\n", f3 = fs_open(sid, fn3, O_WRONLY));
-
-    sleep(1);
-
-    puts("Próba 4");
-    printf("\tFd %d\n", fs_open(sid, fn3, O_WRONLY));
+    f1 = fs_open(sid, fn1, O_RDONLY);
+    if(f1 < 0)
+        return -2;
+    
+    f2 = fs_open(sid, fn2, O_RDONLY);
+    if(f2 < 0)
+        return -3;
+    
+    f3 = fs_open(sid, fn3, O_WRONLY);
+    if(f3 < 0)
+        return -4;
 
     sleep(1);
 
-    fs_close(sid, f3);
+    f4 = fs_open(sid, fn3, O_WRONLY);
+    if(f4 >= 0)
+        return -5;
+    
+    sleep(1);
+    
+    if(fs_close(sid, f3))
+        return -6;
+    
+    f5 = fs_open(sid, fn3, O_RDONLY);
+    if(f5 < 0)
+        return -7;
+    
+    if(fs_close(sid, f2) < 0)
+        return -8;
+    
+    if(fs_close(sid, f1) < 0)
+        return -9;
+  
+    f6 = fs_open(sid, fn3, O_RDONLY);
+    if(f6 < 0)
+        return -10;
 
-    puts("Próba 5");
-    printf("\tFd %d\n", fs_open(sid, fn3, O_RDONLY));
+    if(fs_close(sid, f1) < 0)
+        return -11;
 
-    fs_close(sid, f2);
-    fs_close(sid, f1);
-
-    puts("Próba 6");
-    printf("\tFd %d\n", fs_open(sid, fn3, O_RDONLY));
-
-    fs_close(sid, f1);
-
-    fs_close_server(sid);
-    printf("Zamykam session_id %d\n", sid);
+    if(fs_close_server(sid) < 0)
+        return -12;
 
     return 0;
 }
