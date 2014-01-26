@@ -8,7 +8,7 @@
 #include "ncurses-readstring.h"
 #include "../tin_library/tin_library.h"
 
-char address[20], portString[20], fileName[50], readBufor[512], writeBufor[512], str[15];
+char address[20], portString[20], fileName[50], readBufor[512], writeBufor[512], size[15], mode[15], atime[15], cctime[15], mtime[15];
 volatile int serverHandler;
 volatile int fileDescriptor; 
 struct stat* buf;
@@ -95,7 +95,6 @@ int main(int argc, char *argv[])
 						if(testMenuReturn == 1)
 						{
 							erase();
-							getch();
 							int pid = fork();
 							char *arguments[4] = {"./file_opener.out", address, portString, NULL};
 							if(pid == 0)
@@ -160,8 +159,6 @@ int main(int argc, char *argv[])
 				}
 				else if(connectedMenuReturn == 2)
 				{
-					//TODO
-					// towrzy sie ale ze zlymi prawami dostepu (z zadnymi, treba jakos te prawa dodac)
 					mvreadstr (COORD_Y + 5,COORD_X + WIDTH + 5, fileName, 18, 0);
 					fileDescriptor = fs_open(serverHandler, fileName, O_CREAT);
 					fs_close(serverHandler, fileDescriptor);
@@ -187,7 +184,6 @@ int main(int argc, char *argv[])
 						}
 						else if(fileMenuReturn == 2)
 						{
-							//PLIK JEST NADPISYWANY ALE NIE CZYSZCZONY !!!
 							//otwarcie pliku
 							mvreadstr (COORD_Y + 5,COORD_X + WIDTH + 5, fileName, 18, 0);
 							fileDescriptor = fs_open(serverHandler, fileName, O_WRONLY);
@@ -202,20 +198,17 @@ int main(int argc, char *argv[])
 								i += 1;
 								ch = writeBufor[i];
 							}
-							//mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 15, 0);
 							erase();
 							fs_write(serverHandler, fileDescriptor, writeBufor, i);
 							fs_close(serverHandler, fileDescriptor);
 						}
 						else if(fileMenuReturn == 3)
 						{
-							//TODO append nie dziala...
 							mvreadstr(COORD_Y + 7,COORD_X + WIDTH + 5, fileName, 18, 0);
-							fileDescriptor = fs_open(serverHandler, fileName, O_APPEND);
-							//edycja pliku od pewnego miejsca = fs_write + f_opend z append
+							fileDescriptor = fs_open(serverHandler, fileName, O_WRONLY);
+							fs_lseek(serverHandler, fileDescriptor, 0, SEEK_END);
 							erase();
 							mvreadstr(COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);
-							//konczymy plik zamist enterem (to zamyka pisanie ale nie dopisuje netera do bufora.... beach, peach, bitch
 							char  ch = writeBufor[0];
 							int i = 0;
 							while(ch != ';')
@@ -232,13 +225,35 @@ int main(int argc, char *argv[])
 							//TODO - leci seg. fault nie wiedziec czemu :/
 							mvreadstr (COORD_Y + 9,COORD_X + WIDTH + 5, fileName, 18, 0);
 							fileDescriptor = fs_open(serverHandler, fileName, O_RDONLY);
+							erase();
+							buf = (struct stat*) calloc(sizeof(struct stat), 1);
 							//informacje o pliku
 							fs_fstat(serverHandler, fileDescriptor, buf);
-							printf("%ld", buf->st_size);
-							//sprintf(str, "%d", (int)staty->st_size );
-							//mvprintw(1,1, str);
+
+							sprintf(size, "%d", (int)buf->st_size );
+							sprintf(mode, "%d", (int)buf->st_mode );
+							sprintf(atime, "%d", (int)buf->st_atime );
+							sprintf(cctime, "%d", (int)buf->st_ctime );
+							sprintf(mtime, "%d", (int)buf->st_mtime );
+							
+							mvprintw(1,1, "File size: ");
+							mvprintw(1,20, size);
+
+							mvprintw(2,1, "File mode: ");
+							mvprintw(2,20, mode);
+
+							mvprintw(3,1, "Access time: ");
+							mvprintw(3,20, atime);
+
+							mvprintw(4,1, "Change time: ");
+							mvprintw(5,20, cctime);
+
+							mvprintw(5,1, "Modyfication time: ");
+							mvprintw(5,20, mtime);
+
 							getch();
-							//staty.st_size, .mode, .st_atime, .ctime, mtime
+							erase();
+							free(buf);
 							fs_close(serverHandler, fileDescriptor);
 						}
 					} while(fileMenuReturn != 5);
