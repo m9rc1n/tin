@@ -285,15 +285,17 @@ int main(int argc, char *argv[])
 							//offset
 							mvreadstr(COORD_Y + 5,COORD_X + WIDTH + 20, offset, 18, 0);
 
-
+                            char* buf = (char*) calloc (sizeof(char), 512);
 							fileDescriptor = fs_open(serverHandler, fileName, O_RDONLY);
 							fs_lseek(serverHandler, fileDescriptor, atoi(offset), SEEK_SET);
 							//odczyt
 							erase();
-							fs_read(serverHandler, fileDescriptor, &readBufor, sizeof(readBufor));
-							mvprintw(1,1,readBufor);
+							fs_read(serverHandler, fileDescriptor, buf, 512);
+							if (buf != NULL) mvprintw(1, 1, buf);
+							// mvprintw(1, 1, readBufor);
+                            fs_close(serverHandler, fileDescriptor);
 							getch();
-							fs_close(serverHandler, fileDescriptor);
+							free(buf);
 							erase();
 
 						}

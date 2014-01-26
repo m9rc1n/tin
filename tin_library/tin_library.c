@@ -278,6 +278,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     for(int i=0; i<parts; ++i)
     {
         count = recv(sockd, &response, sizeof(FsResponse), 0);
+        if (response.data.read.status <= 0) return -1;
         strncpy (buf + response.data.read.part_id * BUF_LEN, response.data.read.buffer, response.data.read.buffer_len);
         int *current_index = received_parts + i;
         *current_index = 1;
@@ -286,9 +287,9 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     sleep (WAIT_TO_RCV);
     count = recv(sockd, &response, sizeof(FsResponse), 0);
 
-    if (errno != 0)
+    if (response.answer != IF_OK)
     {
-        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error in read");
         free (received_parts);
         return -1;
     }
@@ -312,12 +313,12 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
 {
     if (server_handler < 0)
     {
-        mvprintw(ANS_X, ANS_Y, "Incorrect server handler");
+        mvprintw(ANS_X, ANS_Y, "Incorrect server handler in lseek");
         return -1;
     }
     if (fd < 0)
     {
-        mvprintw(ANS_X, ANS_Y, "Incorrect file descriptor");
+        mvprintw(ANS_X, ANS_Y, "Incorrect file descriptor in lseek");
         return -1;
     }
 
@@ -343,7 +344,7 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
 
     if (errno != 0)
     {
-        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error in lseek");
         return -1;
     }
 
@@ -355,12 +356,12 @@ int fs_close (int server_handler, int fd)
 {
     if (server_handler < 0)
     {
-        mvprintw(ANS_X, ANS_Y, "Incorrect server handler");
+        mvprintw(ANS_X, ANS_Y, "Incorrect server handler in close");
         return -1;
     }
     if (fd < 0)
     {
-        mvprintw(ANS_X, ANS_Y, "Incorrect file descriptor");
+        mvprintw(ANS_X, ANS_Y, "Incorrect file descriptor in close");
         return -1;
     }
 
@@ -382,9 +383,9 @@ int fs_close (int server_handler, int fd)
 	status = send(sockd, &request, sizeof(FsRequest), 0);
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
-    if (errno != 0)
+    if (response.answer != IF_OK)
     {
-        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
+        mvprintw(ANS_X, ANS_Y, "Receiving packets error in close");
         return -1;
     }
 
@@ -425,7 +426,7 @@ int fs_lock (int server_handler, int fd, int mode)
 	status = send(sockd, &request, sizeof(FsRequest), 0);
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
-    if (errno != 0)
+    if (response.answer != IF_OK)
     {
         mvprintw(ANS_X, ANS_Y, "Receiving packets error");
         return -1;
