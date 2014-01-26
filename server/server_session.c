@@ -249,7 +249,7 @@ int session_destroy_zombies() {
             if((time(NULL) - sessions_list[i]->time_active) > SESSION_ZOMBIE_TIME) {
 
                 /* Send REQUEST_TIMEOUT maybe? Definatelly not spam std out. */
-                printf("WAAAGH, SEZION NUMAH %d IZ DESTROYYY'D\n", i);
+                VDP1("WAAAGH, SEZION NUMAH %d IZ DESTROYYY'D\n", i);
                 session_remove_locks(i);
                 free(sessions_list[i]);
                 sessions_list[i] = NULL;
