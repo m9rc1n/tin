@@ -91,3 +91,261 @@ WAAAGH, SEZION NUMAH 14 IZ DESTROYYY'D
 Unlocked files from 14 sesssion.
 WAAAGH, SEZION NUMAH 15 IZ DESTROYYY'D
 Unlocked files from 15 sesssion.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocking file b.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Incoming OPEN request: b.txt, len = 5 (flags: 1)
+File b.txt has 1 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 1 mode...
+File b.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 2
+Opening session with: 2.
+Creating session SID: 3
+Opening session with: 3.
+Creating session SID: 4
+Opening session with: 4.
+Creating session SID: 5
+Opening session with: 5.
+Creating session SID: 6
+Opening session with: 6.
+Creating session SID: 7
+Opening session with: 7.
+Creating session SID: 8
+Opening session with: 8.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocking file b.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocking file b.txt SID: 0
+Closing file with fd: 0 with status 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocking file b.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.txt, len = 5 (flags: 1)
+File b.txt has 1 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 1 mode...
+File b.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 1)
+File b.txt has 1 readers.
+Attempting EXCLUSIVE lock.
+Lock failed, request turned down.
+Session 0 allowed to receive file
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocking file b.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocking file b.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocking file b.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocking file b.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 2
+Opening session with: 2.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocking file b.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 2
+Opening session with: 2.
+Creating session SID: 3
+Opening session with: 3.
+Creating session SID: 4
+Opening session with: 4.
+Creating session SID: 5
+Opening session with: 5.
+Creating session SID: 6
+Opening session with: 6.
+Creating session SID: 7
+Opening session with: 7.
+Creating session SID: 8
+Opening session with: 8.
+Creating session SID: 9
+Opening session with: 9.
+Creating session SID: 10
+Opening session with: 10.
+Creating session SID: 11
+Opening session with: 11.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.txt, len = 5 (flags: 0)
+File b.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 0 mode...
+File b.txt opened successfully. 
+Unlocking file b.txt SID: 0
+Closing file with fd: 0 with status 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.

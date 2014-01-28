@@ -84,6 +84,14 @@ int main(int argc, char *argv[])
 			mvprintw(COORD_Y + 3,COORD_X + WIDTH + 3, "Connecting...");
 			//laczymy sie z serwerem
 			serverHandler = fs_open_server(address, strtol(portString, NULL, 0));
+
+//CHAMSKI DEBUG
+							//sprintf(size, "%d", (int)fileDescriptor );
+							sprintf(atime, "%d", (int)serverHandler );
+							//mvprintw(20,1, size);
+							mvprintw(21,1, atime); getch();
+//CHAMSKI DEBUG
+
 			if(serverHandler != -1)
 {
 			erase();
@@ -199,10 +207,26 @@ int main(int argc, char *argv[])
 							fileDescriptor = fs_open(serverHandler, fileName, O_RDONLY);
 							//odczyt
 							erase();
+							
+//CHAMSKI DEBUG
+							sprintf(size, "%d", (int)fileDescriptor );
+							sprintf(atime, "%d", (int)serverHandler );
+							mvprintw(20,1, size);mvprintw(21,1, atime); getch();
+//CHAMSKI DEBUG
+
 							fs_read(serverHandler, fileDescriptor, &readBufor, sizeof(readBufor));
 							mvprintw(1,1,readBufor);
+
+//CHAMSKI DEBUG
+							sprintf(size, "%d", (int)fileDescriptor );
+							sprintf(atime, "%d", (int)serverHandler );
+							mvprintw(20,1, size);mvprintw(21,1, atime); getch();
+//CHAMSKI DEBUG
+
 							getch();
 							fs_close(serverHandler, fileDescriptor);
+							//sprintf(cctime, "%d", (int)cc );	mvprintw(22,1, cctime); getch();
+						
 							erase();
 						}
 						else if(fileMenuReturn == 3)
