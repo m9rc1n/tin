@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ssssssssssssssssssssssssssssghffffffffhasjdfsajfasdjkfgasdkjfgasdjgfasdjkg
 sghffffffffhasjdfsajfasdjkfgasdkjfgasdjgfasdjkg
 sghffffffffhasjdfsajfasdjkfgasdkjfgasdjgfasdjkg
@@ -223,3 +224,6 @@ sghffffffffhasjdfsajfasdjkfgasdkjfgasdjgfasdjkg
 sghffffffffhasjdfsajfasdjkfgasdkjfgasdjgfasdjkg
 sghffffffffhasjdfsajfasdjkfgasdkjfgasdjgfasdjkg
 
+=======
+90kasdaaaaaa222222222222222222222222211111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111qwqwqwqwqwqw
+>>>>>>> 76b0373fae26a9ce20b13794693bf76005ff1f51

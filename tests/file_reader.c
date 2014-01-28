@@ -33,6 +33,13 @@ int main(int argc, char* argv[]) {
 
     fs_close(sid, fd);
 
+    fd = fs_open (sid, "a.x", O_RDONLY);
+
+     buf = (char*) calloc(8, sizeof(char));
+    fs_read(sid, fd, buf, 8);
+
+    fs_close(sid, fd);
+
     if(strcmp(buf, "1234567") != 0)
         return -2;
     
