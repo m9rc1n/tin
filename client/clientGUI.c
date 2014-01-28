@@ -87,13 +87,6 @@ int main(int argc, char *argv[])
 			//laczymy sie z serwerem
 			serverHandler = fs_open_server(address, strtol(portString, NULL, 0));
 
-//CHAMSKI DEBUG
-							//sprintf(size, "%d", (int)fileDescriptor );
-							sprintf(atime, "%d", (int)serverHandler );
-							//mvprintw(20,1, size);
-							mvprintw(21,1, atime); getch();
-//CHAMSKI DEBUG
-
 			if(serverHandler != -1)
 {
 			erase();
