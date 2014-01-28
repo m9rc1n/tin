@@ -5,7 +5,7 @@
 
 #define BUF_LEN 100
 #define NAME_LEN 32
-#define MAX_BUF BUF_LEN+120
+#define MAX_BUF BUF_LEN+200
 
 typedef enum FsCommand
 {

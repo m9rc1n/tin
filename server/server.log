@@ -1,93 +1,1713 @@
 Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: tin.txt, len = 7 (flags: 64)
+File tin.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 64 mode...
+File tin.txt opened successfully. 
+Unlocking file tin.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: tin.txt, len = 7 (flags: 1)
+File tin.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 1 mode...
+File tin.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file tin.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: tin.txt, len = 7 (flags: 1)
+File tin.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 1 mode...
+File tin.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file tin.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: tin.txt, len = 7 (flags: 0)
+File tin.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 0 mode...
+File tin.txt opened successfully. 
+Unlocking file tin.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: tin.txt, len = 7 (flags: 0)
+File tin.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 0 mode...
+File tin.txt opened successfully. 
+Incoming OPEN request: tin.txt, len = 7 (flags: 0)
+File tin.txt has 1 readers.
+Attempting SHARED lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 0 mode...
+File tin.txt opened successfully. 
+Incoming OPEN request: tin.txt, len = 7 (flags: 0)
+File tin.txt has 2 readers.
+Attempting SHARED lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 0 mode...
+File tin.txt opened successfully. 
+Incoming OPEN request: tin.txt, len = 7 (flags: 1)
+File tin.txt has 3 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 1 mode...
+File tin.txt opened successfully. 
+Incoming OPEN request: tin.txt, len = 7 (flags: 0)
+File tin.txt has 3 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
 Creating session SID: 1
+Opening session with: 1.
+Incoming OPEN request: plik.rd, len = 7 (flags: 0)
+File plik.rd has 0 readers.
+Attempting SHARED lock.
+Setting lock on file plik.rd, SID: 1
+Lock accepted, request accepted.
+Attempting to open plik.rd file in 0 mode...
+File plik.rd cannot be opened.
+Unlocking file plik.rd SID: 1
 Creating session SID: 2
-Creating session SID: 3
-Creating session SID: 4
-Creating session SID: 5
-Creating session SID: 0
-Opening session with: 0
-Creating session SID: 1
-Opening session with: 1
-Creating session SID: 2
-Opening session with: 2
-Creating session SID: 3
-Opening session with: 3
-Creating session SID: 4
-Opening session with: 4
-Creating session SID: 0
-Opening session with: 0
+Opening session with: 2.
 Incoming OPEN request: a.x, len = 3 (flags: 0)
 File a.x has 0 readers.
 Attempting SHARED lock.
-Setting lock on file a.x, SID: 0
+Setting lock on file a.x, SID: 2
 Lock accepted, request accepted.
 Attempting to open a.x file in 0 mode...
-SUCCESS
-Unlocking file a.x SID: 0
-Creating session SID: 1
-Opening session with: 1
-Creating session SID: 2
-Opening session with: 2
+File a.x opened successfully. 
+Unlocking file a.x SID: 2
+Closing file with fd: 0 with status 0
 Creating session SID: 3
-Opening session with: 3
-Creating session SID: 4
-Opening session with: 4
-Creating session SID: 5
-Opening session with: 5
-Creating session SID: 6
-Opening session with: 6
-Creating session SID: 7
-Opening session with: 7
-Creating session SID: 8
-Opening session with: 8
-Creating session SID: 9
-Opening session with: 9
-Creating session SID: 10
-Opening session with: 10
-Creating session SID: 11
-Opening session with: 11
-Creating session SID: 12
-Opening session with: 12
-Creating session SID: 13
-Opening session with: 13
-Creating session SID: 14
-Opening session with: 14
-Creating session SID: 15
-Opening session with: 15
-Opening session with: -1
-Opening session with: -1
-Opening session with: -1
-Opening session with: -1
-Opening session with: -1
-WAAAGH, SEZION NUMAH 0 IZ DESTROYYY'D
+Opening session with: 3.
+Incoming OPEN request: b.txt, len = 5 (flags: 65)
+File b.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file b.txt, SID: 3
+Lock accepted, request accepted.
+Attempting to open b.txt file in 65 mode...
+File b.txt opened successfully. 
+Session 3 allowed to receive file
+Session 3 received part 0/108
+Session 3 received part 1/108
+Session 3 received part 2/108
+Session 3 received part 4/108
+Session 3 received part 5/108
+Session 3 received part 8/108
+Session 3 received part 10/108
+Session 3 received part 11/108
+Session 3 received part 11/108Session 3 received part 14/108Session 3 received part 14/108Session 3 received part 14/108
+Session 3 received part 14/108
+Session 3 received part 14/108
+Session 3 received part 14/108Session 3 received part 14/108
+Session 3 received part 14/108
+Session 3 received part 14/108
+Session 3 received part 19/108
+Session 3 received part 18/108
+Session 3 received part 21/108
+Session 3 received part 20/108
+Session 3 received part 22/108
+Session 3 received part 22/108
+Session 3 received part 25/108
+Session 3 received part 26/108
+Session 3 received part 26/108
+Session 3 received part 26/108
+Session 3 received part 28/108
+Session 3 received part 29/108
+Session 3 received part 31/108
+Session 3 received part 30/108
+Session 3 received part 32/108
+Session 3 received part 33/108
+Session 3 received part 34/108
+Session 3 received part 35/108
+Session 3 received part 35/108
+Session 3 received part 35/108
+Session 3 received part 35/108
+Session 3 received part 42/108
+Session 3 received part 42/108
+Session 3 received part 43/108
+Session 3 received part 43/108
+Session 3 received part 43/108
+Session 3 received part 43/108
+Session 3 received part 43/108
+Session 3 received part 48/108
+Session 3 received part 47/108
+Session 3 received part 53/108
+Session 3 received part 54/108
+Session 3 received part 57/108
+Session 3 received part 57/108
+Session 3 received part 57/108
+Session 3 received part 57/108
+Session 3 received part 57/108
+Session 3 received part 57/108
+Session 3 received part 57/108
+Session 3 received part 57/108
+Session 3 received part 58/108
+Session 3 received part 59/108
+Session 3 received part 60/108
+Session 3 received part 67/108
+Session 3 received part 61/108
+Session 3 received part 61/108
+Session 3 received part 61/108
+Session 3 received part 61/108
+Session 3 received part 61/108
+Session 3 received part 61/108
+Session 3 received part 68/108
+Session 3 received part 69/108
+Session 3 received part 70/108
+Session 3 received part 71/108
+Session 3 received part 72/108
+Session 3 received part 73/108
+Session 3 received part 74/108
+Session 3 received part 77/108
+Session 3 received part 76/108
+Session 3 received part 76/108
+Session 3 received part 78/108
+Session 3 received part 79/108
+Session 3 received part 80/108
+Session 3 received part 81/108
+Session 3 received part 82/108
+Session 3 received part 83/108
+Session 3 received part 84/108
+Session 3 received part 85/108
+Session 3 received part 86/108
+Session 3 received part 87/108
+Session 3 received part 88/108
+Session 3 received part 89/108
+Session 3 received part 90/108
+Session 3 received part 91/108
+Session 3 received part 92/108
+Session 3 received part 93/108
+Session 3 received part 94/108
+Session 3 received part 96/108
+Session 3 received part 95/108
+Session 3 received part 97/108
+Session 3 received part 98/108
+Session 3 received part 99/108
+Session 3 received part 100/108
+Session 3 received part 101/108
+Session 3 received part 101/108
+Session 3 received part 101/108
+Session 3 received part 107/108
+Session 3 received part 107/108
+Session 3 received part 107/108
+Session 3 received part 107/108
+Unlocking file b.txt SID: 3
+Closing file with fd: 0 with status 0
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: tin.txt, len = 7 (flags: 0)
+File tin.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 0 mode...
+File tin.txt opened successfully. 
+Unlocking file tin.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: tin.txt, len = 7 (flags: 0)
+File tin.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 0 mode...
+File tin.txt opened successfully. 
+Incoming OPEN request: tin.txt, len = 7 (flags: 1)
+File tin.txt has 1 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file tin.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open tin.txt file in 1 mode...
+File tin.txt opened successfully. 
+Incoming OPEN request: b.txt, len = 5 (flags: 1)
+File b.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file b.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.txt file in 1 mode...
+File b.txt opened successfully. 
+Incoming OPEN request: q.txt, len = 5 (flags: 64)
+File q.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file q.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open q.txt file in 64 mode...
+File q.txt opened successfully. 
+Creating session SID: 1
+Opening session with: 1.
+Incoming OPEN request: plik.rd, len = 7 (flags: 0)
+File plik.rd has 0 readers.
+Attempting SHARED lock.
+Setting lock on file plik.rd, SID: 1
+Lock accepted, request accepted.
+Attempting to open plik.rd file in 0 mode...
+File plik.rd cannot be opened.
+Unlocking file plik.rd SID: 1
 Unlocked files from 0 sesssion.
-WAAAGH, SEZION NUMAH 1 IZ DESTROYYY'D
-Unlocked files from 1 sesssion.
-WAAAGH, SEZION NUMAH 2 IZ DESTROYYY'D
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 2
+Opening session with: 2.
+Creating session SID: 3
+Opening session with: 3.
+Creating session SID: 4
+Opening session with: 4.
+Creating session SID: 5
+Opening session with: 5.
+Creating session SID: 6
+Opening session with: 6.
+Creating session SID: 7
+Opening session with: 7.
+Creating session SID: 8
+Opening session with: 8.
+Creating session SID: 9
+Opening session with: 9.
+Creating session SID: 10
+Opening session with: 10.
+Creating session SID: 11
+Opening session with: 11.
+Creating session SID: 12
+Opening session with: 12.
+Creating session SID: 13
+Opening session with: 13.
+Creating session SID: 14
+Opening session with: 14.
+Creating session SID: 15
+Opening session with: 15.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: y.txt, len = 5 (flags: 64)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 64 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 2
+Opening session with: 2.
+Creating session SID: 3
+Opening session with: 3.
+Creating session SID: 4
+Opening session with: 4.
+Creating session SID: 5
+Opening session with: 5.
+Creating session SID: 6
+Opening session with: 6.
+Creating session SID: 7
+Opening session with: 7.
+Creating session SID: 8
+Opening session with: 8.
+Creating session SID: 9
+Opening session with: 9.
+Creating session SID: 10
+Opening session with: 10.
+Creating session SID: 11
+Opening session with: 11.
+Creating session SID: 12
+Opening session with: 12.
+Creating session SID: 13
+Opening session with: 13.
+Creating session SID: 14
+Opening session with: 14.
+Creating session SID: 15
+Opening session with: 15.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 2
+Opening session with: 2.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 2
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 2
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 2
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
 Unlocked files from 2 sesssion.
-WAAAGH, SEZION NUMAH 3 IZ DESTROYYY'D
+Session 2 closed.
+Closing session with: 2.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 2
+Opening session with: 2.
+Creating session SID: 3
+Opening session with: 3.
+Creating session SID: 4
+Opening session with: 4.
+Creating session SID: 5
+Opening session with: 5.
+Creating session SID: 6
+Opening session with: 6.
+Creating session SID: 7
+Opening session with: 7.
+Creating session SID: 8
+Opening session with: 8.
+Creating session SID: 9
+Opening session with: 9.
+Creating session SID: 10
+Opening session with: 10.
+Creating session SID: 11
+Opening session with: 11.
+Creating session SID: 12
+Opening session with: 12.
+Creating session SID: 13
+Opening session with: 13.
+Creating session SID: 14
+Opening session with: 14.
+Creating session SID: 15
+Opening session with: 15.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Lock failed, request turned down.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Could not get file descriptor in read
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 2
+Opening session with: 2.
+Creating session SID: 3
+Opening session with: 3.
+Creating session SID: 4
+Opening session with: 4.
+Creating session SID: 5
+Opening session with: 5.
+Creating session SID: 6
+Opening session with: 6.
+Creating session SID: 7
+Opening session with: 7.
+Creating session SID: 8
+Opening session with: 8.
+Creating session SID: 9
+Opening session with: 9.
+Creating session SID: 10
+Opening session with: 10.
+Creating session SID: 11
+Opening session with: 11.
+Creating session SID: 12
+Opening session with: 12.
+Creating session SID: 13
+Opening session with: 13.
+Creating session SID: 14
+Opening session with: 14.
+Creating session SID: 15
+Opening session with: 15.
+Opening session with: -1.
+Opening session with: -1.
+Session #0 expired.
+Unlocked files from 0 sesssion.
+Session #1 expired.
+Unlocked files from 1 sesssion.
+Session #2 expired.
+Unlocked files from 2 sesssion.
+Session #3 expired.
 Unlocked files from 3 sesssion.
-WAAAGH, SEZION NUMAH 4 IZ DESTROYYY'D
+Session #4 expired.
 Unlocked files from 4 sesssion.
-WAAAGH, SEZION NUMAH 5 IZ DESTROYYY'D
+Session #5 expired.
 Unlocked files from 5 sesssion.
-WAAAGH, SEZION NUMAH 6 IZ DESTROYYY'D
+Session #6 expired.
 Unlocked files from 6 sesssion.
-WAAAGH, SEZION NUMAH 7 IZ DESTROYYY'D
+Session #7 expired.
 Unlocked files from 7 sesssion.
-WAAAGH, SEZION NUMAH 8 IZ DESTROYYY'D
+Session #8 expired.
 Unlocked files from 8 sesssion.
-WAAAGH, SEZION NUMAH 9 IZ DESTROYYY'D
+Session #9 expired.
 Unlocked files from 9 sesssion.
-WAAAGH, SEZION NUMAH 10 IZ DESTROYYY'D
+Session #10 expired.
 Unlocked files from 10 sesssion.
-WAAAGH, SEZION NUMAH 11 IZ DESTROYYY'D
+Session #11 expired.
 Unlocked files from 11 sesssion.
-WAAAGH, SEZION NUMAH 12 IZ DESTROYYY'D
+Session #12 expired.
 Unlocked files from 12 sesssion.
-WAAAGH, SEZION NUMAH 13 IZ DESTROYYY'D
+Session #13 expired.
 Unlocked files from 13 sesssion.
-WAAAGH, SEZION NUMAH 14 IZ DESTROYYY'D
+Session #14 expired.
 Unlocked files from 14 sesssion.
-WAAAGH, SEZION NUMAH 15 IZ DESTROYYY'D
+Session #15 expired.
 Unlocked files from 15 sesssion.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 1
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 1
+Closing file with fd: 0 with status 0
+Creating session SID: 2
+Opening session with: 2.
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 2
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 2
+Closing file with fd: 0 with status 0
+Creating session SID: 3
+Opening session with: 3.
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 3
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 3
+Closing file with fd: 0 with status 0
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Incoming OPEN request: plik.rd, len = 7 (flags: 0)
+File plik.rd has 0 readers.
+Attempting SHARED lock.
+Setting lock on file plik.rd, SID: 1
+Lock accepted, request accepted.
+Attempting to open plik.rd file in 0 mode...
+File plik.rd cannot be opened.
+Unlocking file plik.rd SID: 1
+Creating session SID: 2
+Opening session with: 2.
+Incoming OPEN request: plik.rd, len = 7 (flags: 65)
+File plik.rd has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file plik.rd, SID: 2
+Lock accepted, request accepted.
+Attempting to open plik.rd file in 65 mode...
+File plik.rd opened successfully. 
+Unlocked files from 2 sesssion.
+Session 2 closed.
+Closing session with: 2.
+Creating session SID: 2
+Opening session with: 2.
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 2
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 2
+Closing file with fd: 0 with status 0
+Creating session SID: 3
+Opening session with: 3.
+Incoming OPEN request: plik.rd, len = 7 (flags: 0)
+File plik.rd has 0 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Incoming OPEN request: plik.wr, len = 7 (flags: 0)
+File plik.wr has 0 readers.
+Attempting SHARED lock.
+Setting lock on file plik.wr, SID: 3
+Lock accepted, request accepted.
+Attempting to open plik.wr file in 0 mode...
+File plik.wr cannot be opened.
+Unlocking file plik.wr SID: 3
+Creating session SID: 4
+Opening session with: 4.
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 4
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 4
+Closing file with fd: 0 with status 0
+Creating session SID: 5
+Opening session with: 5.
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 5
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 5
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Session #1 expired.
+Unlocked files from 1 sesssion.
+Session #2 expired.
+Unlocked files from 2 sesssion.
+Session #3 expired.
+Unlocked files from 3 sesssion.
+Session #4 expired.
+Unlocked files from 4 sesssion.
+Session #5 expired.
+Unlocked files from 5 sesssion.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 2
+Opening session with: 2.
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 2
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 2
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 2
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+Attempting to open a.x file in 0 mode.File a.x opened successfully. 
+Unlocking file a.x SID: 2
+Closing file with fd: 0 with status 0
+Creating session SID: 3
+Opening session with: 3.
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 3
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 3
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 3
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 3
+Closing file with fd: 0 with status 0
+Unlocked files from 1 sesssion.
+Session 1 closed.
+Closing session with: 1.
+Creating session SID: 1
+Opening session with: 1.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 1
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 1
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 1
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Lock failed, request turned down.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Unlocked files from 1 sesssion.
+Session 1 closed.
+Closing session with: 1.
+Session #0 expired.
+Unlocked files from 0 sesssion.
+Session #2 expired.
+Unlocked files from 2 sesssion.
+Session #3 expired.
+Unlocked files from 3 sesssion.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Unlocking file y.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: y.txt, len = 5 (flags: 0)
+File y.txt has 0 readers.
+Attempting SHARED lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 0 mode...
+File y.txt opened successfully. 
+Incoming OPEN request: y.txt, len = 5 (flags: 1)
+File y.txt has 1 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file y.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open y.txt file in 1 mode...
+File y.txt opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 2
+Opening session with: 2.
+Creating session SID: 3
+Opening session with: 3.
+Creating session SID: 4
+Opening session with: 4.
+Creating session SID: 5
+Opening session with: 5.
+Creating session SID: 6
+Opening session with: 6.
+Creating session SID: 7
+Opening session with: 7.
+Creating session SID: 8
+Opening session with: 8.
+Creating session SID: 9
+Opening session with: 9.
+Creating session SID: 10
+Opening session with: 10.
+Creating session SID: 11
+Opening session with: 11.
+Creating session SID: 12
+Opening session with: 12.
+Creating session SID: 13
+Opening session with: 13.
+Creating session SID: 14
+Opening session with: 14.
+Creating session SID: 15
+Opening session with: 15.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Opening session with: -1.
+Session #0 expired.
+Unlocked files from 0 sesssion.
+Session #1 expired.
+Unlocked files from 1 sesssion.
+Session #2 expired.
+Unlocked files from 2 sesssion.
+Session #3 expired.
+Unlocked files from 3 sesssion.
+Session #4 expired.
+Unlocked files from 4 sesssion.
+Session #5 expired.
+Unlocked files from 5 sesssion.
+Session #6 expired.
+Unlocked files from 6 sesssion.
+Session #7 expired.
+Unlocked files from 7 sesssion.
+Session #8 expired.
+Unlocked files from 8 sesssion.
+Session #9 expired.
+Unlocked files from 9 sesssion.
+Session #10 expired.
+Unlocked files from 10 sesssion.
+Session #11 expired.
+Unlocked files from 11 sesssion.
+Session #12 expired.
+Unlocked files from 12 sesssion.
+Session #13 expired.
+Unlocked files from 13 sesssion.
+Session #14 expired.
+Unlocked files from 14 sesssion.
+Session #15 expired.
+Unlocked files from 15 sesssion.
+Creating session SID: 0
+Opening session with: 0.
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: o.txt, len = 5 (flags: 64)
+File o.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file o.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open o.txt file in 64 mode...
+File o.txt opened successfully. 
+Unlocking file o.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: o.txt, len = 5 (flags: 1)
+File o.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file o.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open o.txt file in 1 mode...
+File o.txt opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file o.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: o.txt, len = 5 (flags: 1)
+File o.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file o.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open o.txt file in 1 mode...
+File o.txt opened successfully. 
+Unlocking file o.txt SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: o.txt, len = 5 (flags: 1)
+File o.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file o.txt, SID: 0
+Lock accepted, request accepted.
+Attempting to open o.txt file in 1 mode...
+File o.txt opened successfully. 
+Incoming OPEN request: o.txt, len = 5 (flags: 0)
+File o.txt has 0 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 2
+Opening session with: 2.
+Creating session SID: 3
+Opening session with: 3.
+Incoming OPEN request: o.txt, len = 5 (flags: 0)
+File o.txt has 0 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Creating session SID: 4
+Opening session with: 4.
+Incoming OPEN request: plik.rd, len = 7 (flags: 0)
+File plik.rd has 0 readers.
+Attempting SHARED lock.
+Setting lock on file plik.rd, SID: 4
+Lock accepted, request accepted.
+Attempting to open plik.rd file in 0 mode...
+File plik.rd opened successfully. 
+Incoming OPEN request: plik.wr, len = 7 (flags: 0)
+File plik.wr has 0 readers.
+Attempting SHARED lock.
+Setting lock on file plik.wr, SID: 4
+Lock accepted, request accepted.
+Attempting to open plik.wr file in 0 mode...
+File plik.wr cannot be opened.
+Unlocking file plik.wr SID: 4
+Creating session SID: 5
+Opening session with: 5.
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 5
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 5
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 5
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 5
+Closing file with fd: 0 with status 0
+Incoming OPEN request: o.txt, len = 5 (flags: 1)
+File o.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Lock failed, request turned down.
+Incoming OPEN request: p.txt, len = 5 (flags: 64)
+File p.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file p.txt, SID: 3
+Lock accepted, request accepted.
+Attempting to open p.txt file in 64 mode...
+File p.txt opened successfully. 
+Incoming OPEN request: p.txt, len = 5 (flags: 1)
+File p.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Lock failed, request turned down.
+Creating session SID: 6
+Opening session with: 6.
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 6
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 6
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.x, len = 3 (flags: 0)
+File a.x has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.x, SID: 6
+Lock accepted, request accepted.
+Attempting to open a.x file in 0 mode...
+File a.x opened successfully. 
+Unlocking file a.x SID: 6
+Closing file with fd: 0 with status 0
+Creating session SID: 7
+Opening session with: 7.
+Incoming OPEN request: plik.rd, len = 7 (flags: 65)
+File plik.rd has 1 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file plik.rd, SID: 7
+Lock accepted, request accepted.
+Attempting to open plik.rd file in 65 mode...
+File plik.rd opened successfully. 
+Unlocked files from 7 sesssion.
+Session 7 closed.
+Closing session with: 7.
+Unlocked files from 3 sesssion.
+Session 3 closed.
+Closing session with: 3.
+Creating session SID: 3
+Opening session with: 3.
+Creating session SID: 7
+Opening session with: 7.
+Creating session SID: 8
+Opening session with: 8.
+Creating session SID: 9
+Opening session with: 9.
+Session #0 expired.
+Unlocked files from 0 sesssion.
+Session #1 expired.
+Unlocked files from 1 sesssion.
+Session #2 expired.
+Unlocked files from 2 sesssion.
+Incoming OPEN request: l.txt, len = 5 (flags: 64)
+File l.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file l.txt, SID: 9
+Lock accepted, request accepted.
+Attempting to open l.txt file in 64 mode...
+File l.txt opened successfully. 
+Unlocking file l.txt SID: 9
+Closing file with fd: 0 with status 0
+Incoming OPEN request: l.txt, len = 5 (flags: 1)
+File l.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file l.txt, SID: 9
+Lock accepted, request accepted.
+Attempting to open l.txt file in 1 mode...
+File l.txt opened successfully. 
+Session 9 allowed to receive file
+Session 9 received part 0/1
+Unlocking file l.txt SID: 9
+Closing file with fd: 0 with status 0
+Incoming OPEN request: l.txt, len = 5 (flags: 1)
+File l.txt has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file l.txt, SID: 9
+Lock accepted, request accepted.
+Attempting to open l.txt file in 1 mode...
+File l.txt opened successfully. 
+Session 9 allowed to receive file
+Session 9 received part 0/1
+Unlocking file l.txt SID: 9
+Closing file with fd: 0 with status 0
+Session #4 expired.
+Unlocked files from 4 sesssion.
+Session #5 expired.
+Unlocked files from 5 sesssion.
+Unlocked files from 9 sesssion.
+Session 9 closed.
+Closing session with: 9.
+Session #6 expired.
+Unlocked files from 6 sesssion.
+Session #3 expired.
+Unlocked files from 3 sesssion.
+Session #7 expired.
+Unlocked files from 7 sesssion.
+Session #8 expired.
+Unlocked files from 8 sesssion.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a cannot be opened.
+Unlocking file a.a SID: 0
+Incoming OPEN request: a.a, len = 3 (flags: 64)
+File a.a has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 64 mode...
+File a.a opened successfully. 
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 1)
+File a.a has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 1 mode...
+File a.a opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a 2, len = 5 (flags: 0)
+File a.a 2 has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a 2, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a 2 file in 0 mode...
+File a.a 2 cannot be opened.
+Unlocking file a.a 2 SID: 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a 2, len = 5 (flags: 0)
+File a.a 2 has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a 2, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a 2 file in 0 mode...
+File a.a 2 cannot be opened.
+Unlocking file a.a 2 SID: 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.b, len = 3 (flags: 64)
+File a.b has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file a.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.b file in 64 mode...
+File a.b opened successfully. 
+Unlocking file a.b SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in close
+Could not get file descriptor in close
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+Attempting to open a.a file in 0 mode..File a.a opened successfully. 
+Could not get file descriptor in read
+Could not get file descriptor in close
+Could not get file descriptor in close
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 1
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Unlocking file a.a SID: 1
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 1
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing session with: 1.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: f, len = 1 (flags: 64)
+File f has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file f, SID: 0
+Lock accepted, request accepted.
+Attempting to open f file in 64 mode...
+File f opened successfully. 
+Unlocking file f SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Sending success in read
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Sending success in read
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Incoming OPEN request: a, len = 1 (flags: 0)
+File a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a file in 0 mode...
+File a cannot be opened.
+Unlocking file a SID: 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 2 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Incoming OPEN request: a.b, len = 3 (flags: 0)
+File a.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.b file in 0 mode...
+File a.b opened successfully. 
+Incoming OPEN request: , len = 0 (flags: 0)
+File  has 0 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Incoming OPEN request: a.b, len = 3 (flags: 1)
+File a.b has 1 readers.
+Attempting EXCLUSIVE lock.
+Lock failed, request turned down.
+Incoming OPEN request: .a, len = 2 (flags: 0)
+File .a has 0 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Incoming OPEN request: , len = 0 (flags: 0)
+File  has 1 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Incoming OPEN request: , len = 0 (flags: 1)
+File  has 2 readers.
+Attempting EXCLUSIVE lock.
+Lock failed, request turned down.
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Sending success in read
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Creating session SID: 0
+Opening session with: 0.
+Creating session SID: 1
+Opening session with: 1.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 1
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Sending success in read
+Unlocking file a.a SID: 1
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 1
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Unlocked files from 1 sesssion.
+Session 1 closed.
+Closing session with: 1.
+Creating session SID: 1
+Opening session with: 1.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 1
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Sending success in read
+Unlocking file a.a SID: 1
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 1
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Creating session SID: 2
+Opening session with: 2.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 2 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 2
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Sending success in read
+Unlocking file a.a SID: 2
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 2 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 1
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Could not get file descriptor in lseek
+Could not get file descriptor in read

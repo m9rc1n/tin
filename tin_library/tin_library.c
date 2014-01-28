@@ -10,7 +10,7 @@
  * wysylamy login a serwer jesli odpowie dobrze to zwracamy uchwyt
  */
 
-#define WAIT_TO_STOP_RCV 1
+#define WAIT_TO_STOP_RCV 3
 #define WAIT_TO_SEND 1
 #define WAIT_TO_RCV 1
 
@@ -284,7 +284,7 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
         *current_index = 1;
     }
 
-    sleep (WAIT_TO_RCV);
+    // sleep (WAIT_TO_RCV);
     count = recv(sockd, &response, sizeof(FsResponse), 0);
 
     if (response.answer != IF_OK)

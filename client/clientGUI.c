@@ -213,7 +213,6 @@ int main(int argc, char *argv[])
 							//zapis
 							erase();
 							mvreadstr (COORD_Y - 3,COORD_X - 9, writeBufor, 512, 0);
-							//konczymy plik zamist enterem (to zamyka pisanie ale nie dopisuje netera do bufora.... beach, peach, bitc
 							char  ch = writeBufor[0];
 							int i = 0;
 							while(ch != ';')
@@ -341,7 +340,7 @@ int main(int argc, char *argv[])
 				//current settings on screen
 				mvprintw(COORD_Y - 3,COORD_X,"Current address: ");
 				mvprintw(COORD_Y - 3,COORD_X + WIDTH + 3,address);
-				mvprintw(COORD_Y - 1,COORD_X,"Current port: ");
+
 				mvprintw(COORD_Y - 1,COORD_X + WIDTH + 3,portString);
 
 				configMenuReturn = print_menu(COORD_Y,COORD_X,5,WIDTH,"Set settings",configMenu,configMenuReturn);
