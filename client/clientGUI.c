@@ -10,6 +10,8 @@
 #include "ncurses-readstring.h"
 #include "../tin_library/tin_library.h"
 
+#define READ_LEN 512
+
 char address[20], portString[20], fileName[50], readBufor[512], writeBufor[512], size[15], mode[15], atime[15], cctime[15], mtime[15], offset[15];
 volatile int serverHandler;
 volatile int fileDescriptor;
@@ -207,26 +209,18 @@ int main(int argc, char *argv[])
 							fileDescriptor = fs_open(serverHandler, fileName, O_RDONLY);
 							//odczyt
 							erase();
-							
-//CHAMSKI DEBUG
-							sprintf(size, "%d", (int)fileDescriptor );
-							sprintf(atime, "%d", (int)serverHandler );
-							mvprintw(20,1, size);mvprintw(21,1, atime); getch();
-//CHAMSKI DEBUG
 
-							fs_read(serverHandler, fileDescriptor, &readBufor, sizeof(readBufor));
-							mvprintw(1,1,readBufor);
+                            char* buf = (char*) calloc (sizeof(char), READ_LEN);
 
-//CHAMSKI DEBUG
-							sprintf(size, "%d", (int)fileDescriptor );
-							sprintf(atime, "%d", (int)serverHandler );
-							mvprintw(20,1, size);mvprintw(21,1, atime); getch();
-//CHAMSKI DEBUG
+							fs_read(serverHandler, fileDescriptor, buf, READ_LEN);
+							if( buf!= NULL) mvprintw(1,1, buf);
 
 							getch();
 							fs_close(serverHandler, fileDescriptor);
 							//sprintf(cctime, "%d", (int)cc );	mvprintw(22,1, cctime); getch();
-						
+
+                            free(buf);
+
 							erase();
 						}
 						else if(fileMenuReturn == 3)
@@ -308,12 +302,12 @@ int main(int argc, char *argv[])
 							//offset
 							mvreadstr(COORD_Y + 5,COORD_X + WIDTH + 20, offset, 18, 0);
 
-                            char* buf = (char*) calloc (sizeof(char), 512);
+                            char* buf = (char*) calloc (sizeof(char), READ_LEN);
 							fileDescriptor = fs_open(serverHandler, fileName, O_RDONLY);
 							fs_lseek(serverHandler, fileDescriptor, atoi(offset), SEEK_SET);
 							//odczyt
 							erase();
-							fs_read(serverHandler, fileDescriptor, buf, 512);
+							fs_read(serverHandler, fileDescriptor, buf, READ_LEN);
 							if (buf != NULL) mvprintw(1, 1, buf);
 							// mvprintw(1, 1, readBufor);
                             fs_close(serverHandler, fileDescriptor);

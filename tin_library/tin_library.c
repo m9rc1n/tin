@@ -10,7 +10,7 @@
  * wysylamy login a serwer jesli odpowie dobrze to zwracamy uchwyt
  */
 
-#define WAIT_TO_STOP_RCV 3
+#define WAIT_TO_STOP_RCV 1
 #define WAIT_TO_SEND 1
 #define WAIT_TO_RCV 1
 
@@ -71,12 +71,6 @@ int fs_open_server (const char* server_address, int server_port)
     status = send(sockd, &request, sizeof(FsRequest), 0);
     count = recv(sockd, &response, sizeof(FsResponse), 0);
 
-    if (errno != 0)
-    {
-        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
-        return -1;
-    }
-
     info (response.answer);
     return response.data.open_server.server_handler;
 }
@@ -105,12 +99,6 @@ int fs_close_server (int server_handler)
 
     status = send(sockd, &request, sizeof(FsRequest), 0);
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
-
-    if (errno != 0)
-    {
-        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
-        return -1;
-    }
 
     info (response.answer);
 	return response.data.close_server.status;
@@ -142,11 +130,6 @@ int fs_open (int server_handler, const char* name, int flags)
 
 	status = send(sockd, &request, sizeof(FsRequest), 0);
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
-
-    if (errno != 0) {
-        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
-        return -1;
-    }
 
     info(response.answer);
 	return response.data.open.fd;
@@ -219,11 +202,6 @@ int fs_write (int server_handler, int fd, const void *buf, size_t len)
         status = send (sockd, &request, sizeof(FsRequest), 0);
         count = recv (sockd, &response, sizeof(FsResponse), 0);
 
-        if (errno != 0)
-        {
-            mvprintw(ANS_X, ANS_Y, "Error while receiving packets");
-            return -1;
-        }
     }
     info(response.answer);
     return response.data.write.status;
@@ -287,13 +265,6 @@ int fs_read (int server_handler, int fd, void *buf, size_t len)
     // sleep (WAIT_TO_RCV);
     count = recv(sockd, &response, sizeof(FsResponse), 0);
 
-    if (response.answer != IF_OK)
-    {
-        mvprintw(ANS_X, ANS_Y, "Receiving packets error in read");
-        free (received_parts);
-        return -1;
-    }
-
     for(int i=0; i<parts; ++i)
     {
         int* current_index = received_parts + i;
@@ -342,12 +313,6 @@ int fs_lseek (int server_handler, int fd, long offset, int whence)
 	status = send(sockd, &request, sizeof(FsRequest), 0);
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
 
-    if (errno != 0)
-    {
-        mvprintw(ANS_X, ANS_Y, "Receiving packets error in lseek");
-        return -1;
-    }
-
     info(response.answer);
 	return response.data.lseek.status;
 }
@@ -382,12 +347,6 @@ int fs_close (int server_handler, int fd)
 
 	status = send(sockd, &request, sizeof(FsRequest), 0);
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
-
-    if (response.answer != IF_OK)
-    {
-        mvprintw(ANS_X, ANS_Y, "Receiving packets error in close");
-        return -1;
-    }
 
     info(response.answer);
 	return response.data.close.status;
@@ -466,12 +425,6 @@ int fs_fstat (int server_handler, int fd, struct stat* buf)
 
 	status = send(sockd, &request, sizeof(FsRequest), 0);
 	count = recv(sockd, &response, sizeof(FsResponse), 0);
-
-    if (errno != 0)
-    {
-        mvprintw(ANS_X, ANS_Y, "Receiving packets error");
-        return -1;
-    }
 
     info(response.answer);
 

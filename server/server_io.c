@@ -53,7 +53,7 @@ int s_open(IncomingRequest *inc_request) {
         } else {
 
             VDP1("File %s opened successfully. \n", file_name);
-            session_set(inc_request->request.data.open.server_handler, lock_result, fh);
+            status = session_set(inc_request->request.data.open.server_handler, lock_result, fh);
             response.data.open.status = lock_result;
             response.answer = IF_OK;
             response.data.open.fd = lock_result;
@@ -235,7 +235,7 @@ int s_read (IncomingRequest *inc_request)
     }
     else
     {
-/*        offset = session_get_offset (server_handler, fd);
+        offset = session_get_offset (server_handler, fd);
         status = fstat (file, &stat_of_file);
         if (offset < 0 || status < 0)
         {
@@ -298,12 +298,10 @@ int s_read (IncomingRequest *inc_request)
             strncpy (response.data.read.buffer, buf + i * BUF_LEN, last_part);
             status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
         }
-*/
-        // free(buf);
-        sleep(1);
-        response.answer = IF_OK;
 
-        VDP0 ("Sending success in read\n");
+        free(buf);
+        usleep(500);
+        response.answer = IF_OK;
         status = sendto(sockd, &response, sizeof(FsResponse), 0,(struct sockaddr*) &(inc_request->client_addr), inc_request->client_addr_len);
     }
 

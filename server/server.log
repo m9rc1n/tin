@@ -1956,3 +1956,1388 @@ Unlocked files from 0 sesssion.
 Session 0 closed.
 Closing session with: 0.
 >>>>>>> 76b0373fae26a9ce20b13794693bf76005ff1f51
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 1)
+File a.a has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 1 mode...
+File a.a opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 8/11
+Session 0 received part 0/11
+ Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Sending success in read
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Sending success in read
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 2 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: ff, len = 2 (flags: 64)
+File ff has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file ff, SID: 0
+Lock accepted, request accepted.
+Attempting to open ff file in 64 mode...
+File ff opened successfully. 
+Session status: 0
+Closing operation
+Unlocking file ff SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Session status: 0
+Sending success in read
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Session status: 0
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Session status: 0 0 5
+Sending success in read
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Session status: 0 0 5
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Session status: 0 1 6
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 2 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Session status: 0 2 7
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Sending success in read
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Sending success in read
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a., len = 2 (flags: 0)
+File a. has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a., SID: 0
+Lock accepted, request accepted.
+Attempting to open a. file in 0 mode...
+File a. cannot be opened.
+Unlocking file a. SID: 0
+Session #0 expired.
+Unlocked files from 0 sesssion.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: e.e, len = 3 (flags: 64)
+File e.e has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file e.e, SID: 0
+Lock accepted, request accepted.
+Attempting to open e.e file in 64 mode...
+File e.e opened successfully. 
+Closing operation
+Unlocking file e.e SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 1)
+File a.a has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 1 mode...
+File a.a opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Could not get file descriptor in cCreating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Creating session SID: 1
+Opening session with: 1.
+Incoming OPEN request: b.b, len = 3 (flags: 64)
+File b.b has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file b.b, SID: 1
+Lock accepted, request accepted.
+Attempting to open b.b file in 64 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 1
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 1)
+File b.b has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file b.b, SID: 1
+Lock accepted, request accepted.
+Attempting to open b.b file in 1 mode...
+File b.b opened successfully. 
+Session 1 allowed to receive file
+Session 1 received part 0/1
+Closing operation
+Unlocking file b.b SID: 1
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 1
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 1
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 1
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 1
+Closing file with fd: 0 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+Attempting to open b.b file in 0 mode.File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 1
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 1
+Closing file with fd: 0 with status 0
+Incoming OPEN request: , len = 0 (flags: 0)
+File  has 0 readers.
+Attempting SHARED lock.
+Setting lock on file , SID: 1
+Lock accepted, request accepted.
+Attempting to open  file in 0 mode...
+File  cannot be opened.
+Unlocking file  SID: 1
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 1
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 1
+Closing file with fd: 0 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: e.e, len = 3 (flags: 0)
+File e.e has 0 readers.
+Attempting SHARED lock.
+Setting lock on file e.e, SID: 1
+Lock accepted, request accepted.
+Attempting to open e.e file in 0 mode...
+Attempting to open e.e file in 0 mode.File e.e opened successfully. 
+Closing operation
+Unlocking file e.e SID: 1
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 1
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 1
+Closing file with fd: 0 with status 0
+Incoming OPEN request: , len = 0 (flags: 0)
+File  has 0 readers.
+Attempting SHARED lock.
+Setting lock on file , SID: 1
+Lock accepted, request accepted.
+Attempting to open  file in 0 mode...
+File  cannot be opened.
+Unlocking file  SID: 1
+Unlocked files from 1 sesssion.
+Session 1 closed.
+Closing session with: 1.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Could not get file descriptor in read
+Closing operation
+Could not get file descriptor in close
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+Attempting to open a.a file in 0 mode.File a.a opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 1 with status 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+Attempting to open b.b file in 0 mode.File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 1 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 1 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Could not read file in read
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 1 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 1)
+File b.b has 1 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 1 mode...
+File b.b opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 8/11
+Session 0 received part 0/11
+ Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 1 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 1 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+Attempting to open b.b file in 0 mode.File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 2 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 2 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 3 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 3 with status 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 3 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 3 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 1)
+File b.b has 3 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 1 mode...
+File b.b opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 6/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+ Session 0 received part 0/11
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 3 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 1)
+File b.b has 3 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 1 mode...
+File b.b opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 3 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 3 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 3 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+Attempting to openUnlocking file b.b SID: 0
+File b.b opened successfully. 
+Closing file with fd: 0 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: b.b, len = 3 (flags: 1)
+File b.b has 3 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 1 mode...
+File b.b opened successfully. 
+Closing operation
+Session 0 allowed to receive file
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flIncoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 1)
+File a.a has 1 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 1 mode...
+File a.a opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 8/11
+Session 0 received part 0/11
+ Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Session 0 received part 0/11
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: , len = 0 (flags: 1)
+File  has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file , SID: 0
+Lock accepted, request accepted.
+Attempting to open  file in 1 mode...
+File  cannot be opened.
+Unlocking file  SID: 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: w.w, len = 3 (flags: 64)
+File w.w has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file w.w, SID: 0
+Lock accepted, request accepted.
+Attempting to open w.w file in 64 mode...
+File w.w opened successfully. 
+Closing operation
+Unlocking file w.w SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: w.w, len = 3 (flags: 1)
+File w.w has 0 readers.
+Attempting EXCLUSIVE lock.
+Setting lock on file w.w, SID: 0
+Lock accepted, request accepted.
+Attempting to open w.w file in 1 mode...
+File w.w opened successfully. 
+Session 0 allowed to receive file
+Session 0 received part 0/1
+Closing operation
+Unlocking file w.w SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: w.w, len = 3 (flags: 0)
+File w.w has 0 readers.
+Attempting SHARED lock.
+Setting lock on file w.w, SID: 0
+Lock accepted, request accepted.
+Attempting to open w.w file in 0 mode...
+File w.w opened successfully. 
+Closing operation
+Unlocking file w.w SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: w.w, len = 3 (flags: 0)
+File w.w has 0 readers.
+Attempting SHARED lock.
+Setting lock on file w.w, SID: 0
+Lock accepted, request accepted.
+Attempting to open w.w file in 0 mode...
+File w.w opened successfully. 
+Could not read file in read
+Closing operation
+Unlocking file w.w SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: w.w, len = 3 (flags: 0)
+File w.w has 0 readers.
+Attempting SHARED lock.
+Setting lock on file w.w, SID: 0
+Lock accepted, request accepted.
+Attempting to open w.w file in 0 mode...
+File w.w opened successfully. 
+Closing operation
+Unlocking file w.w SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: w.w, len = 3 (flags: 0)
+File w.w has 0 readers.
+Attempting SHARED lock.
+Setting lock on file w.w, SID: 0
+Lock accepted, request accepted.
+Attempting to open w.w file in 0 mode...
+File w.w opened successfully. 
+Closing operation
+Unlocking file w.w SID: 0
+Closing file with fd: 0 with status 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 1 with status 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 1 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 2 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 2 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: , len = 0 (flags: 0)
+File  has 0 readers.
+Attempting SHARED lock.
+Setting lock on file , SID: 0
+Lock accepted, request accepted.
+Attempting to open  file in 0 mode...
+File  cannot be opened.
+Unlocking file  SID: 0
+Incoming OPEN request: , len = 0 (flags: 0)
+File  has 0 readers.
+Attempting SHARED lock.
+Setting lock on file , SID: 0
+Lock accepted, request accepted.
+Attempting to open  file in 0 mode...
+File  cannot be opened.
+Unlocking file  SID: 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 3 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 2 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 2 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 2 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 2 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 3 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 4 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 4 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 5 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+Attempting to open b.b file in 0 mode.File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 4 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 4 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+Attempting to open b.b file in 0 mode.File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 5 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: , len = 0 (flags: 0)
+File  has 0 readers.
+Attempting SHARED lock.
+Setting lock on file , SID: 0
+Lock accepted, request accepted.
+Attempting to open  file in 0 mode...
+File  cannot be opened.
+Unlocking file  SID: 0
+Unlocking file  SID: 0
+  in 0 mode...
+Closing operation
+Could not get file descriptor in close
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Closing operation
+Session timed out with: 0
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+Attempting to open a.a file in 0 mode.File a.a opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 1 with status 0
+Could not get file descriptor in lseek
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+Attempting to open b.b file in 0 mode.File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: , len = 0 (flags: 0)
+File  has 0 readers.
+Attempting SHARED lock.
+Setting lock on file , SID: 0
+Lock accepted, request accepted.
+Attempting to open  file in 0 mode...
+File  cannot be opened.
+Unlocking file  SID: 0
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 2 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 2 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 2 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 2 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 2 with status 0
+Could not get file descriptor in fstat
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 1 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Could not get file descriptor in fstat
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 2 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 2 readers.
+Attempting SHARED lock.
+Lock failed, request turned down.
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 3 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Closing file with fd: 0 with status 0
+ ags: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Incoming OPEN request: a.a, len = 3 (flags: 1)
+File a.a has 2 readers.
+Attempting EXCLUSIVE lock.
+Lock failed, request turned down.
+Closing operation
+Session 0 allowed to receive file
+Unlocking file b.b SID: 0
+Closing file with fd: 3 with status 0
+Closing operation
+Could not get file descriptor in close
+Could not get file descriptor in close
+Could not get file descriptor in closeCould not get file descriptor in close
+ gs: 0)
+File b.b has 3 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
+Creating session SID: 0
+Opening session with: 0.
+Incoming OPEN request: a.a, len = 3 (flags: 0)
+File a.a has 0 readers.
+Attempting SHARED lock.
+Setting lock on file a.a, SID: 0
+Lock accepted, request accepted.
+Attempting to open a.a file in 0 mode...
+File a.a opened successfully. 
+Closing operation
+Unlocking file a.a SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 0 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Could not get file descriptor in close
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 1 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Could not get file descriptor in read
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Incoming OPEN request: b.b, len = 3 (flags: 0)
+File b.b has 1 readers.
+Attempting SHARED lock.
+Setting lock on file b.b, SID: 0
+Lock accepted, request accepted.
+Attempting to open b.b file in 0 mode...
+File b.b opened successfully. 
+Closing operation
+Unlocking file b.b SID: 0
+Closing file with fd: 0 with status 0
+Unlocked files from 0 sesssion.
+Session 0 closed.
+Closing session with: 0.
